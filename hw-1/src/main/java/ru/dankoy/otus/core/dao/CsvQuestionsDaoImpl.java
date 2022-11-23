@@ -1,6 +1,5 @@
 package ru.dankoy.otus.core.dao;
 
-import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,9 +27,9 @@ public class CsvQuestionsDaoImpl implements QuestionsDao {
   @Override
   public List<Question> getQuestions() {
 
-    try (BufferedReader reader = new BufferedReader(
+    try (var reader = new BufferedReader(
         new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(resource))));
-        CSVReader csvReader = new CSVReaderBuilder(reader)
+        var csvReader = new CSVReaderBuilder(reader)
             .withSkipLines(1)
             .build()) {
 
@@ -40,19 +39,19 @@ public class CsvQuestionsDaoImpl implements QuestionsDao {
       // get amount of questions
       for (String[] row : rows) {
 
-        long questionId = Long.parseLong(row[0]);
-        String questionText = row[1];
+        var questionId = Long.parseLong(row[0]);
+        var questionText = row[1];
 
         // parse answers. may have different amount
-        int correctAnswerId = -1;
+        var correctAnswerId = -1;
         List<Answer> answers = new ArrayList<>();
-        int answerId = 1;
+        var answerId = 1;
         for (int i = 2; i < row.length; i += 2) {
 
           if (!row[i].isEmpty() || !row[i].isBlank()) {
             answers.add(new AnswerImpl(answerId, row[i]));
 
-            boolean isCorrect = Boolean.parseBoolean(row[i + 1]);
+            var isCorrect = Boolean.parseBoolean(row[i + 1]);
 
             if (isCorrect) {
               correctAnswerId = answerId;
