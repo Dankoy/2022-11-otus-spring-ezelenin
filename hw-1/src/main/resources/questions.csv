@@ -1,0 +1,5 @@
+Question number,question,answer1,isCorrect?,answer2,isCorrect?,answer3,isCorrect?,answer4,isCorrect?
+1,question1,q1ans1,TRUE,q1ans2,FALSE,q1ans3,FALSE,q1ans4,FALSE
+2,question2,q2ans1,FALSE,q2ans2,FALSE,q2ans3,TRUE,q2ans4,FALSE
+3,question3,q3ans1,FALSE,q3ans2,FALSE,q3ans3,FALSE,q3ans4,TRUE
+4,question4,q4ans1,FALSE,q4ans2,TRUE,q4ans3,FALSE,,

@@ -1,0 +1,76 @@
+package ru.dankoy.otus.core.dao;
+
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import ru.dankoy.otus.core.domain.Answer;
+import ru.dankoy.otus.core.domain.AnswerImpl;
+import ru.dankoy.otus.core.domain.Question;
+import ru.dankoy.otus.core.domain.QuestionImpl;
+
+/**
+ * @author turtality
+ * <p>
+ * Implementation of {@link QuestionsDao} interface where resource for questions is csv file.
+ */
+public class CsvQuestionsDaoImpl implements QuestionsDao {
+
+  private final String resource; // строка с указанием на ресурс
+
+  public CsvQuestionsDaoImpl(String resource) {
+    this.resource = resource;
+  }
+
+  @Override
+  public List<Question> getQuestions() {
+
+    try (BufferedReader reader = new BufferedReader(
+        new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(resource))));
+        CSVReader csvReader = new CSVReaderBuilder(reader)
+            .withSkipLines(1)
+            .build()) {
+
+      List<String[]> rows = csvReader.readAll();
+
+      List<Question> questions = new ArrayList<>();
+      // get amount of questions
+      for (String[] row : rows) {
+
+        long questionId = Long.parseLong(row[0]);
+        String questionText = row[1];
+
+        // parse answers. may have different amount
+        int correctAnswerId = -1;
+        List<Answer> answers = new ArrayList<>();
+        int answerId = 1;
+        for (int i = 2; i < row.length; i += 2) {
+
+          if (!row[i].isEmpty() || !row[i].isBlank()) {
+            answers.add(new AnswerImpl(answerId, row[i]));
+
+            boolean isCorrect = Boolean.parseBoolean(row[i + 1]);
+
+            if (isCorrect) {
+              correctAnswerId = answerId;
+            }
+          }
+          answerId++;
+
+        }
+
+        var question = new QuestionImpl(questionId, questionText, answers, correctAnswerId);
+        questions.add(question);
+
+      }
+
+      return questions;
+
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+}
