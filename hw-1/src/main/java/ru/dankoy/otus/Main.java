@@ -9,7 +9,6 @@ import ru.dankoy.otus.core.utils.Printer;
 public class Main {
 
   public static void main(String[] args) {
-    System.out.println("Hello world!");
 
     var ctx = new ClassPathXmlApplicationContext("/spring-context.xml");
 
