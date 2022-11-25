@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import ru.dankoy.core.dao.CsvQuestionsDaoImpl;
+import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
 import ru.dankoy.core.service.QuestionsServiceImpl;
 import ru.dankoy.core.utils.PrinterImpl;
 

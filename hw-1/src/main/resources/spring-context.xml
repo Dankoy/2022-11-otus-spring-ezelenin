@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean name="csvQuestionsDao" class="ru.dankoy.core.dao.CsvQuestionsDaoImpl">
+  <bean name="csvQuestionsDao" class="ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl">
     <constructor-arg name="resource" value="/questions.csv"></constructor-arg>
   </bean>
 

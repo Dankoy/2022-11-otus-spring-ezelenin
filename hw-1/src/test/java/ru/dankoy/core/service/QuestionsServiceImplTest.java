@@ -6,7 +6,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.dankoy.core.dao.CsvQuestionsDaoImpl;
+import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
 import ru.dankoy.core.dao.QuestionsDao;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.AnswerImpl;
