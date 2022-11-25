@@ -74,7 +74,7 @@ public class CsvQuestionsDaoImpl implements QuestionsDao {
       return questions;
 
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new QuestionsDaoException(e);
     }
   }
 }
