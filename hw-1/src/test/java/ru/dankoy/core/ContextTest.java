@@ -12,14 +12,14 @@ import ru.dankoy.core.service.QuestionsServiceImpl;
 import ru.dankoy.core.utils.PrinterImpl;
 
 @SpringJUnitConfig(locations = "/spring-context.xml")
-public class ContextTest {
+class ContextTest {
 
   @Autowired
   private ApplicationContext applicationContext;
 
   @Test
   @DisplayName("Spring context testing")
-  public void contextTest() {
+  void contextTest() {
 
     assertNotNull(applicationContext);
 

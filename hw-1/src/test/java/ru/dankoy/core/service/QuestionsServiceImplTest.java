@@ -13,14 +13,15 @@ import ru.dankoy.core.domain.AnswerImpl;
 import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.domain.QuestionImpl;
 
-public class QuestionsServiceImplTest {
+@DisplayName("Test Questions Service ")
+class QuestionsServiceImplTest {
 
 
   private final QuestionsDao questionsDao = Mockito.mock(CsvQuestionsDaoImpl.class);
 
   @Test
   @DisplayName("Test get questions from dao")
-  public void getQuestionsTest() {
+  void getQuestionsTest() {
 
     Mockito.when(questionsDao.getQuestions()).thenReturn(correctList());
 

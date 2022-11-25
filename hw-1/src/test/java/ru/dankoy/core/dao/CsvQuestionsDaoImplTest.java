@@ -11,12 +11,12 @@ import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.domain.QuestionImpl;
 
 @DisplayName("Тесты CsvQuestionDaoImpl класса")
-public class CsvQuestionsDaoImplTest {
+class CsvQuestionsDaoImplTest {
 
 
   @Test
   @DisplayName("Тестирование парсера csv")
-  public void parseCsvTest() {
+  void parseCsvTest() {
 
     var questionDao = new CsvQuestionsDaoImpl("/questions.csv");
 
