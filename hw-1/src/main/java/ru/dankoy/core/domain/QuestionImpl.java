@@ -45,4 +45,36 @@ public class QuestionImpl implements Question {
         + ", \"correctAnswerId\":\"" + correctAnswerId + "\""
         + "}}";
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    QuestionImpl question1 = (QuestionImpl) o;
+
+    if (id != question1.id) {
+      return false;
+    }
+    if (correctAnswerId != question1.correctAnswerId) {
+      return false;
+    }
+    if (!question.equals(question1.question)) {
+      return false;
+    }
+    return answers.equals(question1.answers);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = (int) (id ^ (id >>> 32));
+    result = 31 * result + question.hashCode();
+    result = 31 * result + answers.hashCode();
+    result = 31 * result + (int) (correctAnswerId ^ (correctAnswerId >>> 32));
+    return result;
+  }
 }

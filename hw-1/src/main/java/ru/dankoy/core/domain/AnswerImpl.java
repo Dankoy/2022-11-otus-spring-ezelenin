@@ -28,4 +28,28 @@ public class AnswerImpl implements Answer {
         + ", \"answer\":\"" + answer + "\""
         + "}}";
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    AnswerImpl answer1 = (AnswerImpl) o;
+
+    if (id != answer1.id) {
+      return false;
+    }
+    return answer.equals(answer1.answer);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = (int) (id ^ (id >>> 32));
+    result = 31 * result + answer.hashCode();
+    return result;
+  }
 }

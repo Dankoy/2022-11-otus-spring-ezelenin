@@ -5,7 +5,7 @@ import ru.dankoy.core.domain.Question;
 
 /**
  * @author turtality
- *
+ * <p>
  * Service layer for questions
  */
 public interface QuestionsService {
