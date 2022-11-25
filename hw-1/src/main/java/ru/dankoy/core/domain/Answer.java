@@ -1,4 +1,4 @@
-package ru.dankoy.otus.core.domain;
+package ru.dankoy.core.domain;
 
 /**
  * @author turtality

@@ -1,15 +1,16 @@
-package ru.dankoy.otus.core.dao;
+package ru.dankoy.core.dao;
 
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import ru.dankoy.otus.core.domain.Answer;
-import ru.dankoy.otus.core.domain.AnswerImpl;
-import ru.dankoy.otus.core.domain.Question;
-import ru.dankoy.otus.core.domain.QuestionImpl;
+import ru.dankoy.core.domain.Answer;
+import ru.dankoy.core.domain.AnswerImpl;
+import ru.dankoy.core.domain.Question;
+import ru.dankoy.core.domain.QuestionImpl;
 
 /**
  * @author turtality
@@ -31,6 +32,10 @@ public class CsvQuestionsDaoImpl implements QuestionsDao {
         new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(resource))));
         var csvReader = new CSVReaderBuilder(reader)
             .withSkipLines(1)
+            .withCSVParser(new CSVParserBuilder()
+                .withSeparator(';')
+                .withIgnoreQuotations(true)
+                .build())
             .build()) {
 
       List<String[]> rows = csvReader.readAll();

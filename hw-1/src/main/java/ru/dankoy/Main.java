@@ -1,10 +1,10 @@
-package ru.dankoy.otus;
+package ru.dankoy;
 
 import java.util.List;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.dankoy.otus.core.domain.Question;
-import ru.dankoy.otus.core.service.QuestionsServiceImpl;
-import ru.dankoy.otus.core.utils.Printer;
+import ru.dankoy.core.domain.Question;
+import ru.dankoy.core.service.QuestionsServiceImpl;
+import ru.dankoy.core.utils.PrinterImpl;
 
 public class Main {
 
@@ -15,7 +15,7 @@ public class Main {
     var questionsService = ctx.getBean(QuestionsServiceImpl.class);
 
     List<Question> questionList = questionsService.getQuestions();
-    var printer = ctx.getBean(Printer.class);
+    var printer = ctx.getBean(PrinterImpl.class);
 
     printer.printQuestions(questionList);
 

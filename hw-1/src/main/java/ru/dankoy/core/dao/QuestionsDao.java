@@ -1,7 +1,7 @@
-package ru.dankoy.otus.core.dao;
+package ru.dankoy.core.dao;
 
 import java.util.List;
-import ru.dankoy.otus.core.domain.Question;
+import ru.dankoy.core.domain.Question;
 
 /**
  * @author turtality 2022-11-23

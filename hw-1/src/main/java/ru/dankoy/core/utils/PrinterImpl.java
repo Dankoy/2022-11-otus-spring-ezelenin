@@ -1,20 +1,21 @@
-package ru.dankoy.otus.core.utils;
+package ru.dankoy.core.utils;
 
 import java.util.List;
-import ru.dankoy.otus.core.domain.Answer;
-import ru.dankoy.otus.core.domain.Question;
+import ru.dankoy.core.domain.Answer;
+import ru.dankoy.core.domain.Question;
 
-public class Printer {
+public class PrinterImpl implements Printer {
 
   private final String questionTemplate;
   private final String answerTemplate;
 
-  public Printer(String questionTemplate, String answerTemplate) {
+  public PrinterImpl(String questionTemplate, String answerTemplate) {
     this.answerTemplate = answerTemplate;
     this.questionTemplate = questionTemplate;
   }
 
 
+  @Override
   public void printQuestions(List<Question> questionList) {
 
     StringBuilder stringBuilder = new StringBuilder();
@@ -29,6 +30,8 @@ public class Printer {
         stringBuilder.append(String.format(answerTemplate, answer.getId(), answer.getAnswer()));
         stringBuilder.append(System.getProperty("line.separator"));
       }
+
+      stringBuilder.append(System.getProperty("line.separator"));
 
     }
 

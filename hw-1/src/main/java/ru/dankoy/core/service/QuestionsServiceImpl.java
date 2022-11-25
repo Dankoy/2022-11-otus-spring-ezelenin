@@ -1,8 +1,8 @@
-package ru.dankoy.otus.core.service;
+package ru.dankoy.core.service;
 
 import java.util.List;
-import ru.dankoy.otus.core.dao.QuestionsDao;
-import ru.dankoy.otus.core.domain.Question;
+import ru.dankoy.core.dao.QuestionsDao;
+import ru.dankoy.core.domain.Question;
 
 /**
  * @author turtality

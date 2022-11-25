@@ -4,17 +4,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean name="csvQuestionsDao" class="ru.dankoy.otus.core.dao.CsvQuestionsDaoImpl">
+  <bean name="csvQuestionsDao" class="ru.dankoy.core.dao.CsvQuestionsDaoImpl">
     <constructor-arg name="resource" value="/questions.csv"></constructor-arg>
   </bean>
 
-  <bean name="csvQuestionsService" class="ru.dankoy.otus.core.service.QuestionsServiceImpl">
+  <bean name="csvQuestionsService" class="ru.dankoy.core.service.QuestionsServiceImpl">
     <constructor-arg name="questionsDao" ref="csvQuestionsDao"></constructor-arg>
   </bean>
 
-  <bean name="printer" class="ru.dankoy.otus.core.utils.Printer">
-    <constructor-arg name="answerTemplate" value="%d) %s"></constructor-arg>
-    <constructor-arg name="questionTemplate" value="Question: %d) %s"></constructor-arg>
+  <bean name="printer" class="ru.dankoy.core.utils.PrinterImpl">
+    <constructor-arg name="answerTemplate" value="  %d) %s"></constructor-arg>
+    <constructor-arg name="questionTemplate" value="%d) %s"></constructor-arg>
   </bean>
 
 </beans>
