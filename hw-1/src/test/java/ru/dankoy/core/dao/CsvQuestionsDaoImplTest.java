@@ -19,7 +19,7 @@ class CsvQuestionsDaoImplTest {
   @DisplayName("Тестирование парсера csv")
   void parseCsvTest() {
 
-    var questionDao = new CsvQuestionsDaoImpl("/questions.csv");
+    var questionDao = new CsvQuestionsDaoImpl("/questions-rus.csv");
 
     List<Question> questionList = questionDao.getQuestions();
 
