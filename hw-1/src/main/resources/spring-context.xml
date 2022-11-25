@@ -5,7 +5,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <bean name="csvQuestionsDao" class="ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl">
-    <constructor-arg name="resource" value="/questions-rus.csv"></constructor-arg>
+    <constructor-arg name="resource" value="/questions-eng.csv"></constructor-arg>
   </bean>
 
   <bean name="csvQuestionsService" class="ru.dankoy.core.service.QuestionsServiceImpl">

@@ -19,7 +19,7 @@ class CsvQuestionsDaoImplTest {
   @DisplayName("Тестирование парсера csv")
   void parseCsvTest() {
 
-    var questionDao = new CsvQuestionsDaoImpl("/questions-rus.csv");
+    var questionDao = new CsvQuestionsDaoImpl("/questions-eng.csv");
 
     List<Question> questionList = questionDao.getQuestions();
 
@@ -30,14 +30,14 @@ class CsvQuestionsDaoImplTest {
   private List<Question> correctList() {
 
     List<Answer> answers = List.of(
-        new AnswerImpl(1, "добавляя воду"),
-        new AnswerImpl(2, "увеличивая концентрацию растворенного вещества"),
-        new AnswerImpl(3, "охлаждая раствор"),
-        new AnswerImpl(4, "вводя в раствор один из продуктов гидролиза")
+        new AnswerImpl(1, "Gas only"),
+        new AnswerImpl(2, "Both Solid and Liquid"),
+        new AnswerImpl(3, "Liquid only"),
+        new AnswerImpl(4, "Solid only")
     );
 
-    var question = new QuestionImpl(2, "Гидролиз соли в водном растворе возможно усилить …",
-        answers, 1);
+    var question = new QuestionImpl(1, "Young's modulus is the property of",
+        answers, 4);
 
     return List.of(question);
 
