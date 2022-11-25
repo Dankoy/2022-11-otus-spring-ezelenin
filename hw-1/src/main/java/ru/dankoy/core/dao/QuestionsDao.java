@@ -4,7 +4,7 @@ import java.util.List;
 import ru.dankoy.core.domain.Question;
 
 /**
- * @author turtality 2022-11-23
+ * @author Dankoy 2022-11-23
  * <p>
  * Common DAO interface for questions
  */

@@ -4,7 +4,7 @@ import java.util.List;
 import ru.dankoy.core.domain.Question;
 
 /**
- * @author turtality
+ * @author Dankoy
  * <p>
  * Service layer for questions
  */

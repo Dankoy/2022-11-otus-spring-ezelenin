@@ -1,7 +1,7 @@
 package ru.dankoy.core.domain;
 
 /**
- * @author turtality
+ * @author Dankoy
  * <p>
  * Answer interface
  */

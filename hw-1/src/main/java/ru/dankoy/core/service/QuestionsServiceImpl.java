@@ -5,7 +5,7 @@ import ru.dankoy.core.dao.QuestionsDao;
 import ru.dankoy.core.domain.Question;
 
 /**
- * @author turtality
+ * @author Dankoy
  * <p>
  * Implementation of interface {@link QuestionsService} for lower DAO layer {@link QuestionsDao}
  */

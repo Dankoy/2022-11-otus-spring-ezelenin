@@ -15,7 +15,7 @@ import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.domain.QuestionImpl;
 
 /**
- * @author turtality
+ * @author Dankoy
  * <p>
  * Implementation of {@link QuestionsDao} interface where resource for questions is csv file.
  */

@@ -3,7 +3,7 @@ package ru.dankoy.core.domain;
 import java.util.List;
 
 /**
- * @author turtality
+ * @author Dankoy
  * <p>
  * Question interface
  */
