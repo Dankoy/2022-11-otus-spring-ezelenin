@@ -37,16 +37,6 @@ public class QuestionImpl implements Question {
   }
 
   @Override
-  public String toString() {
-    return "{\"QuestionImpl\":{"
-        + "\"id\":\"" + id + "\""
-        + ", \"question\":\"" + question + "\""
-        + ", \"answer\":" + answers
-        + ", \"correctAnswerId\":\"" + correctAnswerId + "\""
-        + "}}";
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -76,5 +66,15 @@ public class QuestionImpl implements Question {
     result = 31 * result + answers.hashCode();
     result = 31 * result + (int) (correctAnswerId ^ (correctAnswerId >>> 32));
     return result;
+  }
+
+  @Override
+  public String toString() {
+    return "{\"QuestionImpl\":{"
+        + "\"id\":\"" + id + "\""
+        + ", \"question\":\"" + question + "\""
+        + ", \"answer\":" + answers
+        + ", \"correctAnswerId\":\"" + correctAnswerId + "\""
+        + "}}";
   }
 }

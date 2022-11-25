@@ -22,14 +22,6 @@ public class AnswerImpl implements Answer {
   }
 
   @Override
-  public String toString() {
-    return "{\"AnswerImpl\":{"
-        + "\"id\":\"" + id + "\""
-        + ", \"answer\":\"" + answer + "\""
-        + "}}";
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -51,5 +43,13 @@ public class AnswerImpl implements Answer {
     int result = (int) (id ^ (id >>> 32));
     result = 31 * result + answer.hashCode();
     return result;
+  }
+
+  @Override
+  public String toString() {
+    return "{\"AnswerImpl\":{"
+        + "\"id\":\"" + id + "\""
+        + ", \"answer\":\"" + answer + "\""
+        + "}}";
   }
 }
