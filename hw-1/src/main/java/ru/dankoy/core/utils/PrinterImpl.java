@@ -6,6 +6,8 @@ import ru.dankoy.core.domain.Question;
 
 public class PrinterImpl implements Printer {
 
+  private static final String SEPARATOR = "line.separator";
+
   private final String questionTemplate;
   private final String answerTemplate;
 
@@ -24,14 +26,14 @@ public class PrinterImpl implements Printer {
 
       stringBuilder.append(
           String.format(questionTemplate, question.getId(), question.getQuestion()));
-      stringBuilder.append(System.getProperty("line.separator"));
+      stringBuilder.append(System.getProperty(SEPARATOR));
 
       for (Answer answer : question.getAnswers()) {
         stringBuilder.append(String.format(answerTemplate, answer.getId(), answer.getAnswer()));
-        stringBuilder.append(System.getProperty("line.separator"));
+        stringBuilder.append(System.getProperty(SEPARATOR));
       }
 
-      stringBuilder.append(System.getProperty("line.separator"));
+      stringBuilder.append(System.getProperty(SEPARATOR));
 
     }
 
