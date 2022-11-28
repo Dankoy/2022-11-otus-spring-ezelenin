@@ -25,11 +25,11 @@ public class PrinterImpl implements Printer {
     for (Question question : questionList) {
 
       stringBuilder.append(
-          String.format(questionTemplate, question.getId(), question.getQuestion()));
+          String.format(questionTemplate, question.getId(), question.getQuestionText()));
       stringBuilder.append(System.getProperty(SEPARATOR));
 
       for (Answer answer : question.getAnswers()) {
-        stringBuilder.append(String.format(answerTemplate, answer.getId(), answer.getAnswer()));
+        stringBuilder.append(String.format(answerTemplate, answer.getId(), answer.getAnswerText()));
         stringBuilder.append(System.getProperty(SEPARATOR));
       }
 

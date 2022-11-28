@@ -10,9 +10,7 @@ import java.util.Objects;
 import ru.dankoy.core.dao.QuestionsDao;
 import ru.dankoy.core.dao.QuestionsDaoException;
 import ru.dankoy.core.domain.Answer;
-import ru.dankoy.core.domain.AnswerImpl;
 import ru.dankoy.core.domain.Question;
-import ru.dankoy.core.domain.QuestionImpl;
 
 /**
  * @author Dankoy
@@ -56,7 +54,7 @@ public class CsvQuestionsDaoImpl implements QuestionsDao {
         for (int i = 2; i < row.length; i += 2) {
 
           if (!row[i].isEmpty() || !row[i].isBlank()) {
-            answers.add(new AnswerImpl(answerId, row[i]));
+            answers.add(new Answer(answerId, row[i]));
 
             var isCorrect = Boolean.parseBoolean(row[i + 1]);
 
@@ -68,7 +66,7 @@ public class CsvQuestionsDaoImpl implements QuestionsDao {
 
         }
 
-        var question = new QuestionImpl(questionId, questionText, answers, correctAnswerId);
+        var question = new Question(questionId, questionText, answers, correctAnswerId);
         questions.add(question);
 
       }

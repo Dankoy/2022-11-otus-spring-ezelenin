@@ -9,9 +9,7 @@ import org.mockito.Mockito;
 import ru.dankoy.core.dao.QuestionsDao;
 import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
 import ru.dankoy.core.domain.Answer;
-import ru.dankoy.core.domain.AnswerImpl;
 import ru.dankoy.core.domain.Question;
-import ru.dankoy.core.domain.QuestionImpl;
 
 @DisplayName("Test Questions Service ")
 class QuestionsServiceImplTest {
@@ -36,13 +34,13 @@ class QuestionsServiceImplTest {
   private List<Question> correctList() {
 
     List<Answer> answers = List.of(
-        new AnswerImpl(1, "добавляя воду"),
-        new AnswerImpl(2, "увеличивая концентрацию растворенного вещества"),
-        new AnswerImpl(3, "охлаждая раствор"),
-        new AnswerImpl(4, "вводя в раствор один из продуктов гидролиза")
+        new Answer(1, "добавляя воду"),
+        new Answer(2, "увеличивая концентрацию растворенного вещества"),
+        new Answer(3, "охлаждая раствор"),
+        new Answer(4, "вводя в раствор один из продуктов гидролиза")
     );
 
-    var question = new QuestionImpl(2, "Гидролиз соли в водном растворе возможно усилить …",
+    var question = new Question(2, "Гидролиз соли в водном растворе возможно усилить …",
         answers, 1);
 
     return List.of(question);
