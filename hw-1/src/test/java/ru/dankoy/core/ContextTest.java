@@ -7,9 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
-import ru.dankoy.core.service.QuestionsServiceImpl;
-import ru.dankoy.core.utils.PrinterImpl;
+import ru.dankoy.core.csvreader.CsvReader;
+import ru.dankoy.core.dao.QuestionsDao;
+import ru.dankoy.core.service.QuestionsService;
+import ru.dankoy.core.utils.Printer;
 
 @SpringJUnitConfig(locations = "/spring-context.xml")
 class ContextTest {
@@ -23,9 +24,10 @@ class ContextTest {
 
     assertNotNull(applicationContext);
 
-    assertNotNull(applicationContext.getBean(PrinterImpl.class));
-    assertNotNull(applicationContext.getBean(QuestionsServiceImpl.class));
-    assertNotNull(applicationContext.getBean(CsvQuestionsDaoImpl.class));
+    assertNotNull(applicationContext.getBean(Printer.class));
+    assertNotNull(applicationContext.getBean(QuestionsService.class));
+    assertNotNull(applicationContext.getBean(QuestionsDao.class));
+    assertNotNull(applicationContext.getBean(CsvReader.class));
 
   }
 
