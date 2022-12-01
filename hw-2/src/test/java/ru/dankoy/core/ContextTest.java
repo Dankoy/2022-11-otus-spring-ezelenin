@@ -7,12 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import ru.dankoy.Main;
 import ru.dankoy.core.csvreader.CsvReader;
 import ru.dankoy.core.dao.QuestionsDao;
 import ru.dankoy.core.service.QuestionsService;
 import ru.dankoy.core.utils.Printer;
 
-@SpringJUnitConfig(locations = "/spring-context.xml")
+@SpringJUnitConfig(value = Main.class)
 class ContextTest {
 
   @Autowired

@@ -6,12 +6,15 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CsvReaderImpl implements CsvReader {
 
   private final String resource;
 
-  public CsvReaderImpl(String resource) {
+  public CsvReaderImpl(@Value("${questionsCsv}") String resource) {
     this.resource = resource;
   }
 

@@ -1,9 +1,12 @@
 package ru.dankoy.core.utils;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 
+@Component
 public class PrinterImpl implements Printer {
 
   private static final String SEPARATOR = "line.separator";
@@ -11,7 +14,8 @@ public class PrinterImpl implements Printer {
   private final String questionTemplate;
   private final String answerTemplate;
 
-  public PrinterImpl(String questionTemplate, String answerTemplate) {
+  public PrinterImpl(@Value("${questionTemplate}") String questionTemplate,
+      @Value("${answerTemplate}") String answerTemplate) {
     this.answerTemplate = answerTemplate;
     this.questionTemplate = questionTemplate;
   }
