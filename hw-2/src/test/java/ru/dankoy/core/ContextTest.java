@@ -10,8 +10,8 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.dankoy.Main;
 import ru.dankoy.core.csvreader.CsvReader;
 import ru.dankoy.core.dao.QuestionsDao;
-import ru.dankoy.core.service.QuestionsService;
-import ru.dankoy.core.utils.Printer;
+import ru.dankoy.core.service.questions.QuestionsService;
+import ru.dankoy.core.service.printer.Printer;
 
 @SpringJUnitConfig(value = Main.class)
 class ContextTest {

@@ -1,4 +1,4 @@
-package ru.dankoy.core.service;
+package ru.dankoy.core.service.questions;
 
 import java.util.List;
 import ru.dankoy.core.domain.Question;
