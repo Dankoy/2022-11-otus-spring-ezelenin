@@ -1,4 +1,4 @@
-package ru.dankoy;
+package ru.dankoy.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
