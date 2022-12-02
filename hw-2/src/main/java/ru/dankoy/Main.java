@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import ru.dankoy.core.service.test.TestingPerformerConsole;
+import ru.dankoy.core.service.testresultinterpreter.TestResultInterpreterServiceImpl;
 
 
 @PropertySource("classpath:application.properties")
@@ -16,8 +17,9 @@ public class Main {
 
     var ctx = new AnnotationConfigApplicationContext(Main.class);
     var testPerformer = ctx.getBean(TestingPerformerConsole.class);
+    var testResultInterpreter = ctx.getBean(TestResultInterpreterServiceImpl.class);
     var testResult = testPerformer.performTest();
-    testResult.printResult();
+    testResultInterpreter.interpretTestResult(testResult);
 
   }
 }

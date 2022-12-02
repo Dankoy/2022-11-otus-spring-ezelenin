@@ -62,8 +62,7 @@ public class TestingPerformerConsole implements TestingPerformer {
 
     }
 
-    return new TestResult(ioService, amountOfCorrectAnswersToPassTest,
-        correctAnsweredAmount, student);
+    return new TestResult(amountOfCorrectAnswersToPassTest, correctAnsweredAmount, student);
 
   }
 }
