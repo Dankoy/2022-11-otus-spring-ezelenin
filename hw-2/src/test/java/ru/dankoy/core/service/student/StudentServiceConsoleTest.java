@@ -2,6 +2,7 @@ package ru.dankoy.core.service.student;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ class StudentServiceConsoleTest {
   private static final String studentFirstAndLastName = "abc";
 
   @Test
+  @DisplayName("Test correct creation of student object")
   void getStudentTest() {
 
     var correctStudent = new Student(studentFirstAndLastName, studentFirstAndLastName);
