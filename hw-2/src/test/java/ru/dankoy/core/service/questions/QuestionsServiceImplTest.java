@@ -1,4 +1,4 @@
-package ru.dankoy.core.service;
+package ru.dankoy.core.service.questions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,7 +10,6 @@ import ru.dankoy.core.dao.QuestionsDao;
 import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
-import ru.dankoy.core.service.questions.QuestionsServiceImpl;
 
 @DisplayName("Test Questions Service ")
 class QuestionsServiceImplTest {
