@@ -43,4 +43,31 @@ public class TestResult {
   }
 
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof TestResult)) {
+      return false;
+    }
+
+    TestResult that = (TestResult) o;
+
+    if (amountOfCorrectAnswersToPassTest != that.amountOfCorrectAnswersToPassTest) {
+      return false;
+    }
+    if (correctAnsweredAmount != that.correctAnsweredAmount) {
+      return false;
+    }
+    return student.equals(that.student);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = amountOfCorrectAnswersToPassTest;
+    result = 31 * result + correctAnsweredAmount;
+    result = 31 * result + student.hashCode();
+    return result;
+  }
 }
