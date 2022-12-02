@@ -26,7 +26,7 @@ class StudentServiceConsoleTest {
 
   private static final String studentFirstAndLastName = "abc";
   @Autowired
-  private StudentService studentService;
+  private StudentServiceConsole studentService;
 
   @Autowired
   private IOService ioService;
@@ -53,7 +53,7 @@ class StudentServiceConsoleTest {
   static class Config {
 
     @Bean
-    public StudentService studentService() {
+    public StudentServiceConsole studentService() {
       return new StudentServiceConsole(ioService());
     }
 

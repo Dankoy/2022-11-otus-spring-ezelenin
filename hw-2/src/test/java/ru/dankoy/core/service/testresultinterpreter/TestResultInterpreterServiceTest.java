@@ -22,7 +22,7 @@ class TestResultInterpreterServiceTest {
   @Autowired
   private IOService ioService;
   @Autowired
-  private TestResultInterpreterService testResultInterpreterService;
+  private TestResultInterpreterServiceImpl testResultInterpreterService;
   private Student student;
 
   @Test
@@ -66,7 +66,7 @@ class TestResultInterpreterServiceTest {
   static class Config {
 
     @Bean
-    TestResultInterpreterService testResultInterpreterService() {
+    TestResultInterpreterServiceImpl testResultInterpreterService() {
       return new TestResultInterpreterServiceImpl(ioService());
     }
 

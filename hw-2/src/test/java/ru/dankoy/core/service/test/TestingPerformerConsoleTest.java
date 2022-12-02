@@ -47,7 +47,7 @@ class TestingPerformerConsoleTest {
   @Autowired
   private IOService ioService;
   @Autowired
-  private TestingPerformer testingPerformer;
+  private TestingPerformerConsole testingPerformer;
 
   @Test
   @DisplayName("Testing if algorithm of testing works correctly")
@@ -119,7 +119,7 @@ class TestingPerformerConsoleTest {
     int amountOfCorrectAnswersToPassTest;
 
     @Bean
-    TestingPerformer testingPerformer() {
+    TestingPerformerConsole testingPerformer() {
       return new TestingPerformerConsole(ioService(), studentService(), questionsService(),
           printer(),
           amountOfCorrectAnswersToPassTest);

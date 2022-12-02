@@ -6,7 +6,6 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.dankoy.core.dao.QuestionsDao;
 import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
@@ -15,7 +14,7 @@ import ru.dankoy.core.domain.Question;
 class QuestionsServiceImplTest {
 
 
-  private final QuestionsDao questionsDao = Mockito.mock(CsvQuestionsDaoImpl.class);
+  private final CsvQuestionsDaoImpl questionsDao = Mockito.mock(CsvQuestionsDaoImpl.class);
 
   @Test
   @DisplayName("Test get questions from dao")
