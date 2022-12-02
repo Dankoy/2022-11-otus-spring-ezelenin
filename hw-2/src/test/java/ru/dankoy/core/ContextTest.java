@@ -15,9 +15,10 @@ import ru.dankoy.core.service.io.IOService;
 import ru.dankoy.core.service.printer.Printer;
 import ru.dankoy.core.service.questions.QuestionsService;
 import ru.dankoy.core.service.test.TestingPerformer;
+import ru.dankoy.core.service.testresultinterpreter.TestResultInterpreterService;
 
 @SpringJUnitConfig(value = Main.class)
-@ActiveProfiles({ "default" })
+@ActiveProfiles({"default"})
 class ContextTest {
 
   @Autowired
@@ -35,6 +36,7 @@ class ContextTest {
     assertNotNull(applicationContext.getBean(CsvReader.class));
     assertNotNull(applicationContext.getBean(IOService.class));
     assertNotNull(applicationContext.getBean(TestingPerformer.class));
+    assertNotNull(applicationContext.getBean(TestResultInterpreterService.class));
 
   }
 

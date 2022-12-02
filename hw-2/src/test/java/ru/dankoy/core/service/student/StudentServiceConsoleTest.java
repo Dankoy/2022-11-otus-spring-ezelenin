@@ -20,33 +20,16 @@ import ru.dankoy.core.service.io.IOServiceConsole;
 
 
 @SpringJUnitConfig()
-@ContextConfiguration(loader= AnnotationConfigContextLoader.class)
-@ActiveProfiles({ "test" })
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@ActiveProfiles({"test"})
 class StudentServiceConsoleTest {
 
-  @PropertySource("classpath:application.properties")
-  @Configuration
-  @Profile({ "test" })
-  static class Config {
-
-    @Bean
-    public StudentService studentService() {
-      return new StudentServiceConsole(ioService());
-    }
-
-    @Bean
-    public IOService ioService() {
-      return Mockito.mock(IOServiceConsole.class);
-    }
-  }
-
+  private static final String studentFirstAndLastName = "abc";
   @Autowired
   private StudentService studentService;
 
   @Autowired
   private IOService ioService;
-
-  private static final String studentFirstAndLastName = "abc";
 
   @Test
   @DisplayName("Test correct creation of student object")
@@ -62,6 +45,22 @@ class StudentServiceConsoleTest {
 
     assertEquals(student, correctStudent);
 
+  }
+
+  @PropertySource("classpath:application.properties")
+  @Configuration
+  @Profile({"test"})
+  static class Config {
+
+    @Bean
+    public StudentService studentService() {
+      return new StudentServiceConsole(ioService());
+    }
+
+    @Bean
+    public IOService ioService() {
+      return Mockito.mock(IOServiceConsole.class);
+    }
   }
 
 }

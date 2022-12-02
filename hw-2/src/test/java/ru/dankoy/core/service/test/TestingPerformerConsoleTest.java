@@ -32,64 +32,22 @@ import ru.dankoy.core.service.student.StudentService;
 import ru.dankoy.core.service.student.StudentServiceConsole;
 
 @SpringJUnitConfig
-@ContextConfiguration(loader= AnnotationConfigContextLoader.class)
-@ActiveProfiles({ "test" })
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@ActiveProfiles({"test"})
 class TestingPerformerConsoleTest {
 
 
-  @PropertySource("classpath:application.properties")
-  @Configuration
-  @Profile({ "test" })
-  static class Config {
-
-    @Value("${amountOfCorrectAnswersToPassTest}")
-    int amountOfCorrectAnswersToPassTest;
-
-    @Bean
-    TestingPerformer testingPerformer() {
-      return new TestingPerformerConsole(ioService(), studentService(), questionsService(),
-          printer(),
-          amountOfCorrectAnswersToPassTest);
-    }
-
-    @Bean
-    IOService ioService() {
-      return Mockito.mock(IOServiceConsole.class);
-    }
-
-    @Bean
-    StudentService studentService() {
-      return Mockito.mock(StudentServiceConsole.class);
-    }
-
-    @Bean
-    QuestionsService questionsService() {
-      return Mockito.mock(QuestionsServiceImpl.class);
-    }
-
-    @Bean
-    Printer printer() {
-      return Mockito.mock(PrinterQuestionsImpl.class);
-    }
-
-  }
-
-  @Autowired
-  private QuestionsService questionsService;
-
-  @Autowired
-  private StudentService studentService;
-
-  @Autowired
-  private IOService ioService;
-
-  @Autowired
-  private TestingPerformer testingPerformer;
-
   private static final String fn = "abc";
   private static final String ln = "cba";
-
   private static Student student;
+  @Autowired
+  private QuestionsService questionsService;
+  @Autowired
+  private StudentService studentService;
+  @Autowired
+  private IOService ioService;
+  @Autowired
+  private TestingPerformer testingPerformer;
 
   @Test
   @DisplayName("Testing if algorithm of testing works correctly")
@@ -112,10 +70,9 @@ class TestingPerformerConsoleTest {
 
   }
 
-
   private TestResult makeTestResult() {
 
-    return new TestResult(ioService, 3, 2, student);
+    return new TestResult(3, 2, student);
 
   }
 
@@ -150,6 +107,43 @@ class TestingPerformerConsoleTest {
     }
 
     return questions;
+
+  }
+
+  @PropertySource("classpath:application.properties")
+  @Configuration
+  @Profile({"test"})
+  static class Config {
+
+    @Value("${amountOfCorrectAnswersToPassTest}")
+    int amountOfCorrectAnswersToPassTest;
+
+    @Bean
+    TestingPerformer testingPerformer() {
+      return new TestingPerformerConsole(ioService(), studentService(), questionsService(),
+          printer(),
+          amountOfCorrectAnswersToPassTest);
+    }
+
+    @Bean
+    IOService ioService() {
+      return Mockito.mock(IOServiceConsole.class);
+    }
+
+    @Bean
+    StudentService studentService() {
+      return Mockito.mock(StudentServiceConsole.class);
+    }
+
+    @Bean
+    QuestionsService questionsService() {
+      return Mockito.mock(QuestionsServiceImpl.class);
+    }
+
+    @Bean
+    Printer printer() {
+      return Mockito.mock(PrinterQuestionsImpl.class);
+    }
 
   }
 
