@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.domain.TestResult;
 import ru.dankoy.core.service.io.IOService;
+import ru.dankoy.core.service.printer.Printer;
 import ru.dankoy.core.service.questions.QuestionsService;
 import ru.dankoy.core.service.student.StudentService;
-import ru.dankoy.core.service.printer.Printer;
 
 /**
  * @author Dankoy
@@ -40,6 +40,7 @@ public class TestingPerformerConsole implements TestingPerformer {
    *
    * @return test result {@link TestResult}
    */
+  @Override
   public TestResult performTest() {
 
     // получаем вопросы

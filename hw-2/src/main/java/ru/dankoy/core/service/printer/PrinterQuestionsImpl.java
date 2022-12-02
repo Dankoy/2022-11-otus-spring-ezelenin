@@ -10,15 +10,11 @@ import ru.dankoy.core.service.io.IOService;
 public class PrinterQuestionsImpl implements Printer {
 
   private static final String SEPARATOR = "line.separator";
-
+  private final IOService ioService;
   @Value("${questionTemplate}")
   private String questionTemplate;
-
   @Value("${answerTemplate}")
   private String answerTemplate;
-
-
-  private final IOService ioService;
 
   public PrinterQuestionsImpl(IOService ioService) {
     this.ioService = ioService;

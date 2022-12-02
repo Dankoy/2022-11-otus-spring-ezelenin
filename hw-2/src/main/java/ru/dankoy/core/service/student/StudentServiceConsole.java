@@ -13,14 +13,13 @@ import ru.dankoy.core.service.io.IOService;
 @Service
 public class StudentServiceConsole implements StudentService {
 
+  private final IOService ioService;
   @Value("${askStudentName}")
   private String askStudentName;
   @Value("${firstName}")
   private String askFirstName;
   @Value("${lastName}")
   private String askLastName;
-
-  private final IOService ioService;
 
   public StudentServiceConsole(IOService ioService) {
     this.ioService = ioService;
