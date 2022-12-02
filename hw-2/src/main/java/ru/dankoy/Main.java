@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import ru.dankoy.core.service.test.TestingPerformerConsole;
 
 
-@PropertySource("/application.properties")
+@PropertySource("classpath:application.properties")
 @Configuration
 @ComponentScan
 public class Main {
