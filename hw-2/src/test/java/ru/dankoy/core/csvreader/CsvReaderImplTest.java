@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.dankoy.core.exceptions.CsvReaderException;
 
 @DisplayName("Тестирование ридера из файла csv")
 class CsvReaderImplTest {

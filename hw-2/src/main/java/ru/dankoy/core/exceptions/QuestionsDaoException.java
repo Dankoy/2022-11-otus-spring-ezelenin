@@ -1,4 +1,4 @@
-package ru.dankoy.core.dao;
+package ru.dankoy.core.exceptions;
 
 public class QuestionsDaoException extends RuntimeException {
 

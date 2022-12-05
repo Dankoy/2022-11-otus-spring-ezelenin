@@ -1,4 +1,4 @@
-package ru.dankoy.core.csvreader;
+package ru.dankoy.core.exceptions;
 
 public class CsvReaderException extends RuntimeException {
 
