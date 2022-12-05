@@ -1,32 +1,38 @@
 package ru.dankoy.core.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.dankoy.core.csvreader.CsvReader;
-import ru.dankoy.core.csvreader.CsvReaderImpl;
 import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 
 @DisplayName("Тесты CsvQuestionDaoImpl класса")
+@ExtendWith(MockitoExtension.class)
 class CsvQuestionsDaoImplTest {
 
-  private final CsvReader csvReader = Mockito.mock(CsvReaderImpl.class);
+  @Mock
+  private CsvReader csvReader;
+
+  @InjectMocks
+  private CsvQuestionsDaoImpl csvQuestionsDao;
 
   @Test
   @DisplayName("Тестирование парсера csv")
   void parseCsvTest() {
 
-    Mockito.when(csvReader.read()).thenReturn(correctCsvRead());
+    given(csvReader.read()).willReturn(correctCsvRead());
 
-    var questionDao = new CsvQuestionsDaoImpl(csvReader);
-
-    List<Question> questionList = questionDao.getQuestions();
+    List<Question> questionList = csvQuestionsDao.getQuestions();
 
     assertEquals(questionList, correctList());
 

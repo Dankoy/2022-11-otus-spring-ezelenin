@@ -1,28 +1,35 @@
 package ru.dankoy.core.service.questions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 
 @DisplayName("Test Questions Service ")
+@ExtendWith(MockitoExtension.class)
 class QuestionsServiceImplTest {
 
+  @Mock
+  private CsvQuestionsDaoImpl questionsDao;
 
-  private final CsvQuestionsDaoImpl questionsDao = Mockito.mock(CsvQuestionsDaoImpl.class);
+  @InjectMocks
+  private QuestionsServiceImpl service;
 
   @Test
   @DisplayName("Test get questions from dao")
   void getQuestionsTest() {
 
-    Mockito.when(questionsDao.getQuestions()).thenReturn(correctList());
-
-    var service = new QuestionsServiceImpl(questionsDao);
+    given(questionsDao.getQuestions()).willReturn(correctList());
 
     assertEquals(service.getQuestions(), correctList());
 
