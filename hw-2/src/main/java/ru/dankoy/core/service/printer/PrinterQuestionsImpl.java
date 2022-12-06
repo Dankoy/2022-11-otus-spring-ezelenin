@@ -11,13 +11,15 @@ public class PrinterQuestionsImpl implements Printer {
 
   private static final String SEPARATOR = "line.separator";
   private final IOService ioService;
-  @Value("${questionTemplate}")
   private String questionTemplate;
-  @Value("${answerTemplate}")
   private String answerTemplate;
 
-  public PrinterQuestionsImpl(IOService ioService) {
+  public PrinterQuestionsImpl(IOService ioService,
+      @Value("${questionTemplate}") String questionTemplate,
+      @Value("${answerTemplate}") String answerTemplate) {
     this.ioService = ioService;
+    this.questionTemplate = questionTemplate;
+    this.answerTemplate = answerTemplate;
   }
 
   /**
