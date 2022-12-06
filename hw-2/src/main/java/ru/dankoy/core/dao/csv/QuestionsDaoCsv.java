@@ -16,11 +16,11 @@ import ru.dankoy.core.exceptions.QuestionsDaoException;
  * class
  */
 @Component
-public class CsvQuestionsDaoImpl implements QuestionsDao {
+public class QuestionsDaoCsv implements QuestionsDao {
 
   private final CsvReader csvReader;
 
-  public CsvQuestionsDaoImpl(CsvReader csvReader) {
+  public QuestionsDaoCsv(CsvReader csvReader) {
     this.csvReader = csvReader;
   }
 

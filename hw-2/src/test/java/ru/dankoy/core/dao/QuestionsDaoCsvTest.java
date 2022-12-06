@@ -12,19 +12,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.dankoy.core.csvreader.CsvReader;
-import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
+import ru.dankoy.core.dao.csv.QuestionsDaoCsv;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 
 @DisplayName("Тесты CsvQuestionDaoImpl класса")
 @ExtendWith(MockitoExtension.class)
-class CsvQuestionsDaoImplTest {
+class QuestionsDaoCsvTest {
 
   @Mock
   private CsvReader csvReader;
 
   @InjectMocks
-  private CsvQuestionsDaoImpl csvQuestionsDao;
+  private QuestionsDaoCsv csvQuestionsDao;
 
   @Test
   @DisplayName("Тестирование парсера csv")

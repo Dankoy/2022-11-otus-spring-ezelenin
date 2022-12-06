@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl;
+import ru.dankoy.core.dao.csv.QuestionsDaoCsv;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 
@@ -20,7 +20,7 @@ import ru.dankoy.core.domain.Question;
 class QuestionsServiceImplTest {
 
   @Mock
-  private CsvQuestionsDaoImpl questionsDao;
+  private QuestionsDaoCsv questionsDao;
 
   @InjectMocks
   private QuestionsServiceImpl service;
