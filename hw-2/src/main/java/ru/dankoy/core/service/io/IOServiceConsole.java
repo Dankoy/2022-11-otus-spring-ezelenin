@@ -2,7 +2,9 @@ package ru.dankoy.core.service.io;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.InputMismatchException;
 import java.util.Scanner;
+import ru.dankoy.core.exceptions.InvalidInputException;
 
 public class IOServiceConsole implements IOService {
 
@@ -26,7 +28,12 @@ public class IOServiceConsole implements IOService {
 
   @Override
   public long readLong() {
-    return inputStream.nextLong();
+    try {
+      return inputStream.nextLong();
+    } catch (InputMismatchException e) {
+      throw new InvalidInputException("Expected number input", e);
+    }
+
   }
 
 }
