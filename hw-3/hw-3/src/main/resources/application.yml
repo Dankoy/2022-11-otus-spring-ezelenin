@@ -1,0 +1,17 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, beans
+
+
+hw3:
+  questionsCsv: /questions-eng.csv
+  answerTemplate: "\ \ %d) %s"
+  questionTemplate: "%d) %s"
+  askStudentName: "Please type you first name and last name"
+  firstName: "First name:"
+  lastName: "Last name:"
+  amountOfCorrectAnswersToPassTest: 3
+
+

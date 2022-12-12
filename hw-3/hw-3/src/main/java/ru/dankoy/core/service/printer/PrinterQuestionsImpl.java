@@ -15,8 +15,8 @@ public class PrinterQuestionsImpl implements Printer {
   private final String answerTemplate;
 
   public PrinterQuestionsImpl(IOService ioService,
-      @Value("${questionTemplate}") String questionTemplate,
-      @Value("${answerTemplate}") String answerTemplate) {
+      @Value("${hw3.questionTemplate}") String questionTemplate,
+      @Value("${hw3.answerTemplate}") String answerTemplate) {
     this.ioService = ioService;
     this.questionTemplate = questionTemplate;
     this.answerTemplate = answerTemplate;

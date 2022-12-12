@@ -26,7 +26,7 @@ public class TestingPerformerConsole implements TestingPerformer {
 
   public TestingPerformerConsole(IOService ioService, StudentService studentService,
       QuestionsService questionsService, Printer printer,
-      @Value("${amountOfCorrectAnswersToPassTest}") int amountOfCorrectAnswersToPassTest) {
+      @Value("${hw3.amountOfCorrectAnswersToPassTest}") int amountOfCorrectAnswersToPassTest) {
     this.ioService = ioService;
     this.studentService = studentService;
     this.questionsService = questionsService;

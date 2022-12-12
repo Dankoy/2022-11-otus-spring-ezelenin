@@ -15,7 +15,7 @@ public class CsvReaderImpl implements CsvReader {
 
   private final String resource;
 
-  public CsvReaderImpl(@Value("${questionsCsv}") String resource) {
+  public CsvReaderImpl(@Value("${hw3.questionsCsv}") String resource) {
     this.resource = resource;
   }
 

@@ -14,15 +14,20 @@ import ru.dankoy.core.service.io.IOService;
 public class StudentServiceConsole implements StudentService {
 
   private final IOService ioService;
-  @Value("${askStudentName}")
-  private String askStudentName;
-  @Value("${firstName}")
-  private String askFirstName;
-  @Value("${lastName}")
-  private String askLastName;
 
-  public StudentServiceConsole(IOService ioService) {
+  private final String askStudentName;
+
+  private final String askFirstName;
+
+  private final String askLastName;
+
+  public StudentServiceConsole(IOService ioService, @Value("${hw3.askStudentName}") String askStudentName,
+      @Value("${hw3.firstName}") String askFirstName,
+      @Value("${hw3.lastName}") String askLastName) {
     this.ioService = ioService;
+    this.askFirstName = askFirstName;
+    this.askStudentName = askStudentName;
+    this.askLastName = askLastName;
   }
 
 
