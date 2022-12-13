@@ -1,7 +1,9 @@
 package ru.dankoy.core.service.testresultinterpreter;
 
 
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import ru.dankoy.config.AppProperties;
 import ru.dankoy.core.domain.TestResult;
 import ru.dankoy.core.service.io.IOService;
 
@@ -14,9 +16,14 @@ import ru.dankoy.core.service.io.IOService;
 public class TestResultInterpreterServiceImpl implements TestResultInterpreterService {
 
   private final IOService ioService;
+  private final MessageSource messageSource;
+  private final AppProperties appProperties;
 
-  public TestResultInterpreterServiceImpl(IOService ioService) {
+  public TestResultInterpreterServiceImpl(IOService ioService, MessageSource messageSource,
+      AppProperties appProperties) {
     this.ioService = ioService;
+    this.messageSource = messageSource;
+    this.appProperties = appProperties;
   }
 
   /**
@@ -27,12 +34,12 @@ public class TestResultInterpreterServiceImpl implements TestResultInterpreterSe
 
     if (testResult.getCorrectAnsweredAmount() >= testResult.getAmountOfCorrectAnswersToPassTest()) {
       ioService.print(String.format(
-          "Student '%s' passed test with correct answers - %d",
+          messageSource.getMessage("testPassed", null, appProperties.getLocale()),
           testResult.getStudent().getFirstAndLastName(),
           testResult.getCorrectAnsweredAmount()));
     } else {
       ioService.print(
-          String.format("Student '%s' didn't pass test with correct answers - %d",
+          String.format(messageSource.getMessage("testNotPassed", null, appProperties.getLocale()),
               testResult.getStudent().getFirstAndLastName(),
               testResult.getCorrectAnsweredAmount()));
     }

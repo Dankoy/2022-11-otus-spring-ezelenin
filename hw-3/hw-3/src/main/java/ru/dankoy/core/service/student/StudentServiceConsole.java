@@ -1,7 +1,8 @@
 package ru.dankoy.core.service.student;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import ru.dankoy.config.AppProperties;
 import ru.dankoy.core.domain.Student;
 import ru.dankoy.core.service.io.IOService;
 
@@ -14,20 +15,14 @@ import ru.dankoy.core.service.io.IOService;
 public class StudentServiceConsole implements StudentService {
 
   private final IOService ioService;
+  private final AppProperties appProperties;
+  private final MessageSource messageSource;
 
-  private final String askStudentName;
-
-  private final String askFirstName;
-
-  private final String askLastName;
-
-  public StudentServiceConsole(IOService ioService, @Value("${hw3.askStudentName}") String askStudentName,
-      @Value("${hw3.firstName}") String askFirstName,
-      @Value("${hw3.lastName}") String askLastName) {
+  public StudentServiceConsole(IOService ioService, AppProperties appProperties,
+      MessageSource messageSource) {
     this.ioService = ioService;
-    this.askFirstName = askFirstName;
-    this.askStudentName = askStudentName;
-    this.askLastName = askLastName;
+    this.appProperties = appProperties;
+    this.messageSource = messageSource;
   }
 
 
@@ -39,11 +34,11 @@ public class StudentServiceConsole implements StudentService {
   @Override
   public Student getStudent() {
 
-    ioService.print(askStudentName);
-    ioService.print(askFirstName);
+    ioService.print(messageSource.getMessage("askStudentName", null, appProperties.getLocale()));
+    ioService.print(messageSource.getMessage("firstName", null, appProperties.getLocale()));
     String firstName = ioService.readLn();
 
-    ioService.print(askLastName);
+    ioService.print(messageSource.getMessage("lastName", null, appProperties.getLocale()));
     String lastName = ioService.readLn();
 
     return new Student(firstName, lastName);

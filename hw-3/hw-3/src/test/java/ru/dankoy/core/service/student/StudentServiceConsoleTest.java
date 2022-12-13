@@ -52,10 +52,10 @@ class StudentServiceConsoleTest {
   @Profile({"test"})
   static class Config {
 
-    @Bean
-    public StudentServiceConsole studentService() {
-      return new StudentServiceConsole(ioService());
-    }
+//    @Bean
+//    public StudentServiceConsole studentService() {
+//      return new StudentServiceConsole(ioService());
+//    }
 
     @Bean
     public IOService ioService() {

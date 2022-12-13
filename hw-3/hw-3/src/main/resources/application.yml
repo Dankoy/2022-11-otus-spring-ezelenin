@@ -6,12 +6,10 @@ management:
 
 
 hw3:
-  questionsCsv: /questions-eng.csv
+  locale: en_US
   answerTemplate: "\ \ %d) %s"
   questionTemplate: "%d) %s"
-  askStudentName: "Please type you first name and last name"
-  firstName: "First name:"
-  lastName: "Last name:"
   amountOfCorrectAnswersToPassTest: 3
+
 
 

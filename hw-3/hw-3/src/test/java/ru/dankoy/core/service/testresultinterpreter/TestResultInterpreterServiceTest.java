@@ -67,7 +67,7 @@ class TestResultInterpreterServiceTest {
 
     @Bean
     TestResultInterpreterServiceImpl testResultInterpreterService() {
-      return new TestResultInterpreterServiceImpl(ioService());
+      return new TestResultInterpreterServiceImpl(ioService(), messageSource, appProperties);
     }
 
     @Bean

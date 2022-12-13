@@ -6,23 +6,28 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
+import ru.dankoy.config.AppProperties;
 import ru.dankoy.core.exceptions.CsvReaderException;
 
 @Component
 public class CsvReaderImpl implements CsvReader {
 
-  private final String resource;
+  private final MessageSource messageSource;
+  private final AppProperties appProperties;
 
-  public CsvReaderImpl(@Value("${hw3.questionsCsv}") String resource) {
-    this.resource = resource;
+  public CsvReaderImpl(MessageSource messageSource, AppProperties appProperties) {
+    this.messageSource = messageSource;
+    this.appProperties = appProperties;
   }
 
   @Override
   public List<String[]> read() {
     try (var reader = new BufferedReader(
-        new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(resource))));
+        new InputStreamReader(
+            Objects.requireNonNull(getClass().getResourceAsStream(
+                messageSource.getMessage("questionsCsv", null, appProperties.getLocale())))));
         var csvReader = new CSVReaderBuilder(reader)
             .withSkipLines(1)
             .withCSVParser(new CSVParserBuilder()
