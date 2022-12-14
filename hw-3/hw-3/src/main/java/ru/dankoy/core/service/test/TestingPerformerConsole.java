@@ -1,7 +1,7 @@
 package ru.dankoy.core.service.test;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.dankoy.config.TestEvaluationProvider;
 import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.domain.TestResult;
 import ru.dankoy.core.service.io.IOService;
@@ -21,17 +21,17 @@ public class TestingPerformerConsole implements TestingPerformer {
   private final IOService ioService;
   private final StudentService studentService;
   private final QuestionsService questionsService;
-  private final int amountOfCorrectAnswersToPassTest;
+  private final TestEvaluationProvider appProperties;
 
 
   public TestingPerformerConsole(IOService ioService, StudentService studentService,
       QuestionsService questionsService, Printer printer,
-      @Value("${hw3.amountOfCorrectAnswersToPassTest}") int amountOfCorrectAnswersToPassTest) {
+      TestEvaluationProvider appProperties) {
     this.ioService = ioService;
     this.studentService = studentService;
     this.questionsService = questionsService;
     this.printer = printer;
-    this.amountOfCorrectAnswersToPassTest = amountOfCorrectAnswersToPassTest;
+    this.appProperties = appProperties;
   }
 
 
@@ -62,7 +62,8 @@ public class TestingPerformerConsole implements TestingPerformer {
 
     }
 
-    return new TestResult(amountOfCorrectAnswersToPassTest, correctAnsweredAmount, student);
+    return new TestResult(appProperties.getAmountOfCorrectAnswersToPassTest(),
+        correctAnsweredAmount, student);
 
   }
 }

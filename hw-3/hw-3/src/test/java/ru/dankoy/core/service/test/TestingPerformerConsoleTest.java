@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -18,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import ru.dankoy.config.TestEvaluationProvider;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.domain.Student;
@@ -115,14 +117,14 @@ class TestingPerformerConsoleTest {
   @Profile({"test"})
   static class Config {
 
-    @Value("${amountOfCorrectAnswersToPassTest}")
-    int amountOfCorrectAnswersToPassTest;
+    @MockBean
+    TestEvaluationProvider appProperties;
 
     @Bean
     TestingPerformerConsole testingPerformer() {
       return new TestingPerformerConsole(ioService(), studentService(), questionsService(),
           printer(),
-          amountOfCorrectAnswersToPassTest);
+          appProperties);
     }
 
     @Bean

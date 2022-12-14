@@ -3,6 +3,7 @@ package ru.dankoy.core.service.student;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.dankoy.config.AppProperties;
+import ru.dankoy.config.LocaleProvider;
 import ru.dankoy.core.domain.Student;
 import ru.dankoy.core.service.io.IOService;
 
@@ -15,10 +16,10 @@ import ru.dankoy.core.service.io.IOService;
 public class StudentServiceConsole implements StudentService {
 
   private final IOService ioService;
-  private final AppProperties appProperties;
+  private final LocaleProvider appProperties;
   private final MessageSource messageSource;
 
-  public StudentServiceConsole(IOService ioService, AppProperties appProperties,
+  public StudentServiceConsole(IOService ioService, LocaleProvider appProperties,
       MessageSource messageSource) {
     this.ioService = ioService;
     this.appProperties = appProperties;

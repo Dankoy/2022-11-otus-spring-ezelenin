@@ -1,8 +1,7 @@
 package ru.dankoy.core.service.printer;
 
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-import ru.dankoy.config.AppProperties;
+import ru.dankoy.config.PrinterPropertiesProvider;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.service.io.IOService;
@@ -12,14 +11,11 @@ public class PrinterQuestionsImpl implements Printer {
 
   private static final String SEPARATOR = "line.separator";
   private final IOService ioService;
-  private final AppProperties appProperties;
-  private final MessageSource messageSource;
+  private final PrinterPropertiesProvider appProperties;
 
-  public PrinterQuestionsImpl(IOService ioService, AppProperties appProperties,
-      MessageSource messageSource) {
+  public PrinterQuestionsImpl(IOService ioService, PrinterPropertiesProvider appProperties) {
     this.ioService = ioService;
     this.appProperties = appProperties;
-    this.messageSource = messageSource;
   }
 
   /**
@@ -33,14 +29,13 @@ public class PrinterQuestionsImpl implements Printer {
     StringBuilder stringBuilder = new StringBuilder();
 
     stringBuilder.append(
-        String.format(messageSource.getMessage("questionTemplate", null, appProperties.getLocale()),
-            question.getId(), question.getQuestionText()));
+        String.format(appProperties.getQuestionTemplate(), question.getId(),
+            question.getQuestionText()));
     stringBuilder.append(System.getProperty(SEPARATOR));
 
     for (Answer answer : question.getAnswers()) {
       stringBuilder.append(
-          String.format(messageSource.getMessage("answerTemplate", null, appProperties.getLocale()),
-              answer.getId(), answer.getAnswerText()));
+          String.format(appProperties.getAnswerTemplate(), answer.getId(), answer.getAnswerText()));
       stringBuilder.append(System.getProperty(SEPARATOR));
     }
 

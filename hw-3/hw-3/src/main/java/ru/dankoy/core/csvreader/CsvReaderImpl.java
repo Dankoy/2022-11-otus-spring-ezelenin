@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-import ru.dankoy.config.AppProperties;
+import ru.dankoy.config.LocaleProvider;
 import ru.dankoy.core.exceptions.CsvReaderException;
 
 @Component
 public class CsvReaderImpl implements CsvReader {
 
   private final MessageSource messageSource;
-  private final AppProperties appProperties;
+  private final LocaleProvider appProperties;
 
-  public CsvReaderImpl(MessageSource messageSource, AppProperties appProperties) {
+  public CsvReaderImpl(MessageSource messageSource, LocaleProvider appProperties) {
     this.messageSource = messageSource;
     this.appProperties = appProperties;
   }

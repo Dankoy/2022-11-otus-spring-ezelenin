@@ -4,13 +4,15 @@ import java.util.Locale;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "hw3")
-public class AppProperties {
+public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
+    TestEvaluationProvider {
 
   private String answerTemplate;
   private String questionTemplate;
-  private String amountOfCorrectAnswersToPassTest;
+  private int amountOfCorrectAnswersToPassTest;
   private Locale locale;
 
+  @Override
   public String getAnswerTemplate() {
     return answerTemplate;
   }
@@ -19,6 +21,7 @@ public class AppProperties {
     this.answerTemplate = answerTemplate;
   }
 
+  @Override
   public String getQuestionTemplate() {
     return questionTemplate;
   }
@@ -27,14 +30,16 @@ public class AppProperties {
     this.questionTemplate = questionTemplate;
   }
 
-  public String getAmountOfCorrectAnswersToPassTest() {
+  @Override
+  public int getAmountOfCorrectAnswersToPassTest() {
     return amountOfCorrectAnswersToPassTest;
   }
 
-  public void setAmountOfCorrectAnswersToPassTest(String amountOfCorrectAnswersToPassTest) {
+  public void setAmountOfCorrectAnswersToPassTest(int amountOfCorrectAnswersToPassTest) {
     this.amountOfCorrectAnswersToPassTest = amountOfCorrectAnswersToPassTest;
   }
 
+  @Override
   public Locale getLocale() {
     return locale;
   }
