@@ -5,6 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import ru.dankoy.core.service.io.IOService;
 import ru.dankoy.core.service.io.IOServiceConsole;
 
+/**
+ * @author turtality
+ * <p>
+ * Configuration for beans that couldn't be created with annotations
+ */
 @Configuration
 public class AppConfig {
 

@@ -22,11 +22,11 @@ public class LogAspect {
   @Around("@annotation(ru.dankoy.core.aspects.Log)")
   public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
 
-    logger.info("Before " + joinPoint.getSignature());
+    logger.info("Before {}", joinPoint.getSignature());
 
     var res = joinPoint.proceed();
 
-    logger.info("After " + joinPoint.getSignature());
+    logger.info("After {}", joinPoint.getSignature());
 
     return res;
 

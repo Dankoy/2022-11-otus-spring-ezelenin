@@ -3,6 +3,11 @@ package ru.dankoy.config;
 import java.util.Locale;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * @author turtality
+ * <p>
+ * Aggregates certain properties from yml file.
+ */
 @ConfigurationProperties(prefix = "hw3")
 public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
     TestEvaluationProvider {
