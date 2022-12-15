@@ -1,43 +1,54 @@
 package ru.dankoy.core.service.student;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 
+import java.util.Locale;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import ru.dankoy.config.LocaleProvider;
 import ru.dankoy.core.domain.Student;
 import ru.dankoy.core.service.io.IOService;
-import ru.dankoy.core.service.io.IOServiceConsole;
 
 
 @SpringJUnitConfig()
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
-@ActiveProfiles({"test"})
 class StudentServiceConsoleTest {
 
   private static final String studentFirstAndLastName = "abc";
-  @Autowired
+
+  @InjectMocks
   private StudentServiceConsole studentService;
 
-  @Autowired
+  @Mock
   private IOService ioService;
+
+  @Mock
+  private LocaleProvider localeProvider;
+
+  @Mock
+  private MessageSource messageSource;
+
+  private final Locale locale = new Locale("en_US");
 
   @Test
   @DisplayName("Test correct creation of student object")
   void getStudentTest() {
 
-    var correctStudent = new Student(studentFirstAndLastName, studentFirstAndLastName);
+    given(localeProvider.getLocale()).willReturn(locale);
+    given(messageSource.getMessage(any(), any(), eq(locale))).willReturn(
+        studentFirstAndLastName);
+    given(ioService.readLn()).willReturn(studentFirstAndLastName);
+    willDoNothing().given(ioService).print(any());
 
-    Mockito.when(ioService.readLn()).thenReturn(studentFirstAndLastName);
+    var correctStudent = new Student(studentFirstAndLastName, studentFirstAndLastName);
 
     var student = studentService.getStudent();
 
@@ -47,20 +58,5 @@ class StudentServiceConsoleTest {
 
   }
 
-  @PropertySource("classpath:application.properties")
-  @Configuration
-  @Profile({"test"})
-  static class Config {
-
-//    @Bean
-//    public StudentServiceConsole studentService() {
-//      return new StudentServiceConsole(ioService());
-//    }
-
-    @Bean
-    public IOService ioService() {
-      return Mockito.mock(IOServiceConsole.class);
-    }
-  }
 
 }

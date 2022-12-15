@@ -2,6 +2,7 @@ package ru.dankoy.core.service.test;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +10,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import ru.dankoy.config.AppProperties;
 import ru.dankoy.config.TestEvaluationProvider;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
@@ -27,7 +28,6 @@ import ru.dankoy.core.domain.TestResult;
 import ru.dankoy.core.service.io.IOService;
 import ru.dankoy.core.service.io.IOServiceConsole;
 import ru.dankoy.core.service.printer.Printer;
-import ru.dankoy.core.service.printer.PrinterQuestionsImpl;
 import ru.dankoy.core.service.questions.QuestionsService;
 import ru.dankoy.core.service.questions.QuestionsServiceImpl;
 import ru.dankoy.core.service.student.StudentService;
@@ -38,18 +38,24 @@ import ru.dankoy.core.service.student.StudentServiceConsole;
 @ActiveProfiles({"test"})
 class TestingPerformerConsoleTest {
 
-
   private static final String fn = "abc";
   private static final String ln = "cba";
   private static Student student;
-  @Autowired
+  @MockBean
   private QuestionsService questionsService;
-  @Autowired
+  @MockBean
   private StudentService studentService;
-  @Autowired
+  @MockBean
   private IOService ioService;
+  @MockBean
+  private TestEvaluationProvider testEvaluationProvider;
+
+  @MockBean
+  private Printer printer;
   @Autowired
   private TestingPerformerConsole testingPerformer;
+
+  private final int amountOfCorrectAnswersToPassTest = 3;
 
   @Test
   @DisplayName("Testing if algorithm of testing works correctly")
@@ -57,10 +63,11 @@ class TestingPerformerConsoleTest {
 
     student = new Student(fn, ln);
 
-    Mockito.when(ioService.readLong())
-        .thenReturn(1L, 2L, 3L, 4L, 5L);
-    Mockito.when(questionsService.getQuestions()).thenReturn(makeQuestions());
-    Mockito.when(studentService.getStudent()).thenReturn(student);
+    given(ioService.readLong()).willReturn(1L, 2L, 3L, 4L, 5L);
+    given(questionsService.getQuestions()).willReturn(makeQuestions());
+    given(studentService.getStudent()).willReturn(student);
+    given(testEvaluationProvider.getAmountOfCorrectAnswersToPassTest()).willReturn(
+        amountOfCorrectAnswersToPassTest);
 
     TestResult testResult = testingPerformer.performTest();
 
@@ -74,7 +81,7 @@ class TestingPerformerConsoleTest {
 
   private TestResult makeTestResult() {
 
-    return new TestResult(3, 2, student);
+    return new TestResult(amountOfCorrectAnswersToPassTest, 2, student);
 
   }
 
@@ -112,40 +119,12 @@ class TestingPerformerConsoleTest {
 
   }
 
-  @PropertySource("classpath:application.properties")
+  @PropertySource("classpath:application.yml")
   @Configuration
   @Profile({"test"})
+  @Import({QuestionsServiceImpl.class, StudentServiceConsole.class, IOServiceConsole.class,
+      AppProperties.class, TestingPerformerConsole.class})
   static class Config {
-
-    @MockBean
-    TestEvaluationProvider appProperties;
-
-    @Bean
-    TestingPerformerConsole testingPerformer() {
-      return new TestingPerformerConsole(ioService(), studentService(), questionsService(),
-          printer(),
-          appProperties);
-    }
-
-    @Bean
-    IOService ioService() {
-      return Mockito.mock(IOServiceConsole.class);
-    }
-
-    @Bean
-    StudentService studentService() {
-      return Mockito.mock(StudentServiceConsole.class);
-    }
-
-    @Bean
-    QuestionsService questionsService() {
-      return Mockito.mock(QuestionsServiceImpl.class);
-    }
-
-    @Bean
-    Printer printer() {
-      return Mockito.mock(PrinterQuestionsImpl.class);
-    }
 
   }
 

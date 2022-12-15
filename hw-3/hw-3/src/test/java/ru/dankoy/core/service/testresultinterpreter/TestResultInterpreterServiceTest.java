@@ -1,82 +1,106 @@
 package ru.dankoy.core.service.testresultinterpreter;
 
+import static org.mockito.BDDMockito.given;
+
+import java.util.Locale;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.MessageSource;
+import ru.dankoy.config.AppProperties;
 import ru.dankoy.core.domain.Student;
 import ru.dankoy.core.domain.TestResult;
 import ru.dankoy.core.service.io.IOService;
-import ru.dankoy.core.service.io.IOServiceConsole;
 
-@SpringJUnitConfig
-@ActiveProfiles({"test"})
+
+@DisplayName("Test testing interpretation logic")
+@ExtendWith(MockitoExtension.class)
 class TestResultInterpreterServiceTest {
 
-//  @Autowired
-//  private IOService ioService;
-//  @Autowired
-//  private TestResultInterpreterServiceImpl testResultInterpreterService;
+  @Mock
+  private IOService ioService;
+
+  @Mock
+  private MessageSource messageSource;
+
+  @Mock
+  private AppProperties appProperties;
+  @InjectMocks
+  private TestResultInterpreterServiceImpl testResultInterpreterService;
   private Student student;
 
+  private final Locale locale = new Locale("en_US");
+
   @Test
-  @DisplayName("Test if student passed test")
-  void printResultPassedTest() {
+  @DisplayName("if student did not pass a test")
+  void printResultNotPassedTest() {
 
     student = new Student("fn", "ln");
 
+    given(appProperties.getLocale()).willReturn(locale);
+    given(messageSource.getMessage("testNotPassed", null, locale)).willReturn(
+        "Student '%s' didn't pass test with correct answers - %d");
+
     var testResult = new TestResult(3, 2, student);
 
-//    testResultInterpreterService.interpretTestResult(testResult);
-//
-//    Mockito.verify(ioService, Mockito.times(1))
-//        .print(String.format(
-//            "Student '%s' didn't pass test with correct answers - %d",
-//            student.getFirstAndLastName(),
-//            2));
+    testResultInterpreterService.interpretTestResult(testResult);
+
+    Mockito.verify(ioService, Mockito.times(1))
+        .print(String.format(
+            "Student '%s' didn't pass test with correct answers - %d",
+            student.getFirstAndLastName(), 2));
+    Mockito.verify(appProperties, Mockito.times(1)).getLocale();
 
   }
 
   @Test
-  @DisplayName("Test if student didn't pass test")
-  void printResultNotPassedTest() {
+  @DisplayName("if student passed a test")
+  void printResultPassedTest() {
+
+    given(appProperties.getLocale()).willReturn(locale);
+    given(messageSource.getMessage("testPassed", null, locale)).willReturn(
+        "Student '%s' passed test with correct answers - %d");
 
     student = new Student("fn", "ln");
 
     var testResult = new TestResult(3, 5, student);
 
-//    testResultInterpreterService.interpretTestResult(testResult);
-//
-//    Mockito.verify(ioService, Mockito.times(1))
-//        .print(String.format(
-//            "Student '%s' passed test with correct answers - %d", student.getFirstAndLastName(),
-//            5));
+    testResultInterpreterService.interpretTestResult(testResult);
+
+    Mockito.verify(ioService, Mockito.times(1))
+        .print(String.format(
+            "Student '%s' passed test with correct answers - %d", student.getFirstAndLastName(),
+            5));
+    Mockito.verify(appProperties, Mockito.times(1)).getLocale();
 
   }
 
-  @PropertySource("classpath:application.properties")
-  @Configuration
+  /*
+  * для тестирования со спрингом:
+  *
+  *   @Configuration
   @Profile({"test"})
+  @Import({TestResultInterpreterServiceImpl.class, IOServiceConsole.class,
+      ResourceBundleMessageSource.class, AppConfigProperties.class})
   static class Config {
 
-//    @Bean
-//    TestResultInterpreterServiceImpl testResultInterpreterService() {
-//      return new TestResultInterpreterServiceImpl(ioService(), messageSource, appProperties);
-//    }
-//
-//    @Bean
-//    IOService ioService() {
-//      return Mockito.mock(IOServiceConsole.class);
-//    }
-
-
+    // Пришлось переопределить бин, что бы в тестах были видны данные ресурсы. Если этого не сделать,
+    // то возвращается либо пустой messagesource, либо немокнутый, методы которого невозможно переопределить.
+    // @TestPropertySource(locations = {"classpath:i18n/appmessages.properties"}) - так же не работает,
+    // даже при наличии
+    @Bean
+    public ResourceBundleMessageSource messageSource() {
+      ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+      source.setBasenames("i18n/appmessages");
+      return source;
+    }
   }
+  *
+  * */
 
 
 }
