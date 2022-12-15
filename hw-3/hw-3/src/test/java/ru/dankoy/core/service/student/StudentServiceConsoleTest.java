@@ -23,20 +23,15 @@ import ru.dankoy.core.service.io.IOService;
 class StudentServiceConsoleTest {
 
   private static final String studentFirstAndLastName = "abc";
-
+  private final Locale locale = new Locale("en_US");
   @InjectMocks
   private StudentServiceConsole studentService;
-
   @Mock
   private IOService ioService;
-
   @Mock
   private LocaleProvider localeProvider;
-
   @Mock
   private MessageSource messageSource;
-
-  private final Locale locale = new Locale("en_US");
 
   @Test
   @DisplayName("Test correct creation of student object")

@@ -41,6 +41,7 @@ class TestingPerformerConsoleTest {
   private static final String fn = "abc";
   private static final String ln = "cba";
   private static Student student;
+  private final int amountOfCorrectAnswersToPassTest = 3;
   @MockBean
   private QuestionsService questionsService;
   @MockBean
@@ -49,13 +50,10 @@ class TestingPerformerConsoleTest {
   private IOService ioService;
   @MockBean
   private TestEvaluationProvider testEvaluationProvider;
-
   @MockBean
   private Printer printer;
   @Autowired
   private TestingPerformerConsole testingPerformer;
-
-  private final int amountOfCorrectAnswersToPassTest = 3;
 
   @Test
   @DisplayName("Testing if algorithm of testing works correctly")

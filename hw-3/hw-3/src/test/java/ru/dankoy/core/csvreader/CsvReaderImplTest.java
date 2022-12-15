@@ -26,17 +26,13 @@ import ru.dankoy.core.exceptions.CsvReaderException;
 @ExtendWith(MockitoExtension.class)
 class CsvReaderImplTest {
 
+  private final Locale enLocale = new Locale("en_US");
   @Mock
   private MessageSource messageSource;
-
   @Mock
   private LocaleProvider localeProvider;
-
   @InjectMocks
   private CsvReaderImpl csvReader;
-
-  private final Locale enLocale = new Locale("en_US");
-
 
   @DisplayName("Test correct read from csv file")
   @ParameterizedTest(name = "locale: {0}, file_name: {1}")

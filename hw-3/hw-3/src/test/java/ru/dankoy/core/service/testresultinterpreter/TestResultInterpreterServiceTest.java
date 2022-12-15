@@ -21,19 +21,16 @@ import ru.dankoy.core.service.io.IOService;
 @ExtendWith(MockitoExtension.class)
 class TestResultInterpreterServiceTest {
 
+  private final Locale locale = new Locale("en_US");
   @Mock
   private IOService ioService;
-
   @Mock
   private MessageSource messageSource;
-
   @Mock
   private AppProperties appProperties;
   @InjectMocks
   private TestResultInterpreterServiceImpl testResultInterpreterService;
   private Student student;
-
-  private final Locale locale = new Locale("en_US");
 
   @Test
   @DisplayName("if student did not pass a test")
