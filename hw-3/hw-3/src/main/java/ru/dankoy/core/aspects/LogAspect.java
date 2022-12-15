@@ -17,10 +17,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogAspect {
 
-  private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
-
   @Around("@annotation(ru.dankoy.core.aspects.Log)")
   public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
+
+    // здесь получаем класс поинтката, но тратим ресерсы на создание объекта логгера.
+    var logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+
+    logger.info("Before {}", joinPoint.getSignature());
+
+    var res = joinPoint.proceed();
+
+    logger.info("After {}", joinPoint.getSignature());
+
+    return res;
+
+  }
+
+  private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
+
+  @Around("@annotation(ru.dankoy.core.aspects.Log)")
+  public Object log2(ProceedingJoinPoint joinPoint) throws Throwable {
+
+    // здесь используем логгер аспекта, то есть в логах увилим класс аспекта, а не класс поинтката
 
     logger.info("Before {}", joinPoint.getSignature());
 
