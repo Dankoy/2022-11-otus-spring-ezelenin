@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import ru.dankoy.config.LocaleProvider;
+import ru.dankoy.core.aspects.Log;
 import ru.dankoy.core.exceptions.CsvReaderException;
 
 @Component
@@ -22,6 +23,7 @@ public class CsvReaderImpl implements CsvReader {
     this.appProperties = appProperties;
   }
 
+  @Log
   @Override
   public List<String[]> read() {
     try (var reader = new BufferedReader(

@@ -2,7 +2,6 @@ package ru.dankoy.core.service.student;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import ru.dankoy.config.AppProperties;
 import ru.dankoy.config.LocaleProvider;
 import ru.dankoy.core.domain.Student;
 import ru.dankoy.core.service.io.IOService;

@@ -4,6 +4,13 @@ management:
       exposure:
         include: info, health, beans
 
+logging:
+  level:
+    ru.dankoy.*: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+
 spring:
   messages:
     basename: "i18n/appmessages"
