@@ -1,0 +1,7 @@
+${AnsiColor.RED}  __                              ${AnsiColor.BLUE}                             ${AnsiColor.YELLOW}                     __
+${AnsiColor.RED}|/  |           /                 ${AnsiColor.BLUE}                 /           ${AnsiColor.YELLOW}     /                 |
+${AnsiColor.RED}|   | ___  ___ (     ___          ${AnsiColor.BLUE}  ___  ___  ___    ___  ___  ${AnsiColor.YELLOW}    (___       ___  ___|
+${AnsiColor.RED}|   )|   )|   )|___)|   )\   )    ${AnsiColor.BLUE} |___ |   )|   )| |   )|   ) ${AnsiColor.YELLOW}    |   )|   )         )
+${AnsiColor.RED}|__/ |__/||  / | \  |__/  \_/     ${AnsiColor.BLUE} __/  |__/ |    | |  / |__/   ${AnsiColor.YELLOW}   |  / |/\/       __/
+${AnsiColor.RED}                           /      ${AnsiColor.BLUE}      |                __/
+${AnsiColor.DEFAULT}
