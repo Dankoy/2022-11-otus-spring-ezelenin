@@ -1,4 +1,4 @@
-package ru.dankoy.hw3;
+package ru.dankoy;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
