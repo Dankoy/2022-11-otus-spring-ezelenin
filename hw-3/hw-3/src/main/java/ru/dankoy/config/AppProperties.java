@@ -2,6 +2,7 @@ package ru.dankoy.config;
 
 import java.util.Locale;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
 /**
  * @author turtality
@@ -9,21 +10,26 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Aggregates certain properties from yml file.
  */
 @ConfigurationProperties(prefix = "hw3")
+@ConstructorBinding
 public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
     TestEvaluationProvider {
 
-  private String answerTemplate;
-  private String questionTemplate;
-  private int amountOfCorrectAnswersToPassTest;
-  private Locale locale;
+  private final String answerTemplate;
+  private final String questionTemplate;
+  private final int amountOfCorrectAnswersToPassTest;
+  private final Locale locale;
+
+  public AppProperties(String answerTemplate, String questionTemplate,
+      int amountOfCorrectAnswersToPassTest, Locale locale) {
+    this.answerTemplate = answerTemplate;
+    this.questionTemplate = questionTemplate;
+    this.amountOfCorrectAnswersToPassTest = amountOfCorrectAnswersToPassTest;
+    this.locale = locale;
+  }
 
   @Override
   public String getAnswerTemplate() {
     return answerTemplate;
-  }
-
-  public void setAnswerTemplate(String answerTemplate) {
-    this.answerTemplate = answerTemplate;
   }
 
   @Override
@@ -31,17 +37,9 @@ public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
     return questionTemplate;
   }
 
-  public void setQuestionTemplate(String questionTemplate) {
-    this.questionTemplate = questionTemplate;
-  }
-
   @Override
   public int getAmountOfCorrectAnswersToPassTest() {
     return amountOfCorrectAnswersToPassTest;
-  }
-
-  public void setAmountOfCorrectAnswersToPassTest(int amountOfCorrectAnswersToPassTest) {
-    this.amountOfCorrectAnswersToPassTest = amountOfCorrectAnswersToPassTest;
   }
 
   @Override
@@ -49,9 +47,6 @@ public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
     return locale;
   }
 
-  public void setLocale(Locale locale) {
-    this.locale = locale;
-  }
 
   @Override
   public String toString() {
@@ -61,5 +56,37 @@ public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
         + ", \"amountOfCorrectAnswersToPassTest\":\"" + amountOfCorrectAnswersToPassTest + "\""
         + ", \"locale\":" + locale
         + "}";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof AppProperties)) {
+      return false;
+    }
+
+    AppProperties that = (AppProperties) o;
+
+    if (amountOfCorrectAnswersToPassTest != that.amountOfCorrectAnswersToPassTest) {
+      return false;
+    }
+    if (!answerTemplate.equals(that.answerTemplate)) {
+      return false;
+    }
+    if (!questionTemplate.equals(that.questionTemplate)) {
+      return false;
+    }
+    return locale.equals(that.locale);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = answerTemplate.hashCode();
+    result = 31 * result + questionTemplate.hashCode();
+    result = 31 * result + amountOfCorrectAnswersToPassTest;
+    result = 31 * result + locale.hashCode();
+    return result;
   }
 }
