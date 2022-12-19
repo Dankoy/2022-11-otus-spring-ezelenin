@@ -20,7 +20,8 @@ public class LogAspect {
   @Around("@annotation(ru.dankoy.core.aspects.Log)")
   public Object log(ProceedingJoinPoint joinPoint) throws Throwable {
 
-    // здесь получаем класс поинтката, но тратим ресерсы на создание объекта логгера.
+    // здесь получаем класс поинтката, но тратим ресурсы на создание объекта логгера.
+    // Этот вариант лучше другого
     var logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
 
     logger.info("Before {}", joinPoint.getSignature());
@@ -38,7 +39,7 @@ public class LogAspect {
   @Around("@annotation(ru.dankoy.core.aspects.Log)")
   public Object log2(ProceedingJoinPoint joinPoint) throws Throwable {
 
-    // здесь используем логгер аспекта, то есть в логах увилим класс аспекта, а не класс поинтката
+    // здесь используем логгер аспекта, то есть в логах увидим класс аспекта, а не класс поинтката
 
     logger.info("Before {}", joinPoint.getSignature());
 
