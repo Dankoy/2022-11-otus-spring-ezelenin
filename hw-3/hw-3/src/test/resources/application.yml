@@ -10,7 +10,7 @@ spring:
     encoding: "UTF-8"
 
 hw3:
-  locale: ru
+  locale: en
   answerTemplate: "\ \ %d) %s"
   questionTemplate: "%d) %s"
   amountOfCorrectAnswersToPassTest: 3

@@ -32,7 +32,7 @@ class AppPropertiesTest {
   private AppProperties makeCorrectProps() {
 
     return new AppProperties("  %d) %s", "%d) %s", 3,
-        new Locale("ru"));
+        new Locale("en"));
 
   }
 
