@@ -10,14 +10,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ru.dankoy.config.AppProperties;
 import ru.dankoy.config.TestEvaluationProvider;
@@ -33,9 +31,8 @@ import ru.dankoy.core.service.questions.QuestionsServiceImpl;
 import ru.dankoy.core.service.student.StudentService;
 import ru.dankoy.core.service.student.StudentServiceConsole;
 
-@SpringJUnitConfig
+@SpringBootTest
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
-@ActiveProfiles({"test"})
 class TestingPerformerConsoleTest {
 
   private static final String fn = "abc";
@@ -119,7 +116,6 @@ class TestingPerformerConsoleTest {
 
   @PropertySource("classpath:application.yml")
   @Configuration
-  @Profile({"test"})
   @Import({QuestionsServiceImpl.class, StudentServiceConsole.class, IOServiceConsole.class,
       AppProperties.class, TestingPerformerConsole.class})
   static class Config {

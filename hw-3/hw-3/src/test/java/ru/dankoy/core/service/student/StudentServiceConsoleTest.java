@@ -9,17 +9,19 @@ import static org.mockito.BDDMockito.willDoNothing;
 import java.util.Locale;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.dankoy.config.LocaleProvider;
 import ru.dankoy.core.domain.Student;
 import ru.dankoy.core.service.io.IOService;
 
 
-@SpringJUnitConfig()
+@DisplayName("Test Student Service ")
+@ExtendWith(MockitoExtension.class)
 class StudentServiceConsoleTest {
 
   private static final String studentFirstAndLastName = "abc";
