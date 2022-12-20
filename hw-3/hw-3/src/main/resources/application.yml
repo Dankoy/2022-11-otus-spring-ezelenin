@@ -21,6 +21,7 @@ hw3:
   answerTemplate: "\ \ %d) %s"
   questionTemplate: "%d) %s"
   amountOfCorrectAnswersToPassTest: 3
+  questionsCsv: "/questions-${hw3.locale}.csv"
 
 
 

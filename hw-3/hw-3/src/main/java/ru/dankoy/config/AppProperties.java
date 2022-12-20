@@ -12,19 +12,21 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConfigurationProperties(prefix = "hw3")
 @ConstructorBinding
 public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
-    TestEvaluationProvider {
+    TestEvaluationProvider, QuestionsFileNameProvider {
 
   private final String answerTemplate;
   private final String questionTemplate;
   private final int amountOfCorrectAnswersToPassTest;
   private final Locale locale;
+  private final String questionsCsv;
 
   public AppProperties(String answerTemplate, String questionTemplate,
-      int amountOfCorrectAnswersToPassTest, Locale locale) {
+      int amountOfCorrectAnswersToPassTest, Locale locale, String questionsCsv) {
     this.answerTemplate = answerTemplate;
     this.questionTemplate = questionTemplate;
     this.amountOfCorrectAnswersToPassTest = amountOfCorrectAnswersToPassTest;
     this.locale = locale;
+    this.questionsCsv = questionsCsv;
   }
 
   @Override
@@ -47,15 +49,20 @@ public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
     return locale;
   }
 
+  @Override
+  public String getQuestionsCsv() {
+    return questionsCsv;
+  }
 
   @Override
   public String toString() {
-    return "{"
+    return "{\"AppProperties\":{"
         + "\"answerTemplate\":\"" + answerTemplate + "\""
         + ", \"questionTemplate\":\"" + questionTemplate + "\""
         + ", \"amountOfCorrectAnswersToPassTest\":\"" + amountOfCorrectAnswersToPassTest + "\""
         + ", \"locale\":" + locale
-        + "}";
+        + ", \"questionsCsv\":\"" + questionsCsv + "\""
+        + "}}";
   }
 
   @Override
@@ -78,7 +85,10 @@ public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
     if (!questionTemplate.equals(that.questionTemplate)) {
       return false;
     }
-    return locale.equals(that.locale);
+    if (!locale.equals(that.locale)) {
+      return false;
+    }
+    return questionsCsv.equals(that.questionsCsv);
   }
 
   @Override
@@ -87,6 +97,7 @@ public class AppProperties implements LocaleProvider, PrinterPropertiesProvider,
     result = 31 * result + questionTemplate.hashCode();
     result = 31 * result + amountOfCorrectAnswersToPassTest;
     result = 31 * result + locale.hashCode();
+    result = 31 * result + questionsCsv.hashCode();
     return result;
   }
 }
