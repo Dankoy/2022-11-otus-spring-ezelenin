@@ -24,15 +24,19 @@ class AppPropertiesTest {
   @Test
   void testCorrectParseOfApplicationYmlToConfigClass() {
 
+    AppProperties correctProperties = makeCorrectProps();
+
     assertThat(appProperties).hasNoNullFieldsOrProperties();
-    assertThat(appProperties).isEqualTo(makeCorrectProps());
+    assertThat(appProperties).isEqualTo(correctProperties);
 
   }
 
   private AppProperties makeCorrectProps() {
 
+    var locale = new Locale("en", "US");
+
     return new AppProperties("  %d) %s", "%d) %s", 3,
-        new Locale("en"));
+        locale, "/questions-" + locale + ".csv");
 
   }
 

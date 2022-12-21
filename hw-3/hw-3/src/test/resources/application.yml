@@ -10,10 +10,11 @@ spring:
     encoding: "UTF-8"
 
 hw3:
-  locale: en
+  locale: en_US
   answerTemplate: "\ \ %d) %s"
   questionTemplate: "%d) %s"
   amountOfCorrectAnswersToPassTest: 3
+  questionsCsv: "/questions-${hw3.locale}.csv"
 
 
 

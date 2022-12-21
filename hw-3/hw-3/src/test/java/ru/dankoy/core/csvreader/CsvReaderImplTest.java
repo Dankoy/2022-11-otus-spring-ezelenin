@@ -2,9 +2,6 @@ package ru.dankoy.core.csvreader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
@@ -12,54 +9,49 @@ import java.util.List;
 import java.util.Locale;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.MessageSource;
-import ru.dankoy.config.LocaleProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import ru.dankoy.config.AppConfigProperties;
+import ru.dankoy.config.QuestionsFileNameProvider;
 import ru.dankoy.core.exceptions.CsvReaderException;
 
-@DisplayName("Тестирование ридера из файла csv")
-@ExtendWith(MockitoExtension.class)
+@DisplayName("Csv reader ")
+@SpringBootTest
 class CsvReaderImplTest {
 
-  private final Locale enLocale = new Locale("en_US");
-  @Mock
-  private MessageSource messageSource;
-  @Mock
-  private LocaleProvider localeProvider;
-  @InjectMocks
+  @MockBean
+  private QuestionsFileNameProvider questionsFileNameProvider;
+  @Autowired
   private CsvReaderImpl csvReader;
 
-  @DisplayName("Test correct read from csv file")
+  @DisplayName("should correctly read from csv file")
   @ParameterizedTest(name = "locale: {0}, file_name: {1}")
-  @CsvSource({"en_US, /questions-eng.csv", "ru_RU, /questions-ru.csv"})
-  void readTest(Locale locale, String fileName) {
+  @CsvSource({"en_US, /questions-en_US.csv", "ru_RU, /questions-ru_RU.csv"})
+  void shouldCorrectlyReadFiles(Locale locale, String fileName) {
 
-    given(localeProvider.getLocale()).willReturn(locale);
-    given(messageSource.getMessage(anyString(), any(), eq(locale))).willReturn(fileName);
+    given(questionsFileNameProvider.getQuestionsCsv()).willReturn(fileName);
 
     List<String[]> expected = csvReader.read();
 
-    if (locale.equals(new Locale("en_US"))) {
+    if (locale.equals(new Locale("en", "US"))) {
       assertThat(expected).hasSameElementsAs(correctEngCsvRead());
-    } else if (locale.equals(new Locale("ru_RU"))) {
+    } else if (locale.equals(new Locale("ru", "RU"))) {
       assertThat(expected).hasSameElementsAs(correctRusCsvRead());
     }
 
 
   }
 
-  @DisplayName("Test read from non existing file. Expecting CsvReaderException")
+  @DisplayName("should throw npe while reading non existing file")
   @Test
-  void read_expect_npe_error() {
+  void shouldReturnCsvReaderException() {
 
-    given(localeProvider.getLocale()).willReturn(enLocale);
-    given(messageSource.getMessage(anyString(), any(), eq(enLocale))).willReturn(
-        "/questions-none.csv");
+    given(questionsFileNameProvider.getQuestionsCsv()).willReturn("fileName");
 
     assertThatThrownBy(csvReader::read).isInstanceOf(CsvReaderException.class);
 
@@ -98,6 +90,12 @@ class CsvReaderImplTest {
     result.add(keys);
 
     return result;
+
+  }
+
+  @Configuration()
+  @Import({AppConfigProperties.class, CsvReaderImpl.class})
+  static class Config {
 
   }
 
