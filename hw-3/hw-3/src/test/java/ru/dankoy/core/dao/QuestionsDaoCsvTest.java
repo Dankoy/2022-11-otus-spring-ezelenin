@@ -16,7 +16,7 @@ import ru.dankoy.core.dao.csv.QuestionsDaoCsv;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 
-@DisplayName("Тесты CsvQuestionDaoImpl класса")
+@DisplayName("Test CsvQuestionDaoImpl ")
 @ExtendWith(MockitoExtension.class)
 class QuestionsDaoCsvTest {
 
@@ -27,8 +27,8 @@ class QuestionsDaoCsvTest {
   private QuestionsDaoCsv csvQuestionsDao;
 
   @Test
-  @DisplayName("Тестирование парсера csv")
-  void parseCsvTest() {
+  @DisplayName("should return correct list of parsed questions")
+  void shouldCorrectlyParseCsv() {
 
     given(csvReader.read()).willReturn(correctCsvRead());
 

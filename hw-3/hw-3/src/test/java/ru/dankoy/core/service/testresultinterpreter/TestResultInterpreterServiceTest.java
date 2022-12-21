@@ -17,7 +17,7 @@ import ru.dankoy.core.domain.TestResult;
 import ru.dankoy.core.service.io.IOService;
 
 
-@DisplayName("Test testing interpretation logic")
+@DisplayName("Test testing interpretation logic ")
 @ExtendWith(MockitoExtension.class)
 class TestResultInterpreterServiceTest {
 

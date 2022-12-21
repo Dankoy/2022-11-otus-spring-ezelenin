@@ -36,8 +36,8 @@ class StudentServiceConsoleTest {
   private MessageSource messageSource;
 
   @Test
-  @DisplayName("Test correct creation of student object")
-  void getStudentTest() {
+  @DisplayName("correct creation of student object")
+  void shouldReturnCorrectStudentStudent() {
 
     given(localeProvider.getLocale()).willReturn(locale);
     given(messageSource.getMessage(any(), any(), eq(locale))).willReturn(

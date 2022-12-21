@@ -11,6 +11,7 @@ import ru.dankoy.core.domain.TestResult;
 import ru.dankoy.core.service.io.IOService;
 
 
+@DisplayName("Test TestResultInterpreter ")
 @SpringBootTest
 class TestResultInterpreterServiceBootTest {
 

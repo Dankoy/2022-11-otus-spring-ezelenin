@@ -26,8 +26,8 @@ class QuestionsServiceImplTest {
   private QuestionsServiceImpl service;
 
   @Test
-  @DisplayName("Test get questions from dao")
-  void getQuestionsTest() {
+  @DisplayName("returns correct questions")
+  void shouldReturnCorrectQuestionsFromDao() {
 
     given(questionsDao.getQuestions()).willReturn(correctList());
 

@@ -2,6 +2,7 @@ package ru.dankoy.core.service.test;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
@@ -15,8 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ru.dankoy.config.AppProperties;
 import ru.dankoy.config.TestEvaluationProvider;
 import ru.dankoy.core.domain.Answer;
@@ -31,8 +30,8 @@ import ru.dankoy.core.service.questions.QuestionsServiceImpl;
 import ru.dankoy.core.service.student.StudentService;
 import ru.dankoy.core.service.student.StudentServiceConsole;
 
+@DisplayName("Test TestingPerformer ")
 @SpringBootTest
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 class TestingPerformerConsoleTest {
 
   private static final String fn = "abc";
@@ -53,8 +52,8 @@ class TestingPerformerConsoleTest {
   private TestingPerformerConsole testingPerformer;
 
   @Test
-  @DisplayName("Testing if algorithm of testing works correctly")
-  void performTestTest() {
+  @DisplayName("if algorithm of testing works correctly, returns correct TestResult object")
+  void shouldReturnCorrectTestResult() {
 
     student = new Student(fn, ln);
 
@@ -71,6 +70,7 @@ class TestingPerformerConsoleTest {
     Mockito.verify(ioService, Mockito.times(5)).readLong();
     Mockito.verify(questionsService, Mockito.times(1)).getQuestions();
     Mockito.verify(studentService, Mockito.times(1)).getStudent();
+    Mockito.verify(printer, Mockito.times(5)).printQuestion(any(Question.class));
 
   }
 
