@@ -24,7 +24,7 @@ import ru.dankoy.core.domain.Student;
 import ru.dankoy.core.domain.TestResult;
 import ru.dankoy.core.service.io.IOService;
 import ru.dankoy.core.service.io.IOServiceConsole;
-import ru.dankoy.core.service.printer.Printer;
+import ru.dankoy.core.service.printer.QuestionPrinter;
 import ru.dankoy.core.service.questions.QuestionsService;
 import ru.dankoy.core.service.questions.QuestionsServiceImpl;
 import ru.dankoy.core.service.student.StudentService;
@@ -47,7 +47,7 @@ class TestingPerformerConsoleTest {
   @MockBean
   private TestEvaluationProvider testEvaluationProvider;
   @MockBean
-  private Printer printer;
+  private QuestionPrinter questionPrinter;
   @Autowired
   private TestingPerformerConsole testingPerformer;
 
@@ -70,7 +70,7 @@ class TestingPerformerConsoleTest {
     Mockito.verify(ioService, Mockito.times(5)).readLong();
     Mockito.verify(questionsService, Mockito.times(1)).getQuestions();
     Mockito.verify(studentService, Mockito.times(1)).getStudent();
-    Mockito.verify(printer, Mockito.times(5)).printQuestion(any(Question.class));
+    Mockito.verify(questionPrinter, Mockito.times(5)).printQuestion(any(Question.class));
 
   }
 

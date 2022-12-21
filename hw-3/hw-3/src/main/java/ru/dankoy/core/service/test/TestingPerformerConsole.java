@@ -5,7 +5,7 @@ import ru.dankoy.config.TestEvaluationProvider;
 import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.domain.TestResult;
 import ru.dankoy.core.service.io.IOService;
-import ru.dankoy.core.service.printer.Printer;
+import ru.dankoy.core.service.printer.QuestionPrinter;
 import ru.dankoy.core.service.questions.QuestionsService;
 import ru.dankoy.core.service.student.StudentService;
 
@@ -17,7 +17,7 @@ import ru.dankoy.core.service.student.StudentService;
 @Service
 public class TestingPerformerConsole implements TestingPerformer {
 
-  private final Printer printer;
+  private final QuestionPrinter questionPrinter;
   private final IOService ioService;
   private final StudentService studentService;
   private final QuestionsService questionsService;
@@ -25,12 +25,12 @@ public class TestingPerformerConsole implements TestingPerformer {
 
 
   public TestingPerformerConsole(IOService ioService, StudentService studentService,
-      QuestionsService questionsService, Printer printer,
+      QuestionsService questionsService, QuestionPrinter questionPrinter,
       TestEvaluationProvider appProperties) {
     this.ioService = ioService;
     this.studentService = studentService;
     this.questionsService = questionsService;
-    this.printer = printer;
+    this.questionPrinter = questionPrinter;
     this.appProperties = appProperties;
   }
 
@@ -53,7 +53,7 @@ public class TestingPerformerConsole implements TestingPerformer {
     // проводим опрос и получаем количество корректных ответов
     for (Question question : questions) {
 
-      printer.printQuestion(question);
+      questionPrinter.printQuestion(question);
       long answer = ioService.readLong();
 
       if (answer == question.getCorrectAnswerId()) {

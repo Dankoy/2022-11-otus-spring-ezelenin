@@ -7,13 +7,13 @@ import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.service.io.IOService;
 
 @Component
-public class PrinterQuestionsImpl implements Printer {
+public class QuestionPrinterImpl implements QuestionPrinter {
 
   private static final String SEPARATOR = "line.separator";
   private final IOService ioService;
   private final PrinterPropertiesProvider appProperties;
 
-  public PrinterQuestionsImpl(IOService ioService, PrinterPropertiesProvider appProperties) {
+  public QuestionPrinterImpl(IOService ioService, PrinterPropertiesProvider appProperties) {
     this.ioService = ioService;
     this.appProperties = appProperties;
   }
