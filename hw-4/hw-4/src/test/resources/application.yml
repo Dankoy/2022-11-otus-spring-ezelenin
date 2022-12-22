@@ -8,6 +8,11 @@ spring:
   messages:
     basename: "i18n/appmessages"
     encoding: "UTF-8"
+  shell:
+    interactive:
+      enabled: false
+  main:
+    allow-circular-references: true
 
 hw3:
   locale: en_US
