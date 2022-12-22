@@ -1,0 +1,20 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, beans
+
+spring:
+  messages:
+    basename: "i18n/appmessages"
+    encoding: "UTF-8"
+
+hw3:
+  locale: en_US
+  answerTemplate: "\ \ %d) %s"
+  questionTemplate: "%d) %s"
+  amountOfCorrectAnswersToPassTest: 3
+  questionsCsv: "/questions-${hw3.locale}.csv"
+
+
+
