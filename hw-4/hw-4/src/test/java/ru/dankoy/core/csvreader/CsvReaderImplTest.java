@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Locale.Builder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,9 +39,9 @@ class CsvReaderImplTest {
 
     List<String[]> expected = csvReader.read();
 
-    if (locale.equals(new Locale("en", "US"))) {
+    if (locale.equals(new Builder().setLanguage("en").setRegion("US").build())) {
       assertThat(expected).hasSameElementsAs(correctEngCsvRead());
-    } else if (locale.equals(new Locale("ru", "RU"))) {
+    } else if (locale.equals(new Builder().setLanguage("ru").setRegion("RU").build())) {
       assertThat(expected).hasSameElementsAs(correctRusCsvRead());
     }
 

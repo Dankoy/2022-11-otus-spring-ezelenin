@@ -8,24 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import ru.dankoy.core.csvreader.CsvReader;
+import ru.dankoy.core.csvreader.CsvReaderImpl;
 import ru.dankoy.core.dao.csv.QuestionsDaoCsv;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 import ru.dankoy.core.exceptions.QuestionsDaoException;
 
 @DisplayName("Test CsvQuestionDaoImpl ")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class QuestionsDaoCsvTest {
 
-  @Mock
-  private CsvReader csvReader;
 
-  @InjectMocks
+  @MockBean
+  private CsvReader csvReader;
+  @Autowired
   private QuestionsDaoCsv csvQuestionsDao;
 
   @Test
@@ -100,6 +102,12 @@ class QuestionsDaoCsvTest {
     result.add(keys);
 
     return result;
+
+  }
+
+  @Configuration
+  @Import({CsvReaderImpl.class, QuestionsDaoCsv.class})
+  static class Config {
 
   }
 

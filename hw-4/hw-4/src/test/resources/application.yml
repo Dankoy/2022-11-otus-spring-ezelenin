@@ -8,6 +8,7 @@ spring:
   messages:
     basename: "i18n/appmessages"
     encoding: "UTF-8"
+    fallback-to-system-locale: false
   shell:
     interactive:
       enabled: false

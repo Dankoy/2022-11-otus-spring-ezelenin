@@ -2,7 +2,7 @@ package ru.dankoy.config;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import java.util.Locale;
+import java.util.Locale.Builder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +27,7 @@ class AppPropertiesTest {
 
   private AppProperties makeCorrectProps() {
 
-    var locale = new Locale("en", "US");
+    var locale = new Builder().setLanguage("en").setRegion("US").build();
 
     return new AppProperties("  %d) %s", "%d) %s", 3,
         locale, "/questions-" + locale + ".csv");

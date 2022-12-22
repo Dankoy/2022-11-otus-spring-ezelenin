@@ -6,23 +6,23 @@ import static org.mockito.BDDMockito.given;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import ru.dankoy.core.dao.csv.QuestionsDaoCsv;
 import ru.dankoy.core.domain.Answer;
 import ru.dankoy.core.domain.Question;
 
 @DisplayName("Test Questions Service ")
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class QuestionsServiceImplTest {
 
-  @Mock
+  @MockBean
   private QuestionsDaoCsv questionsDao;
-
-  @InjectMocks
+  @Autowired
   private QuestionsServiceImpl service;
 
   @Test
@@ -50,6 +50,12 @@ class QuestionsServiceImplTest {
         answers, 1);
 
     return List.of(question);
+
+  }
+
+  @Configuration
+  @Import({QuestionsServiceImpl.class, QuestionsDaoCsv.class})
+  static class Config {
 
   }
 
