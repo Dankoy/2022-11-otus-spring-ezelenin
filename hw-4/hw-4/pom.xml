@@ -9,6 +9,7 @@
     <version>2.7.6</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
+
   <groupId>ru.dankoy</groupId>
   <artifactId>hw-4</artifactId>
   <version>0.0.1-SNAPSHOT</version>
@@ -22,6 +23,8 @@
 
     <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
     <minimal.maven.version>3.3.9</minimal.maven.version>
+    <spring.version>2.7.6</spring.version>
+    <spring.shell.version>2.1.4</spring.shell.version>
   </properties>
 
 
@@ -58,10 +61,20 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-aop</artifactId>
-      <version>2.7.6</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.springframework.shell</groupId>
+      <artifactId>spring-shell-starter</artifactId>
+      <version>${spring.shell.version}</version>
+    </dependency>
 
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.24</version>
+        <scope>provided</scope>
+      </dependency>
 
   </dependencies>
 
