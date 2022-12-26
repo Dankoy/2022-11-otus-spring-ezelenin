@@ -1,9 +1,9 @@
-package ru.dankoy.hw5.core.service;
+package ru.dankoy.hw5.core.service.objectmapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.dankoy.hw5.core.exceptions.MappingException;
+import ru.dankoy.hw5.core.exceptions.ObjectMapperException;
 
 
 @Service
@@ -17,7 +17,7 @@ public class ObjectMapperServiceImpl implements ObjectMapperService {
     try {
       return objectMapper.writeValueAsString(object);
     } catch (Exception e) {
-      throw new MappingException(
+      throw new ObjectMapperException(
           String.format("Couldn't convert object of type '%s' to string", object.getClass()), e);
     }
   }

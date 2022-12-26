@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.service;
+package ru.dankoy.hw5.core.service.objectmapper;
 
 public interface ObjectMapperService {
 
