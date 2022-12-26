@@ -1,9 +1,3 @@
-management:
-  endpoints:
-    web:
-      exposure:
-        include: info, health, beans
-
 logging:
   level:
     ru.dankoy.*: DEBUG
