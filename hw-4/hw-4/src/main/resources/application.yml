@@ -1,0 +1,21 @@
+logging:
+  level:
+    ru.dankoy.*: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    file: "%d %p %c{1.} [%t] %m%n"
+
+spring:
+  messages:
+    basename: "i18n/appmessages"
+    encoding: "UTF-8"
+
+hw3:
+  locale: ru_RU
+  answerTemplate: "\ \ %d) %s"
+  questionTemplate: "%d) %s"
+  amountOfCorrectAnswersToPassTest: 3
+  questionsCsv: "/questions-${hw3.locale}.csv"
+
+
+
