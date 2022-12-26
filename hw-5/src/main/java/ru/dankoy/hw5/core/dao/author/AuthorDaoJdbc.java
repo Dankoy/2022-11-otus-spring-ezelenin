@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -25,7 +25,7 @@ public class AuthorDaoJdbc implements AuthorDao {
 
   @Override
   public List<Author> getAll() {
-    return namedParameterJdbcOperations.query("select id, name from authors", new PersonMapper());
+    return namedParameterJdbcOperations.query("select id, name from authors", new AuthorMapper());
   }
 
   @Override
@@ -33,7 +33,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     Map<String, Object> params = Collections.singletonMap("id", id);
     try {
       return namedParameterJdbcOperations.queryForObject(
-          "select id, name from authors where id = :id", params, new PersonMapper()
+          "select id, name from authors where id = :id", params, new AuthorMapper()
       );
     } catch (Exception e) {
       throw new AuthorDaoException(String.format("Author with id '%d' does not exist", id), e);
@@ -48,12 +48,11 @@ public class AuthorDaoJdbc implements AuthorDao {
     KeyHolder keyHolder = new GeneratedKeyHolder();
     namedParameterJdbcOperations
         .update("insert into authors (name) values (:name)", parameters, keyHolder);
-    if (Objects.nonNull(keyHolder.getKey())) {
-      return keyHolder.getKey().longValue();
-    } else {
-      throw new AuthorDaoException("Expecting key holder not null, but got " + keyHolder.getKey());
-    }
 
+    Optional<Number> optionalNumber = Optional.ofNullable(keyHolder.getKey());
+    Number number = optionalNumber.orElseThrow(() -> new AuthorDaoException(
+        "Expecting key holder not null, but got " + keyHolder.getKey()));
+    return number.longValue();
 
   }
 
@@ -84,7 +83,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     return count == null ? 0 : count;
   }
 
-  private static class PersonMapper implements RowMapper<Author> {
+  private static class AuthorMapper implements RowMapper<Author> {
 
     @Override
     public Author mapRow(ResultSet resultSet, int i) throws SQLException {

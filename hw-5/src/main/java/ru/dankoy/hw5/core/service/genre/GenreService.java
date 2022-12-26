@@ -1,9 +1,9 @@
-package ru.dankoy.hw5.core.dao.genre;
+package ru.dankoy.hw5.core.service.genre;
 
 import java.util.List;
 import ru.dankoy.hw5.core.domain.Genre;
 
-public interface GenreDao {
+public interface GenreService {
 
   List<Genre> getAll();
 
