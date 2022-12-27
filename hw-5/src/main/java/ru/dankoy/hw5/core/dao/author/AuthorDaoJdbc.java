@@ -79,7 +79,7 @@ public class AuthorDaoJdbc implements AuthorDao {
   @Override
   public long count() {
     Long count = namedParameterJdbcOperations.getJdbcOperations()
-        .queryForObject("select count(*) from author", Long.class);
+        .queryForObject("select count(*) from authors", Long.class);
     return count == null ? 0 : count;
   }
 
