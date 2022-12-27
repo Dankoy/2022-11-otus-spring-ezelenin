@@ -10,7 +10,7 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>ru.dankoy</groupId>
-  <artifactId>hw5</artifactId>
+  <artifactId>hw-5</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>hw-5</name>
   <description>hw-5</description>
