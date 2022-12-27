@@ -6,8 +6,8 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.dankoy.hw5.core.domain.Genre;
-import ru.dankoy.hw5.core.service.objectmapper.ObjectMapperService;
 import ru.dankoy.hw5.core.service.genre.GenreService;
+import ru.dankoy.hw5.core.service.objectmapper.ObjectMapperService;
 
 @RequiredArgsConstructor
 @ShellComponent
