@@ -1,0 +1,188 @@
+package ru.dankoy.hw5.core.service.book;
+
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import ru.dankoy.hw5.core.dao.book.BookDao;
+import ru.dankoy.hw5.core.domain.Author;
+import ru.dankoy.hw5.core.domain.Book;
+import ru.dankoy.hw5.core.domain.Genre;
+import ru.dankoy.hw5.core.exceptions.BookDaoException;
+
+
+@DisplayName("Test BookServiceJdbc ")
+@JdbcTest
+@Import({BookServiceJdbc.class, BookDao.class})
+class BookServiceJdbcTest {
+
+  @MockBean
+  private BookDao bookDao;
+
+  @Autowired
+  private BookServiceJdbc bookServiceJdbc;
+
+
+  @DisplayName("should return all books")
+  @Test
+  void shouldGetAllBooksTest() {
+
+    given(bookDao.getAll()).willReturn(makeCorrectAllBooksList());
+
+    var books = bookServiceJdbc.getAll();
+
+    assertThat(books).isEqualTo(makeCorrectAllBooksList());
+    Mockito.verify(bookDao, times(1)).getAll();
+  }
+
+
+  @DisplayName("should return correct count")
+  @Test
+  void shouldReturnCorrectCountTest() {
+
+    given(bookDao.count()).willReturn(3L);
+
+    var count = bookServiceJdbc.count();
+
+    assertThat(count).isEqualTo(makeCorrectAllBooksList().size());
+    Mockito.verify(bookDao, times(1)).count();
+
+  }
+
+  @DisplayName("should return correct book by id")
+  @Test
+  void shouldReturnCorrectBookById() {
+
+    var id = 1;
+
+    var books = makeCorrectAllBooksList();
+    var correctbook = getBookByIdFromList(books, id);
+
+    given(bookDao.getById(id)).willReturn(correctbook);
+
+    var book = bookServiceJdbc.getById(id);
+
+    assertThat(book).isEqualTo(correctbook);
+    Mockito.verify(bookDao, times(1)).getById(id);
+
+  }
+
+  @DisplayName("should throw bookServiceException for non existing book")
+  @Test
+  void shouldThrowBookServiceExceptionWhenGetById() {
+
+    var id = 999;
+    String exceptionMessage = String.format("Book with id '%d' does not exist", id);
+
+    Mockito.doThrow(new BookDaoException(exceptionMessage)).when(bookDao).getById(id);
+
+    assertThatThrownBy(() -> bookServiceJdbc.getById(id))
+        .isInstanceOf(BookDaoException.class)
+        .hasMessage(exceptionMessage);
+
+  }
+
+  @DisplayName("should correctly insert book in db")
+  @Test
+  void shouldCorrectlyInsertBook() {
+
+    var bookName = "book4";
+
+    var id = 1L;
+    var author = new Author(id, "author1");
+    var genre = new Genre(id, "genre1");
+    var bookToInsert = new Book(0L, bookName, author, genre);
+    var correctInsertedId = 4L;
+
+    given(bookDao.insert(bookToInsert)).willReturn(correctInsertedId);
+
+    var insertedId = bookServiceJdbc.insert(bookToInsert);
+
+    assertThat(insertedId).isEqualTo(correctInsertedId);
+    Mockito.verify(bookDao, times(1)).insert(bookToInsert);
+
+  }
+
+  @DisplayName("should correctly delete book by id")
+  @Test
+  void shouldCorrectlyDeleteBookById() {
+
+    var id = 1L;
+
+    bookServiceJdbc.deleteById(id);
+
+    Mockito.verify(bookDao, times(1)).deleteById(id);
+
+  }
+
+  @DisplayName("should correctly delete book by id")
+  @Test
+  void shouldThrowExceptionWhenDeleteNonExistingBookById() {
+
+    var id = 999L;
+    var exceptionMessage = String.format("Can't delete book. Book with id '%d' does not exist",
+        id);
+
+    Mockito.doThrow(new BookDaoException(exceptionMessage)).when(bookDao).deleteById(id);
+
+    assertThatThrownBy(() -> bookServiceJdbc.deleteById(id))
+        .isInstanceOf(BookDaoException.class)
+        .hasMessage(exceptionMessage);
+
+    Mockito.verify(bookDao, times(1)).deleteById(id);
+
+  }
+
+
+  @DisplayName("should update book by id")
+  @Test
+  void shouldCorrectlyUpdateBook() {
+
+    var id = 1L;
+    var author = new Author(id, "author1");
+    var genre = new Genre(id, "genre1");
+    var bookToUpdate = new Book(id, "newName", author, genre);
+
+    bookServiceJdbc.update(bookToUpdate);
+
+    Mockito.verify(bookDao, times(1)).update(bookToUpdate);
+
+  }
+
+
+  private Book getBookByIdFromList(List<Book> books, long id) {
+
+    var nonExistingId = 999999L;
+    var bookOptional = books.stream().filter(book -> book.getId() == id)
+        .findFirst();
+
+    return bookOptional.orElse(
+        new Book(nonExistingId, "nonexisting",
+            new Author(nonExistingId, "author1"),
+            new Genre(nonExistingId, "genre1")));
+
+  }
+
+  private List<Book> makeCorrectAllBooksList() {
+    return List.of(
+        new Book(1L, "book1", new Author(1L, "author1"),
+            new Genre(1L, "genre1")),
+        new Book(2L, "book2", new Author(2L, "author2"),
+            new Genre(1L, "genre1")),
+        new Book(3L, "book3", new Author(2L, "author2"),
+            new Genre(3L, "genre3"))
+    );
+  }
+
+
+}
