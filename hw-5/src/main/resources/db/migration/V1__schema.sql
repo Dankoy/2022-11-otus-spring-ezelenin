@@ -16,9 +16,19 @@ create table genres
 create table books
 (
     id        bigint auto_increment primary key,
-    name      varchar(255) not null,
-    author_id bigint,
-    foreign key (author_id) references authors (id) on delete cascade,
-    genre_id  bigint,
-    foreign key (genre_id) references genres (id) on delete cascade
+    name      varchar(255) not null
+);
+
+create table books_authors
+(
+    book_id bigint references books(id) on delete cascade,
+    author_id bigint references authors(id),
+    primary key (book_id, author_id)
+);
+
+create table books_genres
+(
+    book_id bigint references books(id) on delete cascade,
+    genre_id bigint references genres(id),
+    primary key (book_id, genre_id)
 );

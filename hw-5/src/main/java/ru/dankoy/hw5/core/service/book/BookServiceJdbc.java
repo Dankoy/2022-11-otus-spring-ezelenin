@@ -25,8 +25,8 @@ public class BookServiceJdbc implements BookService {
   }
 
   @Override
-  public long insert(Book book) {
-    return bookDao.insert(book);
+  public long insert(Book book, long[] authorIds, long[] genreIds) {
+    return bookDao.insert(book, authorIds, genreIds);
   }
 
   @Override
@@ -35,8 +35,8 @@ public class BookServiceJdbc implements BookService {
   }
 
   @Override
-  public void update(Book book) {
-    bookDao.update(book);
+  public void update(Book book, long[] authorIds, long[] genreIds) {
+    bookDao.update(book, authorIds, genreIds);
   }
 
   @Override

@@ -9,11 +9,11 @@ public interface BookService {
 
   Book getById(long id);
 
-  long insert(Book book);
+  long insert(Book book, long[] authorIds, long[] genreIds);
 
   void deleteById(long id);
 
-  void update(Book book);
+  void update(Book book, long[] authorIds, long[] genreIds);
 
   long count();
 

@@ -1,18 +1,27 @@
 package ru.dankoy.hw5.core.dao.book;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import ru.dankoy.hw5.core.dao.author.AuthorDao;
+import ru.dankoy.hw5.core.dao.book.manytomany.BookAuthorRelation;
+import ru.dankoy.hw5.core.dao.book.manytomany.BookGenreRelation;
+import ru.dankoy.hw5.core.dao.book.manytomany.BookResultSetExtractor;
+import ru.dankoy.hw5.core.dao.genre.GenreDao;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Genre;
@@ -23,63 +32,79 @@ import ru.dankoy.hw5.core.exceptions.BookDaoException;
 @Repository
 public class BookDaoJdbc implements BookDao {
 
-  private static final String AUTHOR_ID_COLUMN = "author_id";
-  private static final String GENRE_ID_COLUMN = "genre_id";
-
   private final NamedParameterJdbcOperations namedParameterJdbcOperations;
+
+  private final AuthorDao authorDao;
+  private final GenreDao genreDao;
 
   @Override
   public List<Book> getAll() {
 
-    String query = "select books.id as book_id, books.name as book_name, books.author_id, "
-        + "authors.name as author_name, books.genre_id, genres.name as genre_name "
-        + "from books "
-        + "join authors on authors.id = books.author_id "
-        + "join genres on genres.id = books.genre_id";
+    List<Genre> genres = genreDao.getAll();
+    List<Author> authors = authorDao.getAll();
 
-    return namedParameterJdbcOperations.query(
-        query, new BookRowMapper()
+    List<BookAuthorRelation> bookAuthorRelations = getAllBookAuthorRelations();
+    List<BookGenreRelation> bookGenreRelations = getAllBookGenreRelations();
+
+    String query = "select id, name from books";
+
+    Map<Long, Book> books = namedParameterJdbcOperations.query(
+        query, new BookResultSetExtractor()
     );
+
+    mergeBookInfo(books, authors, genres, bookAuthorRelations, bookGenreRelations);
+
+    return new ArrayList<>(Objects.requireNonNull(books).values());
 
   }
 
   @Override
   public Book getById(long id) {
+
+    List<Genre> genres = genreDao.getAll();
+    List<Author> authors = authorDao.getAll();
+
+    List<BookAuthorRelation> bookAuthorRelations = getAllBookAuthorRelations();
+    List<BookGenreRelation> bookGenreRelations = getAllBookGenreRelations();
+
     Map<String, Object> params = Collections.singletonMap("id", id);
 
-    String query = "select books.id as book_id, books.name as book_name, books.author_id, "
-        + "authors.name as author_name, books.genre_id, genres.name as genre_name "
-        + "from books "
-        + "join authors on authors.id = books.author_id "
-        + "join genres on genres.id = books.genre_id "
-        + "where books.id = :id";
+    String query = "select id, name from books where id = :id";
 
-    try {
-      return namedParameterJdbcOperations.queryForObject(
-          query, params, new BookRowMapper()
-      );
-    } catch (Exception e) {
-      throw new BookDaoException(String.format("Book with id '%d' does not exist", id), e);
+    Map<Long, Book> books = namedParameterJdbcOperations.query(
+        query, params, new BookResultSetExtractor());
+
+    mergeBookInfo(books, authors, genres, bookAuthorRelations, bookGenreRelations);
+
+    if (Objects.requireNonNull(books).size() < 1) {
+      throw new BookDaoException(String.format("Book with id '%d' does not exist", id));
+    } else {
+      return books.get(id);
     }
 
   }
 
   @Override
-  public long insert(Book book) {
-    String query = "insert into books (name, author_id, genre_id) values (:name, :author_id, :genre_id)";
+  public long insert(Book book, long[] authorIds, long[] genreIds) {
+
+    String queryBook = "insert into books (name) values (:name)";
 
     MapSqlParameterSource parameters = new MapSqlParameterSource()
-        .addValue("name", book.getName())
-        .addValue(AUTHOR_ID_COLUMN, book.getAuthor().getId())
-        .addValue(GENRE_ID_COLUMN, book.getGenre().getId());
+        .addValue("name", book.getName());
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
-    namedParameterJdbcOperations.update(query, parameters, keyHolder);
+    namedParameterJdbcOperations.update(queryBook, parameters, keyHolder);
 
     Optional<Number> optionalNumber = Optional.ofNullable(keyHolder.getKey());
     Number number = optionalNumber.orElseThrow(() -> new BookDaoException(
         "Expecting key holder not null, but got " + keyHolder.getKey()));
-    return number.longValue();
+
+    long bookId = number.longValue();
+
+    insertToBookAuthorRelation(bookId, authorIds);
+    insertToBookGenreRelation(bookId, genreIds);
+
+    return bookId;
   }
 
   @Override
@@ -96,20 +121,25 @@ public class BookDaoJdbc implements BookDao {
   }
 
   @Override
-  public void update(Book book) {
+  public void update(Book book, long[] authorIds, long[] genreIds) {
 
     Map<String, Object> params = Map.of(
-        "id", book.getId(), "name", book.getName(),
-        AUTHOR_ID_COLUMN, book.getAuthor().getId(),
-        GENRE_ID_COLUMN, book.getGenre().getId()
+        "id", book.getId(), "name", book.getName()
     );
 
-    String query = "update books set name = :name, "
-        + "author_id = :author_id, "
-        + "genre_id = :genre_id "
-        + "where id = :id";
+    String query = "update books set name = :name where id = :id";
 
     namedParameterJdbcOperations.update(query, params);
+
+    List<BookAuthorRelation> bookAuthorRelations = getBookAuthorRelationsByBookId(book.getId());
+    List<BookGenreRelation> bookGenreRelations = getBookGenreRelationsByBookId(book.getId());
+
+    deleteAllBookAuthorRelationsByBookId(bookAuthorRelations);
+    deleteAllBookGenreRelationsByBookId(bookGenreRelations);
+
+    insertToBookAuthorRelation(book.getId(), authorIds);
+    insertToBookGenreRelation(book.getId(), genreIds);
+
   }
 
   @Override
@@ -120,23 +150,123 @@ public class BookDaoJdbc implements BookDao {
   }
 
 
-  private static class BookRowMapper implements RowMapper<Book> {
+  private List<BookAuthorRelation> getAllBookAuthorRelations() {
+    return namedParameterJdbcOperations.query(
+        "select book_id, author_id from books_authors ba order by book_id, author_id",
+        (rs, i) -> new BookAuthorRelation(rs.getLong(1), rs.getLong(2)));
+  }
 
-    @Override
-    public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
+  private List<BookGenreRelation> getAllBookGenreRelations() {
+    return namedParameterJdbcOperations.query(
+        "select book_id, genre_id from books_genres bg order by book_id, genre_id",
+        (rs, i) -> new BookGenreRelation(rs.getLong(1), rs.getLong(2)));
+  }
 
-      Long bookId = rs.getLong("book_id");
-      String bookName = rs.getString("book_name");
-      Long authorId = rs.getLong(AUTHOR_ID_COLUMN);
-      String authorName = rs.getString("author_name");
-      Long genreId = rs.getLong(GENRE_ID_COLUMN);
-      String genreName = rs.getString("genre_name");
+  private List<BookAuthorRelation> getBookAuthorRelationsByBookId(long bookId) {
+    Map<String, Object> params = Map.of(
+        "book_id", bookId
+    );
 
-      Author author = new Author(authorId, authorName);
-      Genre genre = new Genre(genreId, genreName);
+    return namedParameterJdbcOperations.query(
+        "select book_id, author_id from books_authors ba where book_id = :book_id order by book_id, author_id",
+        params,
+        (rs, i) -> new BookAuthorRelation(rs.getLong(1), rs.getLong(2)));
+  }
 
-      return new Book(bookId, bookName, author, genre);
-    }
+  private List<BookGenreRelation> getBookGenreRelationsByBookId(long bookId) {
+    Map<String, Object> params = Map.of(
+        "book_id", bookId
+    );
+
+    return namedParameterJdbcOperations.query(
+        "select book_id, genre_id from books_genres bg where book_id = :book_id order by book_id, genre_id",
+        params,
+        (rs, i) -> new BookGenreRelation(rs.getLong(1), rs.getLong(2)));
+  }
+
+  private void insertToBookAuthorRelation(long bookId, long[] authorIds) {
+
+    List<BookAuthorRelation> bookAuthorRelations = Arrays.stream(authorIds)
+        .mapToObj(id -> new BookAuthorRelation(bookId, id))
+        .collect(Collectors.toList());
+
+    SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(bookAuthorRelations);
+
+    String query = "insert into books_authors (book_id, author_id) values (:bookId, :authorId)";
+
+    namedParameterJdbcOperations.batchUpdate(query, batch);
 
   }
+
+  private void insertToBookGenreRelation(long bookId, long[] genreIds) {
+
+    List<BookGenreRelation> bookGenreRelations = Arrays.stream(genreIds)
+        .mapToObj(id -> new BookGenreRelation(bookId, id))
+        .collect(Collectors.toList());
+
+    SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(bookGenreRelations);
+
+    String query = "insert into books_genres (book_id, genre_id) values (:bookId, :genreId)";
+
+    namedParameterJdbcOperations.batchUpdate(query, batch);
+
+  }
+
+  private void deleteAllBookAuthorRelationsByBookId(List<BookAuthorRelation> bookAuthorRelations) {
+
+    SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(bookAuthorRelations);
+
+    String query = "delete from books_authors where book_id = :bookId";
+
+    namedParameterJdbcOperations.batchUpdate(query, batch);
+
+  }
+
+  private void deleteAllBookGenreRelationsByBookId(List<BookGenreRelation> bookGenreRelations) {
+
+    SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(bookGenreRelations);
+
+    String query = "delete from books_genres where book_id = :bookId";
+
+    namedParameterJdbcOperations.batchUpdate(query, batch);
+
+  }
+
+  private void mergeBookInfo(Map<Long, Book> books, List<Author> authors,
+      List<Genre> genres, List<BookAuthorRelation> bookAuthorRelations,
+      List<BookGenreRelation> bookGenreRelations) {
+    Map<Long, Author> authorMap = authors.stream().collect(
+        Collectors.toMap(Author::getId, Function.identity()));
+    Map<Long, Genre> genreMap = genres.stream().collect(
+        Collectors.toMap(Genre::getId, Function.identity()));
+
+    mergeAuthorsToBook(books, authorMap, bookAuthorRelations);
+    mergeGenresToBook(books, genreMap, bookGenreRelations);
+
+  }
+
+  private void mergeAuthorsToBook(Map<Long, Book> books, Map<Long, Author> authorMap,
+      List<BookAuthorRelation> bookAuthorRelations) {
+
+    bookAuthorRelations.forEach(relation -> {
+      if (books.containsKey(relation.getBookId()) && authorMap.containsKey(
+          relation.getAuthorId())) {
+        books.get(relation.getBookId()).getAuthors().add(authorMap.get(relation.getAuthorId()));
+      }
+    });
+
+  }
+
+  private void mergeGenresToBook(Map<Long, Book> books, Map<Long, Genre> genreMap,
+      List<BookGenreRelation> bookGenreRelations) {
+
+    bookGenreRelations.forEach(relation -> {
+      if (books.containsKey(relation.getBookId()) && genreMap.containsKey(
+          relation.getGenreId())) {
+        books.get(relation.getBookId()).getGenres().add(genreMap.get(relation.getGenreId()));
+      }
+    });
+
+  }
+
 }
