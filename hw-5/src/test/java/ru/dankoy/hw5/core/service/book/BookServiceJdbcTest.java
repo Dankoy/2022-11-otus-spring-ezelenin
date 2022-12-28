@@ -6,6 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -99,17 +100,20 @@ class BookServiceJdbcTest {
     var bookName = "book4";
 
     var id = 1L;
+    var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
-    var bookToInsert = new Book(0L, bookName, author, genre);
+    var bookToInsert = new Book(0L, bookName, List.of(author), List.of(genre));
     var correctInsertedId = 4L;
 
-    given(bookDao.insert(bookToInsert)).willReturn(correctInsertedId);
+    given(bookDao.insert(bookToInsert, listOfIds, listOfIds)).willReturn(
+        correctInsertedId);
 
-    var insertedId = bookServiceJdbc.insert(bookToInsert);
+    var insertedId = bookServiceJdbc.insert(bookToInsert, listOfIds, listOfIds);
 
     assertThat(insertedId).isEqualTo(correctInsertedId);
-    Mockito.verify(bookDao, times(1)).insert(bookToInsert);
+    Mockito.verify(bookDao, times(1))
+        .insert(bookToInsert, listOfIds, listOfIds);
 
   }
 
@@ -149,13 +153,38 @@ class BookServiceJdbcTest {
   void shouldCorrectlyUpdateBook() {
 
     var id = 1L;
+    var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
-    var bookToUpdate = new Book(id, "newName", author, genre);
+    var bookToUpdate = new Book(id, "newName", List.of(author), List.of(genre));
 
-    bookServiceJdbc.update(bookToUpdate);
+    bookServiceJdbc.update(bookToUpdate, listOfIds, listOfIds);
 
-    Mockito.verify(bookDao, times(1)).update(bookToUpdate);
+    Mockito.verify(bookDao, times(1))
+        .update(bookToUpdate, listOfIds, listOfIds);
+
+  }
+
+  @DisplayName("should throw exception when updating non existing book")
+  @Test
+  void shouldThrowExceptionWhenUpdatingNonExistingBook() {
+
+    var id = 1L;
+    var listOfIds = new long[]{id};
+    var author = new Author(id, "author1");
+    var genre = new Genre(id, "genre1");
+    var bookToUpdate = new Book(id, "newName", List.of(author), List.of(genre));
+
+    Mockito.doThrow(new BookDaoException("msg")).when(bookDao).getById(id);
+
+    assertThatThrownBy(() -> bookServiceJdbc.update(bookToUpdate, listOfIds, listOfIds))
+        .isInstanceOf(BookDaoException.class)
+        .hasMessage("msg");
+
+    Mockito.verify(bookDao, times(1))
+        .getById(id);
+    Mockito.verify(bookDao, times(0))
+        .update(bookToUpdate, listOfIds, listOfIds);
 
   }
 
@@ -168,19 +197,22 @@ class BookServiceJdbcTest {
 
     return bookOptional.orElse(
         new Book(nonExistingId, "nonexisting",
-            new Author(nonExistingId, "author1"),
-            new Genre(nonExistingId, "genre1")));
+            new ArrayList<>(),
+            new ArrayList<>()));
 
   }
 
   private List<Book> makeCorrectAllBooksList() {
     return List.of(
-        new Book(1L, "book1", new Author(1L, "author1"),
-            new Genre(1L, "genre1")),
-        new Book(2L, "book2", new Author(2L, "author2"),
-            new Genre(1L, "genre1")),
-        new Book(3L, "book3", new Author(2L, "author2"),
-            new Genre(3L, "genre3"))
+        new Book(1L, "book1",
+            List.of(new Author(1L, "author1"), new Author(2L, "author2")),
+            List.of(new Genre(1L, "genre1"), new Genre(2L, "genre2"))),
+        new Book(2L, "book2",
+            List.of(new Author(2L, "author2"), new Author(3L, "author3")),
+            List.of(new Genre(2L, "genre2"), new Genre(3L, "genre3"))),
+        new Book(3L, "book3",
+            List.of(new Author(1L, "author1"), new Author(3L, "author3")),
+            List.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")))
     );
   }
 
