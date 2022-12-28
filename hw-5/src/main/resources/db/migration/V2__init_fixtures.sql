@@ -1,13 +1,15 @@
 insert into GENRES(NAME)
 values ('genre1'),
        ('genre2'),
-       ('genre3');
+       ('genre3'),
+       ('genre_without_book');
 
 
 insert into AUTHORS(NAME)
 values ('author1'),
        ('author2'),
-       ('author3');
+       ('author3'),
+       ('author_without_book');
 
 insert into BOOKS(name)
 values ('book1'),

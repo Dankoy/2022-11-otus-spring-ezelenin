@@ -3,11 +3,9 @@ package ru.dankoy.hw5.core.service.author;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw5.core.dao.author.AuthorDao;
 import ru.dankoy.hw5.core.domain.Author;
 
-@Transactional
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceJdbc implements AuthorService {

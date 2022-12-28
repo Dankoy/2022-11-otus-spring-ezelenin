@@ -3,11 +3,9 @@ package ru.dankoy.hw5.core.service.genre;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw5.core.dao.genre.GenreDao;
 import ru.dankoy.hw5.core.domain.Genre;
 
-@Transactional
 @Service
 @RequiredArgsConstructor
 public class GenreServiceJdbc implements GenreService {
