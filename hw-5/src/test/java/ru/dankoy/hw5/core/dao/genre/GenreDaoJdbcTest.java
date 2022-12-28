@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataIntegrityViolationException;
 import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.GenreDaoException;
 
@@ -100,6 +101,20 @@ class GenreDaoJdbcTest {
     assertThatThrownBy(() -> genreDaoJdbc.getById(id))
         .isInstanceOf(GenreDaoException.class)
         .hasMessage(String.format("Genre with id '%d' does not exist", id));
+
+  }
+
+  @DisplayName("should throw data integrity exception when deleting genre that is used in many-to-many table")
+  @Test
+  void shouldThrowDataIntegrityViolationExceptionWhenDeleteAuthorById() {
+
+    var id = 1L;
+
+    assertThatCode(() -> genreDaoJdbc.getById(id))
+        .doesNotThrowAnyException();
+
+    assertThatThrownBy(() -> genreDaoJdbc.deleteById(id))
+        .isInstanceOf(DataIntegrityViolationException.class);
 
   }
 

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataIntegrityViolationException;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.exceptions.AuthorDaoException;
 
@@ -100,6 +101,20 @@ class AuthorDaoJdbcTest {
     assertThatThrownBy(() -> authorDaoJdbc.getById(id))
         .isInstanceOf(AuthorDaoException.class)
         .hasMessage(String.format("Author with id '%d' does not exist", id));
+
+  }
+
+  @DisplayName("should throw data integrity exception when deleting author that is used in many-to-many table")
+  @Test
+  void shouldThrowDataIntegrityViolationExceptionWhenDeleteAuthorById() {
+
+    var id = 1L;
+
+    assertThatCode(() -> authorDaoJdbc.getById(id))
+        .doesNotThrowAnyException();
+
+    assertThatThrownBy(() -> authorDaoJdbc.deleteById(id))
+        .isInstanceOf(DataIntegrityViolationException.class);
 
   }
 
