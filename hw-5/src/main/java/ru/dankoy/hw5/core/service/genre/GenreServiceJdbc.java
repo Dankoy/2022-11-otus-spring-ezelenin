@@ -36,6 +36,7 @@ public class GenreServiceJdbc implements GenreService {
 
   @Override
   public void update(Genre genre) {
+    genreDao.getById(genre.getId());
     genreDao.update(genre);
   }
 

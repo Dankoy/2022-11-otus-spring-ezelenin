@@ -36,6 +36,7 @@ public class AuthorServiceJdbc implements AuthorService {
 
   @Override
   public void update(Author author) {
+    authorDao.getById(author.getId());
     authorDao.update(author);
   }
 
