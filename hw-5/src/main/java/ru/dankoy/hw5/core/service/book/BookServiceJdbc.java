@@ -36,6 +36,7 @@ public class BookServiceJdbc implements BookService {
 
   @Override
   public void update(Book book, long[] authorIds, long[] genreIds) {
+    bookDao.getById(book.getId());
     bookDao.update(book, authorIds, genreIds);
   }
 

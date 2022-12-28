@@ -140,6 +140,12 @@ public class BookDaoJdbc implements BookDao {
     insertToBookAuthorRelation(book.getId(), authorIds);
     insertToBookGenreRelation(book.getId(), genreIds);
 
+    List<Author> authors = getAllAuthorsByIds(authorIds);
+    List<Genre> genres = getAllGenresByIds(genreIds);
+
+    book.getAuthors().addAll(authors);
+    book.getGenres().addAll(genres);
+
   }
 
   @Override
@@ -182,6 +188,32 @@ public class BookDaoJdbc implements BookDao {
         "select book_id, genre_id from books_genres bg where book_id = :book_id order by book_id, genre_id",
         params,
         (rs, i) -> new BookGenreRelation(rs.getLong(1), rs.getLong(2)));
+  }
+
+  private List<Author> getAllAuthorsByIds(long[] authorIds) {
+
+    List<Author> authors = new ArrayList<>();
+
+    for (long id : authorIds) {
+
+      Author author = authorDao.getById(id);
+      authors.add(author);
+    }
+
+    return authors;
+  }
+
+  private List<Genre> getAllGenresByIds(long[] genreIds) {
+
+    List<Genre> genres = new ArrayList<>();
+
+    for (long id : genreIds) {
+
+      Genre genre = genreDao.getById(id);
+      genres.add(genre);
+    }
+
+    return genres;
   }
 
   private void insertToBookAuthorRelation(long bookId, long[] authorIds) {
