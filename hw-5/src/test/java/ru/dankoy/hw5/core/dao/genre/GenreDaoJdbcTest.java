@@ -90,7 +90,7 @@ class GenreDaoJdbcTest {
   @Test
   void shouldCorrectlyDeleteGenreById() {
 
-    var id = 1L;
+    var id = 4L;
 
     assertThatCode(() -> genreDaoJdbc.getById(id))
         .doesNotThrowAnyException();
@@ -145,7 +145,8 @@ class GenreDaoJdbcTest {
     return List.of(
         new Genre(1L, "genre1"),
         new Genre(2L, "genre2"),
-        new Genre(3L, "genre3")
+        new Genre(3L, "genre3"),
+        new Genre(4L, "genre_without_book")
     );
   }
 

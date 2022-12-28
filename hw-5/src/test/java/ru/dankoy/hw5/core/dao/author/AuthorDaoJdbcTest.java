@@ -90,7 +90,7 @@ class AuthorDaoJdbcTest {
   @Test
   void shouldCorrectlyDeleteAuthorById() {
 
-    var id = 1L;
+    var id = 4L;
 
     assertThatCode(() -> authorDaoJdbc.getById(id))
         .doesNotThrowAnyException();
@@ -145,7 +145,8 @@ class AuthorDaoJdbcTest {
     return List.of(
         new Author(1L, "author1"),
         new Author(2L, "author2"),
-        new Author(3L, "author3")
+        new Author(3L, "author3"),
+        new Author(4L, "author_without_book")
     );
   }
 
