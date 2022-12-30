@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -84,10 +83,12 @@ public class BookDaoJdbcMerge implements BookDao {
 
     mergeBookInfo(books, authors, genres, bookAuthorRelations, bookGenreRelations);
 
-    if (Objects.requireNonNull(books).size() < 1) {
-      throw new BookDaoException(String.format("Book with id '%d' does not exist", id));
-    } else {
-      return books.get(id);
+    try {
+
+      return Objects.requireNonNull(Objects.requireNonNull(books).get(id));
+
+    } catch (Exception e) {
+      throw new BookDaoException(e);
     }
 
   }
@@ -103,16 +104,18 @@ public class BookDaoJdbcMerge implements BookDao {
     KeyHolder keyHolder = new GeneratedKeyHolder();
     namedParameterJdbcOperations.update(queryBook, parameters, keyHolder);
 
-    Optional<Number> optionalNumber = Optional.ofNullable(keyHolder.getKey());
-    Number number = optionalNumber.orElseThrow(() -> new BookDaoException(
-        "Expecting key holder not null, but got " + keyHolder.getKey()));
+    try {
 
-    long bookId = number.longValue();
+      long bookId = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
-    insertToBookAuthorRelation(bookId, authorIds);
-    insertToBookGenreRelation(bookId, genreIds);
+      insertToBookAuthorRelation(bookId, authorIds);
+      insertToBookGenreRelation(bookId, genreIds);
 
-    return bookId;
+      return bookId;
+    } catch (Exception e) {
+      throw new BookDaoException(e);
+    }
+
   }
 
   @Override
@@ -120,11 +123,7 @@ public class BookDaoJdbcMerge implements BookDao {
     String query = "delete from books where id = :id";
 
     Map<String, Object> params = Collections.singletonMap("id", id);
-    int affected = namedParameterJdbcOperations.update(query, params);
-    if (affected == 0) {
-      throw new BookDaoException(
-          String.format("Can't delete book. Book with id '%d' does not exist", id));
-    }
+    namedParameterJdbcOperations.update(query, params);
 
   }
 

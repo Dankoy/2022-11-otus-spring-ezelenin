@@ -6,7 +6,7 @@ public class BookDaoException extends Hw5RootException {
     super(message);
   }
 
-  public BookDaoException(String message, Exception e) {
-    super(message, e);
+  public BookDaoException(Throwable e) {
+    super(e);
   }
 }

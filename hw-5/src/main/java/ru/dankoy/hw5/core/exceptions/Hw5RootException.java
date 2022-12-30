@@ -9,4 +9,8 @@ public class Hw5RootException extends RuntimeException {
   public Hw5RootException(String message) {
     super(message);
   }
+
+  public Hw5RootException(Throwable throwable) {
+    super(throwable);
+  }
 }

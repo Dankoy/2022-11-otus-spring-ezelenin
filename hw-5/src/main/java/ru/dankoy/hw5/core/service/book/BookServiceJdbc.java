@@ -29,6 +29,7 @@ public class BookServiceJdbc implements BookService {
 
   @Override
   public void deleteById(long id) {
+    bookDao.getById(id);
     bookDao.deleteById(id);
   }
 
