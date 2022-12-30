@@ -6,11 +6,7 @@ public class Hw5RootException extends RuntimeException {
     super(message, e);
   }
 
-  public Hw5RootException(String message) {
-    super(message);
-  }
-
-  public Hw5RootException(Throwable throwable) {
-    super(throwable);
+  public Hw5RootException(Exception e) {
+    super(e);
   }
 }

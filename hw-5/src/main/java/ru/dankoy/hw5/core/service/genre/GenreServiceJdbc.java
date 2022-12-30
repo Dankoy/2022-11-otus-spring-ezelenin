@@ -29,6 +29,7 @@ public class GenreServiceJdbc implements GenreService {
 
   @Override
   public void deleteById(long id) {
+    genreDao.getById(id);
     genreDao.deleteById(id);
   }
 

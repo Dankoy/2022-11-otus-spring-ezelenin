@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -36,7 +36,7 @@ public class AuthorDaoJdbc implements AuthorDao {
           "select id, name from authors where id = :id", params, new AuthorMapper()
       );
     } catch (Exception e) {
-      throw new AuthorDaoException(String.format("Author with id '%d' does not exist", id), e);
+      throw new AuthorDaoException(e);
     }
 
   }
@@ -49,23 +49,19 @@ public class AuthorDaoJdbc implements AuthorDao {
     namedParameterJdbcOperations
         .update("insert into authors (name) values (:name)", parameters, keyHolder);
 
-    Optional<Number> optionalNumber = Optional.ofNullable(keyHolder.getKey());
-    Number number = optionalNumber.orElseThrow(() -> new AuthorDaoException(
-        "Expecting key holder not null, but got " + keyHolder.getKey()));
-    return number.longValue();
-
+    try {
+      return Objects.requireNonNull(keyHolder.getKey()).longValue();
+    } catch (Exception e) {
+      throw new AuthorDaoException(e);
+    }
   }
 
   @Override
   public void deleteById(long id) {
     Map<String, Object> params = Collections.singletonMap("id", id);
-    int affected = namedParameterJdbcOperations.update(
+    namedParameterJdbcOperations.update(
         "delete from authors where id = :id", params
     );
-    if (affected == 0) {
-      throw new AuthorDaoException(
-          String.format("Can't delete author. Author with id '%d' does not exist", id));
-    }
   }
 
   @Override

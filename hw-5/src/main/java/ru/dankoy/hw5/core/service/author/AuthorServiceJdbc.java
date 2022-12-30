@@ -29,6 +29,7 @@ public class AuthorServiceJdbc implements AuthorService {
 
   @Override
   public void deleteById(long id) {
+    authorDao.getById(id);
     authorDao.deleteById(id);
   }
 
