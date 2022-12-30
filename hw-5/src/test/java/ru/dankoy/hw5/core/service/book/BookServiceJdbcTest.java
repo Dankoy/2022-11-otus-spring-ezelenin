@@ -83,13 +83,11 @@ class BookServiceJdbcTest {
   void shouldThrowBookServiceExceptionWhenGetById() {
 
     var id = 999;
-    String exceptionMessage = String.format("Book with id '%d' does not exist", id);
 
-    Mockito.doThrow(new BookDaoException(exceptionMessage)).when(bookDao).getById(id);
+    Mockito.doThrow(new BookDaoException(new Exception())).when(bookDao).getById(id);
 
     assertThatThrownBy(() -> bookServiceJdbc.getById(id))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage(exceptionMessage);
+        .isInstanceOf(BookDaoException.class);
 
   }
 
@@ -134,14 +132,11 @@ class BookServiceJdbcTest {
   void shouldThrowExceptionWhenDeleteNonExistingBookById() {
 
     var id = 999L;
-    var exceptionMessage = String.format("Can't delete book. Book with id '%d' does not exist",
-        id);
 
-    Mockito.doThrow(new BookDaoException(exceptionMessage)).when(bookDao).deleteById(id);
+    Mockito.doThrow(new BookDaoException(new Exception())).when(bookDao).deleteById(id);
 
     assertThatThrownBy(() -> bookServiceJdbc.deleteById(id))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage(exceptionMessage);
+        .isInstanceOf(BookDaoException.class);
 
     Mockito.verify(bookDao, times(1)).deleteById(id);
 
@@ -175,11 +170,10 @@ class BookServiceJdbcTest {
     var genre = new Genre(id, "genre1");
     var bookToUpdate = new Book(id, "newName", List.of(author), List.of(genre));
 
-    Mockito.doThrow(new BookDaoException("msg")).when(bookDao).getById(id);
+    Mockito.doThrow(new BookDaoException(new Exception())).when(bookDao).getById(id);
 
     assertThatThrownBy(() -> bookServiceJdbc.update(bookToUpdate, listOfIds, listOfIds))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage("msg");
+        .isInstanceOf(BookDaoException.class);
 
     Mockito.verify(bookDao, times(1))
         .getById(id);
