@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.book;
+package ru.dankoy.hw5.core.dao.book.mergemanytomanybycode;
 
 import java.util.List;
 import ru.dankoy.hw5.core.domain.Book;

@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.book.manytomany;
+package ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.manytomany;
 
 
 import lombok.Getter;
@@ -8,9 +8,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class BookGenreRelation {
+public class BookAuthorRelation {
 
   private final long bookId;
-  private final long genreId;
+  private final long authorId;
 
 }

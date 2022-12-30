@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.book;
+package ru.dankoy.hw5.core.dao.book.mergemanytomanybycode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,9 +18,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.dankoy.hw5.core.dao.author.AuthorDao;
-import ru.dankoy.hw5.core.dao.book.manytomany.BookAuthorRelation;
-import ru.dankoy.hw5.core.dao.book.manytomany.BookGenreRelation;
-import ru.dankoy.hw5.core.dao.book.manytomany.BookResultSetExtractor;
+import ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.manytomany.BookAuthorRelation;
+import ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.manytomany.BookGenreRelation;
+import ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.manytomany.BookResultSetExtractor;
 import ru.dankoy.hw5.core.dao.genre.GenreDao;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;

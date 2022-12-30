@@ -13,7 +13,7 @@ import ru.dankoy.hw5.core.commands.AuthorCommand;
 import ru.dankoy.hw5.core.commands.BookCommand;
 import ru.dankoy.hw5.core.commands.GenreCommand;
 import ru.dankoy.hw5.core.dao.author.AuthorDaoJdbc;
-import ru.dankoy.hw5.core.dao.book.BookDaoJdbc;
+import ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.BookDaoJdbc;
 import ru.dankoy.hw5.core.dao.genre.GenreDaoJdbc;
 import ru.dankoy.hw5.core.service.author.AuthorServiceJdbc;
 import ru.dankoy.hw5.core.service.book.BookServiceJdbc;
