@@ -29,10 +29,18 @@ import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.BookDaoException;
 
 
+/**
+ * @author turtality
+ * <p>
+ * Dao works with many-to-many by sql join tables and all magic is in
+ * {@link BookResultSetExtractor}
+ */
 @RequiredArgsConstructor
 @Repository
 @ConditionalOnProperty(value = "book.dao.join", havingValue = "true", matchIfMissing = true)
 public class BookDaoJdbcJoin implements BookDao {
+
+  private static final String BOOK_ID_COLUMN = "book_id";
 
   private final NamedParameterJdbcOperations namedParameterJdbcOperations;
 
@@ -42,43 +50,52 @@ public class BookDaoJdbcJoin implements BookDao {
   @Override
   public List<Book> getAll() {
 
-    String query = "select books.id as bid, books.name as book_name, "
-        + "books_genres.genre_id as bg_id, genres.name as genre_name, "
-        + "books_authors.author_id as ba_id, authors.name as author_name "
+    String query = "select books.id as b_id, "
+        + "books.name as book_name, "
+        + "books_genres.genre_id   as bg_id, "
+        + "genres.name             as genre_name, "
+        + "books_authors.author_id as ba_id, "
+        + "authors.name            as author_name "
         + "from books "
-        + "join books_genres on  bid = bgid "
-        + "join books_authors on bid = baid "
-        + "join genres on bg_id = genres.id "
-        + "join authors on ba_id = authors.id";
+        + "join books_genres on books.id = books_genres.book_id "
+        + "join books_authors on books.id = books_authors.book_id "
+        + "inner join genres on books_genres.genre_id = genres.id "
+        + "inner join authors on books_authors.author_id = authors.id ";
 
-    List<Book> books = namedParameterJdbcOperations.query(
+    Map<Long, Book> books = namedParameterJdbcOperations.query(
         query, new BookResultSetExtractor()
     );
 
-    return Objects.requireNonNull(books);
+    return new ArrayList<>(Objects.requireNonNull(books).values());
 
   }
 
   @Override
   public Book getById(long id) {
 
-    String query = "select books.id as bid, books.name as book_name, "
-        + "books_genres.genre_id as bg_id, genres.name as genre_name, "
-        + "books_authors.author_id as ba_id, authors.name as author_name "
-        + "from books "
-        + "join books_genres on  bid = bgid "
-        + "join books_authors on bid = baid "
-        + "join genres on bg_id = genres.id "
-        + "join authors on ba_id = authors.id";
+    Map<String, Object> params = Collections.singletonMap(BOOK_ID_COLUMN, id);
 
-    List<Book> books = namedParameterJdbcOperations.query(
-        query, new BookResultSetExtractor()
+    String query = "select books.id as b_id, "
+        + "books.name as book_name, "
+        + "books_genres.genre_id   as bg_id, "
+        + "genres.name             as genre_name, "
+        + "books_authors.author_id as ba_id, "
+        + "authors.name            as author_name "
+        + "from books "
+        + "join books_genres on books.id = books_genres.book_id "
+        + "join books_authors on books.id = books_authors.book_id "
+        + "inner join genres on books_genres.genre_id = genres.id "
+        + "inner join authors on books_authors.author_id = authors.id "
+        + "where books.id = :book_id";
+
+    Map<Long, Book> books = namedParameterJdbcOperations.query(
+        query, params, new BookResultSetExtractor()
     );
 
-    if (Objects.requireNonNull(books).isEmpty() || books.size() > 1) {
+    if (Objects.requireNonNull(books).isEmpty() || Objects.requireNonNull(books).size() > 1) {
       throw new BookDaoException(String.format("Book with id '%d' does not exist", id));
     } else {
-      return books.get(0);
+      return books.get(id);
     }
 
   }
@@ -156,7 +173,7 @@ public class BookDaoJdbcJoin implements BookDao {
 
   private List<BookAuthorRelation> getBookAuthorRelationsByBookId(long bookId) {
     Map<String, Object> params = Map.of(
-        "book_id", bookId
+        BOOK_ID_COLUMN, bookId
     );
 
     return namedParameterJdbcOperations.query(
@@ -167,7 +184,7 @@ public class BookDaoJdbcJoin implements BookDao {
 
   private List<BookGenreRelation> getBookGenreRelationsByBookId(long bookId) {
     Map<String, Object> params = Map.of(
-        "book_id", bookId
+        BOOK_ID_COLUMN, bookId
     );
 
     return namedParameterJdbcOperations.query(

@@ -30,6 +30,11 @@ import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.BookDaoException;
 
 
+/**
+ * @author turtality
+ * <p>
+ * Dao works with many-to-many in code by merge methods
+ */
 @RequiredArgsConstructor
 @Repository
 @ConditionalOnProperty(value = "book.dao.join", havingValue = "false")
