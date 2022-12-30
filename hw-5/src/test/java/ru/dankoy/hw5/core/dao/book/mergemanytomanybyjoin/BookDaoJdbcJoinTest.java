@@ -25,7 +25,6 @@ import ru.dankoy.hw5.core.exceptions.BookDaoException;
 @DisplayName("Test BookDaoJdbcJoin ")
 @JdbcTest
 @Import({BookDaoJdbcJoin.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
-//@TestPropertySource(properties="book.dao.join=true")
 class BookDaoJdbcJoinTest {
 
   @Autowired
