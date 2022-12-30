@@ -1,49 +1,43 @@
-package ru.dankoy.hw5.core.service.book;
+package ru.dankoy.hw5.core.dao.book.mergemanytomanybyjoin;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import ru.dankoy.hw5.core.dao.book.BookDao;
+import ru.dankoy.hw5.core.dao.author.AuthorDaoJdbc;
+import ru.dankoy.hw5.core.dao.genre.GenreDaoJdbc;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.BookDaoException;
 
 
-@DisplayName("Test BookServiceJdbc ")
+@DisplayName("Test BookDaoJdbcJoin ")
 @JdbcTest
-@Import({BookServiceJdbc.class, BookDao.class})
-class BookServiceJdbcTest {
-
-  @MockBean
-  private BookDao bookDao;
+@Import({BookDaoJdbcJoin.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
+//@TestPropertySource(properties="book.dao.join=true")
+class BookDaoJdbcJoinTest {
 
   @Autowired
-  private BookServiceJdbc bookServiceJdbc;
+  private BookDaoJdbcJoin bookDaoJdbcJoin;
 
 
   @DisplayName("should return all books")
   @Test
   void shouldGetAllBooksTest() {
-
-    given(bookDao.getAll()).willReturn(makeCorrectAllBooksList());
-
-    var books = bookServiceJdbc.getAll();
+    var books = bookDaoJdbcJoin.getAll();
 
     assertThat(books).isEqualTo(makeCorrectAllBooksList());
-    Mockito.verify(bookDao, times(1)).getAll();
   }
 
 
@@ -51,12 +45,9 @@ class BookServiceJdbcTest {
   @Test
   void shouldReturnCorrectCountTest() {
 
-    given(bookDao.count()).willReturn(3L);
-
-    var count = bookServiceJdbc.count();
+    var count = bookDaoJdbcJoin.count();
 
     assertThat(count).isEqualTo(makeCorrectAllBooksList().size());
-    Mockito.verify(bookDao, times(1)).count();
 
   }
 
@@ -69,27 +60,21 @@ class BookServiceJdbcTest {
     var books = makeCorrectAllBooksList();
     var correctbook = getBookByIdFromList(books, id);
 
-    given(bookDao.getById(id)).willReturn(correctbook);
-
-    var book = bookServiceJdbc.getById(id);
+    var book = bookDaoJdbcJoin.getById(id);
 
     assertThat(book).isEqualTo(correctbook);
-    Mockito.verify(bookDao, times(1)).getById(id);
 
   }
 
-  @DisplayName("should throw bookServiceException for non existing book")
+  @DisplayName("should throw bookDaoException for non existing book")
   @Test
-  void shouldThrowBookServiceExceptionWhenGetById() {
+  void shouldThrowBookDaoExceptionWhenGetById() {
 
     var id = 999;
-    String exceptionMessage = String.format("Book with id '%d' does not exist", id);
 
-    Mockito.doThrow(new BookDaoException(exceptionMessage)).when(bookDao).getById(id);
-
-    assertThatThrownBy(() -> bookServiceJdbc.getById(id))
+    assertThatThrownBy(() -> bookDaoJdbcJoin.getById(id))
         .isInstanceOf(BookDaoException.class)
-        .hasMessage(exceptionMessage);
+        .hasMessage(String.format("Book with id '%d' does not exist", id));
 
   }
 
@@ -97,23 +82,21 @@ class BookServiceJdbcTest {
   @Test
   void shouldCorrectlyInsertBook() {
 
-    var bookName = "book4";
+    var bookName = "newName";
 
     var id = 1L;
     var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
     var bookToInsert = new Book(0L, bookName, List.of(author), List.of(genre));
-    var correctInsertedId = 4L;
 
-    given(bookDao.insert(bookToInsert, listOfIds, listOfIds)).willReturn(
-        correctInsertedId);
+    var insertedId = bookDaoJdbcJoin.insert(bookToInsert, listOfIds, listOfIds);
 
-    var insertedId = bookServiceJdbc.insert(bookToInsert, listOfIds, listOfIds);
+    var expected = new Book(insertedId, bookName, List.of(author), List.of(genre));
 
-    assertThat(insertedId).isEqualTo(correctInsertedId);
-    Mockito.verify(bookDao, times(1))
-        .insert(bookToInsert, listOfIds, listOfIds);
+    var actual = bookDaoJdbcJoin.getById(insertedId);
+
+    assertThat(actual).isEqualTo(expected);
 
   }
 
@@ -123,9 +106,14 @@ class BookServiceJdbcTest {
 
     var id = 1L;
 
-    bookServiceJdbc.deleteById(id);
+    assertThatCode(() -> bookDaoJdbcJoin.getById(id))
+        .doesNotThrowAnyException();
 
-    Mockito.verify(bookDao, times(1)).deleteById(id);
+    bookDaoJdbcJoin.deleteById(id);
+
+    assertThatThrownBy(() -> bookDaoJdbcJoin.getById(id))
+        .isInstanceOf(BookDaoException.class)
+        .hasMessage(String.format("Book with id '%d' does not exist", id));
 
   }
 
@@ -134,16 +122,10 @@ class BookServiceJdbcTest {
   void shouldThrowExceptionWhenDeleteNonExistingBookById() {
 
     var id = 999L;
-    var exceptionMessage = String.format("Can't delete book. Book with id '%d' does not exist",
-        id);
 
-    Mockito.doThrow(new BookDaoException(exceptionMessage)).when(bookDao).deleteById(id);
-
-    assertThatThrownBy(() -> bookServiceJdbc.deleteById(id))
+    assertThatThrownBy(() -> bookDaoJdbcJoin.deleteById(id))
         .isInstanceOf(BookDaoException.class)
-        .hasMessage(exceptionMessage);
-
-    Mockito.verify(bookDao, times(1)).deleteById(id);
+        .hasMessage(String.format("Can't delete book. Book with id '%d' does not exist", id));
 
   }
 
@@ -156,35 +138,16 @@ class BookServiceJdbcTest {
     var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
-    var bookToUpdate = new Book(id, "newName", List.of(author), List.of(genre));
+    var bookToUpdate = new Book(id, "newName", new ArrayList<>(), new ArrayList<>());
 
-    bookServiceJdbc.update(bookToUpdate, listOfIds, listOfIds);
+    bookDaoJdbcJoin.update(bookToUpdate, listOfIds, listOfIds);
 
-    Mockito.verify(bookDao, times(1))
-        .update(bookToUpdate, listOfIds, listOfIds);
+    var fromDb = bookDaoJdbcJoin.getById(id);
 
-  }
+    var correctBook = new Book(id, "newName", Stream.of(author).collect(Collectors.toList()),
+        Stream.of(genre).collect(Collectors.toList()));
 
-  @DisplayName("should throw exception when updating non existing book")
-  @Test
-  void shouldThrowExceptionWhenUpdatingNonExistingBook() {
-
-    var id = 1L;
-    var listOfIds = new long[]{id};
-    var author = new Author(id, "author1");
-    var genre = new Genre(id, "genre1");
-    var bookToUpdate = new Book(id, "newName", List.of(author), List.of(genre));
-
-    Mockito.doThrow(new BookDaoException("msg")).when(bookDao).getById(id);
-
-    assertThatThrownBy(() -> bookServiceJdbc.update(bookToUpdate, listOfIds, listOfIds))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage("msg");
-
-    Mockito.verify(bookDao, times(1))
-        .getById(id);
-    Mockito.verify(bookDao, times(0))
-        .update(bookToUpdate, listOfIds, listOfIds);
+    assertThat(fromDb).isEqualTo(correctBook);
 
   }
 

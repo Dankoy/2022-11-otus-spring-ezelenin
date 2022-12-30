@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.book;
+package ru.dankoy.hw5.core.dao.book.mergemanytomanybycode;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import ru.dankoy.hw5.core.dao.author.AuthorDaoJdbc;
-import ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.BookDaoJdbc;
 import ru.dankoy.hw5.core.dao.genre.GenreDaoJdbc;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
@@ -23,19 +23,20 @@ import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.BookDaoException;
 
 
-@DisplayName("Test BookDaoJdbc ")
+@DisplayName("Test BookDaoJdbcMerge ")
 @JdbcTest
-@Import({BookDaoJdbc.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
-class BookDaoJdbcTest {
+@Import({BookDaoJdbcMerge.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
+@TestPropertySource(properties="book.dao.join=false")
+class BookDaoJdbcMergeTest {
 
   @Autowired
-  private BookDaoJdbc bookDaoJdbc;
+  private BookDaoJdbcMerge bookDaoJdbcMerge;
 
 
   @DisplayName("should return all books")
   @Test
   void shouldGetAllBooksTest() {
-    var books = bookDaoJdbc.getAll();
+    var books = bookDaoJdbcMerge.getAll();
 
     assertThat(books).isEqualTo(makeCorrectAllBooksList());
   }
@@ -45,7 +46,7 @@ class BookDaoJdbcTest {
   @Test
   void shouldReturnCorrectCountTest() {
 
-    var count = bookDaoJdbc.count();
+    var count = bookDaoJdbcMerge.count();
 
     assertThat(count).isEqualTo(makeCorrectAllBooksList().size());
 
@@ -60,7 +61,7 @@ class BookDaoJdbcTest {
     var books = makeCorrectAllBooksList();
     var correctbook = getBookByIdFromList(books, id);
 
-    var book = bookDaoJdbc.getById(id);
+    var book = bookDaoJdbcMerge.getById(id);
 
     assertThat(book).isEqualTo(correctbook);
 
@@ -72,7 +73,7 @@ class BookDaoJdbcTest {
 
     var id = 999;
 
-    assertThatThrownBy(() -> bookDaoJdbc.getById(id))
+    assertThatThrownBy(() -> bookDaoJdbcMerge.getById(id))
         .isInstanceOf(BookDaoException.class)
         .hasMessage(String.format("Book with id '%d' does not exist", id));
 
@@ -90,11 +91,11 @@ class BookDaoJdbcTest {
     var genre = new Genre(id, "genre1");
     var bookToInsert = new Book(0L, bookName, List.of(author), List.of(genre));
 
-    var insertedId = bookDaoJdbc.insert(bookToInsert, listOfIds, listOfIds);
+    var insertedId = bookDaoJdbcMerge.insert(bookToInsert, listOfIds, listOfIds);
 
     var expected = new Book(insertedId, bookName, List.of(author), List.of(genre));
 
-    var actual = bookDaoJdbc.getById(insertedId);
+    var actual = bookDaoJdbcMerge.getById(insertedId);
 
     assertThat(actual).isEqualTo(expected);
 
@@ -106,12 +107,12 @@ class BookDaoJdbcTest {
 
     var id = 1L;
 
-    assertThatCode(() -> bookDaoJdbc.getById(id))
+    assertThatCode(() -> bookDaoJdbcMerge.getById(id))
         .doesNotThrowAnyException();
 
-    bookDaoJdbc.deleteById(id);
+    bookDaoJdbcMerge.deleteById(id);
 
-    assertThatThrownBy(() -> bookDaoJdbc.getById(id))
+    assertThatThrownBy(() -> bookDaoJdbcMerge.getById(id))
         .isInstanceOf(BookDaoException.class)
         .hasMessage(String.format("Book with id '%d' does not exist", id));
 
@@ -123,7 +124,7 @@ class BookDaoJdbcTest {
 
     var id = 999L;
 
-    assertThatThrownBy(() -> bookDaoJdbc.deleteById(id))
+    assertThatThrownBy(() -> bookDaoJdbcMerge.deleteById(id))
         .isInstanceOf(BookDaoException.class)
         .hasMessage(String.format("Can't delete book. Book with id '%d' does not exist", id));
 
@@ -140,9 +141,9 @@ class BookDaoJdbcTest {
     var genre = new Genre(id, "genre1");
     var bookToUpdate = new Book(id, "newName", new ArrayList<>(), new ArrayList<>());
 
-    bookDaoJdbc.update(bookToUpdate, listOfIds, listOfIds);
+    bookDaoJdbcMerge.update(bookToUpdate, listOfIds, listOfIds);
 
-    var fromDb = bookDaoJdbc.getById(id);
+    var fromDb = bookDaoJdbcMerge.getById(id);
 
     var correctBook = new Book(id, "newName", Stream.of(author).collect(Collectors.toList()),
         Stream.of(genre).collect(Collectors.toList()));
