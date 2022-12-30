@@ -79,14 +79,11 @@ class GenreServiceJdbcTest {
   void shouldThrowGenreServiceExceptionWhenGetById() {
 
     var id = 999;
-    String exceptionMessage = String.format("Genre with id '%d' does not exist", id);
 
-    Mockito.doThrow(new GenreDaoException(exceptionMessage)).when(genreDao).getById(id);
+    Mockito.doThrow(new GenreDaoException(new Exception())).when(genreDao).getById(id);
 
     assertThatThrownBy(() -> genreServiceJdbc.getById(id))
-        .isInstanceOf(GenreDaoException.class)
-        .hasMessage(exceptionMessage);
-
+        .isInstanceOf(GenreDaoException.class);
   }
 
   @DisplayName("should correctly insert genre in db")
@@ -122,15 +119,11 @@ class GenreServiceJdbcTest {
   void shouldThrowExceptionWhenDeleteNonExistingGenreById() {
 
     var id = 999L;
-    var exceptionMessage = String.format("Can't delete genre. Genre with id '%d' does not exist",
-        id);
 
-    Mockito.doThrow(new GenreDaoException(exceptionMessage)).when(genreDao).deleteById(id);
+    Mockito.doThrow(new GenreDaoException(new Exception())).when(genreDao).deleteById(id);
 
     assertThatThrownBy(() -> genreServiceJdbc.deleteById(id))
-        .isInstanceOf(GenreDaoException.class)
-        .hasMessage(exceptionMessage);
-
+        .isInstanceOf(GenreDaoException.class);
     Mockito.verify(genreDao, times(1)).deleteById(id);
 
   }

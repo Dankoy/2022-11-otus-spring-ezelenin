@@ -66,8 +66,7 @@ class AuthorDaoJdbcTest {
     var id = 999L;
 
     assertThatThrownBy(() -> authorDaoJdbc.getById(id))
-        .isInstanceOf(AuthorDaoException.class)
-        .hasMessage(String.format("Author with id '%d' does not exist", id));
+        .isInstanceOf(AuthorDaoException.class);
 
   }
 
@@ -99,8 +98,7 @@ class AuthorDaoJdbcTest {
     authorDaoJdbc.deleteById(id);
 
     assertThatThrownBy(() -> authorDaoJdbc.getById(id))
-        .isInstanceOf(AuthorDaoException.class)
-        .hasMessage(String.format("Author with id '%d' does not exist", id));
+        .isInstanceOf(AuthorDaoException.class);
 
   }
 
@@ -118,15 +116,18 @@ class AuthorDaoJdbcTest {
 
   }
 
-  @DisplayName("should correctly delete author by id")
+  @DisplayName("should not delete author by id")
   @Test
-  void shouldThrowExceptionWhenDeleteNonExistingAuthorById() {
+  void shouldNotDeleteNonExistingAuthorById() {
 
     var id = 999L;
 
-    assertThatThrownBy(() -> authorDaoJdbc.deleteById(id))
-        .isInstanceOf(AuthorDaoException.class)
-        .hasMessage(String.format("Can't delete author. Author with id '%d' does not exist", id));
+    var countBefore = authorDaoJdbc.count();
+    authorDaoJdbc.deleteById(id);
+
+    var countAfter = authorDaoJdbc.count();
+
+    assertThat(countBefore - countAfter).isZero();
 
   }
 

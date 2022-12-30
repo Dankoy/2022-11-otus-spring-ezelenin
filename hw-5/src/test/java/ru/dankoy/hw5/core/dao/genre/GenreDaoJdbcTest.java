@@ -66,9 +66,7 @@ class GenreDaoJdbcTest {
     var id = 999;
 
     assertThatThrownBy(() -> genreDaoJdbc.getById(id))
-        .isInstanceOf(GenreDaoException.class)
-        .hasMessage(String.format("Genre with id '%d' does not exist", id));
-
+        .isInstanceOf(GenreDaoException.class);
   }
 
   @DisplayName("should correctly insert genre in db")
@@ -99,9 +97,7 @@ class GenreDaoJdbcTest {
     genreDaoJdbc.deleteById(id);
 
     assertThatThrownBy(() -> genreDaoJdbc.getById(id))
-        .isInstanceOf(GenreDaoException.class)
-        .hasMessage(String.format("Genre with id '%d' does not exist", id));
-
+        .isInstanceOf(GenreDaoException.class);
   }
 
   @DisplayName("should throw data integrity exception when deleting genre that is used in many-to-many table")
@@ -118,15 +114,17 @@ class GenreDaoJdbcTest {
 
   }
 
-  @DisplayName("should correctly delete genre by id")
+  @DisplayName("should not delete genre by id")
   @Test
-  void shouldThrowExceptionWhenDeleteNonExistingGenreById() {
+  void shouldNotDeleteNonExistingGenreById() {
 
     var id = 999L;
+    var countBefore = genreDaoJdbc.count();
+    genreDaoJdbc.deleteById(id);
 
-    assertThatThrownBy(() -> genreDaoJdbc.deleteById(id))
-        .isInstanceOf(GenreDaoException.class)
-        .hasMessage(String.format("Can't delete genre. Genre with id '%d' does not exist", id));
+    var countAfter = genreDaoJdbc.count();
+
+    assertThat(countBefore - countAfter).isZero();
 
   }
 

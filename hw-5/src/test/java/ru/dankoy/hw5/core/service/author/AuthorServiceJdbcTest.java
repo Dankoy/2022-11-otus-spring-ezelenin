@@ -82,14 +82,11 @@ class AuthorServiceJdbcTest {
   void shouldThrowAuthorDaoExceptionWhenGetById() {
 
     var id = 999L;
-    String exceptionMessage = String.format("Author with id '%d' does not exist", id);
 
-    Mockito.doThrow(new AuthorDaoException(exceptionMessage)).when(authorDao).getById(id);
+    Mockito.doThrow(new AuthorDaoException(new Exception())).when(authorDao).getById(id);
 
     assertThatThrownBy(() -> authorServiceJdbc.getById(id))
-        .isInstanceOf(AuthorDaoException.class)
-        .hasMessage(exceptionMessage);
-
+        .isInstanceOf(AuthorDaoException.class);
   }
 
 
@@ -126,15 +123,11 @@ class AuthorServiceJdbcTest {
   void shouldThrowExceptionWhenDeleteNonExistingAuthorById() {
 
     var id = 999L;
-    var exceptionMessage = String.format("Can't delete author. Author with id '%d' does not exist",
-        id);
 
-    Mockito.doThrow(new AuthorDaoException(exceptionMessage)).when(authorDao).deleteById(id);
+    Mockito.doThrow(new AuthorDaoException(new Exception())).when(authorDao).deleteById(id);
 
     assertThatThrownBy(() -> authorServiceJdbc.deleteById(id))
-        .isInstanceOf(AuthorDaoException.class)
-        .hasMessage(exceptionMessage);
-
+        .isInstanceOf(AuthorDaoException.class);
     Mockito.verify(authorDao, times(1)).deleteById(id);
 
   }
