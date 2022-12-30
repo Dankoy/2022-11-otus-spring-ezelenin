@@ -72,8 +72,7 @@ class BookDaoJdbcJoinTest {
     var id = 999;
 
     assertThatThrownBy(() -> bookDaoJdbcJoin.getById(id))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage(String.format("Book with id '%d' does not exist", id));
+        .isInstanceOf(BookDaoException.class);
 
   }
 
@@ -111,20 +110,22 @@ class BookDaoJdbcJoinTest {
     bookDaoJdbcJoin.deleteById(id);
 
     assertThatThrownBy(() -> bookDaoJdbcJoin.getById(id))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage(String.format("Book with id '%d' does not exist", id));
+        .isInstanceOf(BookDaoException.class);
 
   }
 
-  @DisplayName("should correctly delete book by id")
+  @DisplayName("should not delete book by id")
   @Test
-  void shouldThrowExceptionWhenDeleteNonExistingBookById() {
+  void shouldNotDeleteNonExistingBookById() {
 
     var id = 999L;
 
-    assertThatThrownBy(() -> bookDaoJdbcJoin.deleteById(id))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage(String.format("Can't delete book. Book with id '%d' does not exist", id));
+    var countBefore = bookDaoJdbcJoin.count();
+    bookDaoJdbcJoin.deleteById(id);
+
+    var countAfter = bookDaoJdbcJoin.count();
+
+    assertThat(countBefore - countAfter).isZero();
 
   }
 

@@ -74,8 +74,7 @@ class BookDaoJdbcMergeTest {
     var id = 999;
 
     assertThatThrownBy(() -> bookDaoJdbcMerge.getById(id))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage(String.format("Book with id '%d' does not exist", id));
+        .isInstanceOf(BookDaoException.class);
 
   }
 
@@ -113,20 +112,22 @@ class BookDaoJdbcMergeTest {
     bookDaoJdbcMerge.deleteById(id);
 
     assertThatThrownBy(() -> bookDaoJdbcMerge.getById(id))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage(String.format("Book with id '%d' does not exist", id));
+        .isInstanceOf(BookDaoException.class);
 
   }
 
-  @DisplayName("should correctly delete book by id")
+  @DisplayName("should not delete book by id")
   @Test
   void shouldThrowExceptionWhenDeleteNonExistingBookById() {
 
     var id = 999L;
 
-    assertThatThrownBy(() -> bookDaoJdbcMerge.deleteById(id))
-        .isInstanceOf(BookDaoException.class)
-        .hasMessage(String.format("Can't delete book. Book with id '%d' does not exist", id));
+    var countBefore = bookDaoJdbcMerge.count();
+    bookDaoJdbcMerge.deleteById(id);
+
+    var countAfter = bookDaoJdbcMerge.count();
+
+    assertThat(countBefore - countAfter).isZero();
 
   }
 
