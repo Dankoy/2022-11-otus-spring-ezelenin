@@ -3,7 +3,7 @@ package ru.dankoy.hw5.core.service.book;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.BookDao;
+import ru.dankoy.hw5.core.dao.book.BookDao;
 import ru.dankoy.hw5.core.domain.Book;
 
 @Service

@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -18,6 +19,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.dankoy.hw5.core.dao.author.AuthorDao;
+import ru.dankoy.hw5.core.dao.book.BookDao;
 import ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.manytomany.BookAuthorRelation;
 import ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.manytomany.BookGenreRelation;
 import ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.manytomany.BookResultSetExtractor;
@@ -30,7 +32,8 @@ import ru.dankoy.hw5.core.exceptions.BookDaoException;
 
 @RequiredArgsConstructor
 @Repository
-public class BookDaoJdbc implements BookDao {
+@ConditionalOnProperty(value = "book.dao.join", havingValue = "false")
+public class BookDaoJdbcMerge implements BookDao {
 
   private final NamedParameterJdbcOperations namedParameterJdbcOperations;
 
