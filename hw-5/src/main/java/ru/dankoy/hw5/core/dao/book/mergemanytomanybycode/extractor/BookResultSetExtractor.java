@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.manytomany;
+package ru.dankoy.hw5.core.dao.book.mergemanytomanybycode.extractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

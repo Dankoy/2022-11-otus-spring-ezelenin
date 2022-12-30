@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.book.mergemanytomanybyjoin.manytomany;
+package ru.dankoy.hw5.core.dao.book.manytomany;
 
 
 import lombok.Getter;
