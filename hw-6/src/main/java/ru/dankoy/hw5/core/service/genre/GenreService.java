@@ -1,19 +1,20 @@
 package ru.dankoy.hw5.core.service.genre;
 
 import java.util.List;
+import java.util.Optional;
 import ru.dankoy.hw5.core.domain.Genre;
 
 public interface GenreService {
 
   List<Genre> getAll();
 
-  Genre getById(long id);
+  Optional<Genre> getById(long id);
 
-  long insert(String genreName);
+  Genre insert(Genre genre);
 
   void deleteById(long id);
 
-  void update(Genre genre);
+  Genre update(Genre genre);
 
   long count();
 

@@ -1,6 +1,6 @@
 package ru.dankoy.hw5.core.commands;
 
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -19,28 +19,36 @@ public class AuthorCommand {
 
   @ShellMethod(key = {"author-count", "ac"}, value = "Count all authors")
   public String count() {
-    Long count = authorService.count();
+    var count = authorService.count();
     return objectMapperService.convertToString(count);
   }
 
   @ShellMethod(key = {"author-get-by-id", "agbi"}, value = "Get author by id")
   public String getById(@ShellOption long id) {
-    Author author = authorService.getById(id);
+    var optional = authorService.getById(id);
+
+    // не уверен, нужно ли в контроллере обрабатывать null или делегировать логику в сервис
+    var author = optional.orElseThrow(
+        () -> new EntityNotFoundException(
+            String.format("No author has been found with id - %d", id))
+    );
+
     return objectMapperService.convertToString(author);
   }
 
 
   @ShellMethod(key = {"author-get-all", "aga"}, value = "Get all authors")
   public String getAll() {
-    List<Author> authors = authorService.getAll();
+    var authors = authorService.getAll();
     return objectMapperService.convertToString(authors);
   }
 
 
   @ShellMethod(key = {"author-insert", "ai"}, value = "Insert new author")
   public String insert(@ShellOption String authorName) {
-    long id = authorService.insert(authorName);
-    return objectMapperService.convertToString(id);
+    var newAuthor = new Author(0L, authorName);
+    var createdAuthor = authorService.insert(newAuthor);
+    return objectMapperService.convertToString(createdAuthor);
   }
 
   @ShellMethod(key = {"author-delete", "ad"}, value = "Delete author by id")
@@ -52,7 +60,7 @@ public class AuthorCommand {
 
   @ShellMethod(key = {"author-update", "au"}, value = "Update author")
   public String update(@ShellOption long id, @ShellOption String authorName) {
-    Author author = new Author(id, authorName);
+    var author = new Author(id, authorName);
     authorService.update(author);
     return String.format("Updated author - %s", objectMapperService.convertToString(author));
   }

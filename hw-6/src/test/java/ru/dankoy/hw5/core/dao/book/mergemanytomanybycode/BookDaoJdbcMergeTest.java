@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
-import ru.dankoy.hw5.core.dao.author.AuthorDaoJdbc;
-import ru.dankoy.hw5.core.dao.genre.GenreDaoJdbc;
+import ru.dankoy.hw5.core.dao.author.AuthorDaoHibernate;
+import ru.dankoy.hw5.core.dao.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Genre;
@@ -25,7 +25,7 @@ import ru.dankoy.hw5.core.exceptions.BookDaoException;
 
 @DisplayName("Test BookDaoJdbcMerge ")
 @JdbcTest
-@Import({BookDaoJdbcMerge.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
+@Import({BookDaoJdbcMerge.class, AuthorDaoHibernate.class, GenreDaoHibernate.class})
 @TestPropertySource(properties = "book.dao.join=false")
 class BookDaoJdbcMergeTest {
 

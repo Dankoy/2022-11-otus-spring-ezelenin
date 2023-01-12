@@ -1,19 +1,20 @@
 package ru.dankoy.hw5.core.dao.book;
 
 import java.util.List;
+import java.util.Optional;
 import ru.dankoy.hw5.core.domain.Book;
 
 public interface BookDao {
 
   List<Book> getAll();
 
-  Book getById(long id);
+  Optional<Book> getById(long id);
 
-  long insert(Book book, long[] authorIds, long[] genreIds);
+  Book insert(Book book);
 
-  void deleteById(long id);
+  void delete(Book book);
 
-  void update(Book book, long[] authorIds, long[] genreIds);
+  Book update(Book book);
 
   long count();
 

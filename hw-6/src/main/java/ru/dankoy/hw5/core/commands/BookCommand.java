@@ -1,7 +1,7 @@
 package ru.dankoy.hw5.core.commands;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -20,20 +20,26 @@ public class BookCommand {
 
   @ShellMethod(key = {"book-count", "bc"}, value = "Count all book")
   public String count() {
-    Long count = bookService.count();
+    var count = bookService.count();
     return objectMapperService.convertToString(count);
   }
 
   @ShellMethod(key = {"book-get-by-id", "bgbi"}, value = "Get book by id")
   public String getById(@ShellOption long id) {
-    Book book = bookService.getById(id);
+    var optional = bookService.getById(id);
+
+    // не уверен, нужно ли в контроллере обрабатывать null или делегировать логику в сервис
+    var book = optional.orElseThrow(
+        () -> new EntityNotFoundException(
+            String.format("No book has been found with id - %d", id))
+    );
     return objectMapperService.convertToString(book);
   }
 
 
   @ShellMethod(key = {"book-get-all", "bga"}, value = "Get all book")
   public String getAll() {
-    List<Book> books = bookService.getAll();
+    var books = bookService.getAll();
     return objectMapperService.convertToString(books);
   }
 
@@ -42,10 +48,11 @@ public class BookCommand {
   public String insert(@ShellOption String bookName, @ShellOption long[] authorIds,
       @ShellOption long[] genreIds) {
 
-    Book book = new Book(0L, bookName, new ArrayList<>(), new ArrayList<>());
+    var book = new Book(0L, bookName, new HashSet<>(), new HashSet<>());
 
-    long id = bookService.insert(book, authorIds, genreIds);
-    return objectMapperService.convertToString(id);
+    var created = bookService.insert(book, authorIds, genreIds);
+
+    return String.format("Created new book with id - %d", created.getId());
   }
 
   @ShellMethod(key = {"book-delete", "bd"}, value = "Delete book by id")
@@ -59,7 +66,7 @@ public class BookCommand {
   public String update(@ShellOption long id, @ShellOption String bookName,
       @ShellOption long[] authorIds, @ShellOption long[] genreIds) {
 
-    Book book = new Book(id, bookName, new ArrayList<>(), new ArrayList<>());
+    var book = new Book(id, bookName, new HashSet<>(), new HashSet<>());
     bookService.update(book, authorIds, genreIds);
     return String.format("Updated book - %s", objectMapperService.convertToString(book));
   }

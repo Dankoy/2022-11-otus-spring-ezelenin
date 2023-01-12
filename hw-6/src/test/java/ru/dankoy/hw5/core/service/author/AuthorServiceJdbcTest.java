@@ -21,7 +21,7 @@ import ru.dankoy.hw5.core.exceptions.AuthorDaoException;
 
 @DisplayName("Test AuthorServiceJdbc ")
 @JdbcTest
-@Import({AuthorServiceJdbc.class, AuthorDao.class})
+@Import({AuthorServiceHibernate.class, AuthorDao.class})
 class AuthorServiceJdbcTest {
 
 
@@ -29,7 +29,7 @@ class AuthorServiceJdbcTest {
   private AuthorDao authorDao;
 
   @Autowired
-  private AuthorServiceJdbc authorServiceJdbc;
+  private AuthorServiceHibernate authorServiceJdbc;
 
 
   @DisplayName("should return all authors")
@@ -97,12 +97,12 @@ class AuthorServiceJdbcTest {
     var authorName = "author4";
     var insertedId = 4L;
 
-    given(authorDao.insert(authorName)).willReturn(insertedId);
+    given(authorDao.insertOrUpdate(authorName)).willReturn(insertedId);
 
     var id = authorServiceJdbc.insert(authorName);
 
     assertThat(id).isEqualTo(insertedId);
-    Mockito.verify(authorDao, times(1)).insert(authorName);
+    Mockito.verify(authorDao, times(1)).insertOrUpdate(authorName);
 
   }
 

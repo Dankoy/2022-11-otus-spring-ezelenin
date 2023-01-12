@@ -1,6 +1,6 @@
 package ru.dankoy.hw5.core.commands;
 
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -19,28 +19,36 @@ public class GenreCommand {
 
   @ShellMethod(key = {"genre-count", "gc"}, value = "Count all genre")
   public String count() {
-    Long count = genreService.count();
+    var count = genreService.count();
     return objectMapperService.convertToString(count);
   }
 
   @ShellMethod(key = {"genre-get-by-id", "ggbi"}, value = "Get genre by id")
   public String getById(@ShellOption long id) {
-    Genre genre = genreService.getById(id);
+    var optional = genreService.getById(id);
+
+    // не уверен, нужно ли в контроллере обрабатывать null или делегировать логику в сервис
+    var genre = optional.orElseThrow(
+        () -> new EntityNotFoundException(
+            String.format("No genre has been found with id - %d", id))
+    );
+
     return objectMapperService.convertToString(genre);
   }
 
 
   @ShellMethod(key = {"genre-get-all", "gga"}, value = "Get all genre")
   public String getAll() {
-    List<Genre> genres = genreService.getAll();
+    var genres = genreService.getAll();
     return objectMapperService.convertToString(genres);
   }
 
 
   @ShellMethod(key = {"genre-insert", "gi"}, value = "Insert new genre")
   public String insert(@ShellOption String genreName) {
-    long id = genreService.insert(genreName);
-    return objectMapperService.convertToString(id);
+    var genre = new Genre(0L, genreName);
+    var inserted = genreService.insert(genre);
+    return objectMapperService.convertToString(inserted);
   }
 
   @ShellMethod(key = {"genre-delete", "gd"}, value = "Delete genre by id")
@@ -52,7 +60,7 @@ public class GenreCommand {
 
   @ShellMethod(key = {"genre-update", "gu"}, value = "Update genre")
   public String update(@ShellOption long id, @ShellOption String genreName) {
-    Genre genre = new Genre(id, genreName);
+    var genre = new Genre(id, genreName);
     genreService.update(genre);
     return String.format("Updated genre - %s", objectMapperService.convertToString(genre));
   }

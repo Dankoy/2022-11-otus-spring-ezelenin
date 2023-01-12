@@ -1,19 +1,20 @@
 package ru.dankoy.hw5.core.dao.author;
 
 import java.util.List;
+import java.util.Optional;
 import ru.dankoy.hw5.core.domain.Author;
 
 public interface AuthorDao {
 
   List<Author> getAll();
 
-  Author getById(long id);
+  Optional<Author> getById(long id);
 
-  long insert(String authorName);
+  Author insertOrUpdate(Author author);
 
-  void deleteById(long id);
+  void delete(Author author);
 
-  void update(Author author);
+  Author update(Author author);
 
   long count();
 

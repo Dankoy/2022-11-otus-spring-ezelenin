@@ -1,19 +1,20 @@
 package ru.dankoy.hw5.core.dao.genre;
 
 import java.util.List;
+import java.util.Optional;
 import ru.dankoy.hw5.core.domain.Genre;
 
 public interface GenreDao {
 
   List<Genre> getAll();
 
-  Genre getById(long id);
+  Optional<Genre> getById(long id);
 
-  long insert(String genreName);
+  Genre insertOrUpdate(Genre genre);
 
-  void deleteById(long id);
+  void delete(Genre genre);
 
-  void update(Genre genre);
+  Genre update(Genre genre);
 
   long count();
 

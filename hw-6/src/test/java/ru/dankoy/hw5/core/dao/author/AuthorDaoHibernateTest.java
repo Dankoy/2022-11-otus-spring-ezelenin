@@ -18,17 +18,17 @@ import ru.dankoy.hw5.core.exceptions.AuthorDaoException;
 
 @DisplayName("Test AuthorDaoJdbc ")
 @JdbcTest
-@Import(AuthorDaoJdbc.class)
-class AuthorDaoJdbcTest {
+@Import(AuthorDaoHibernate.class)
+class AuthorDaoHibernateTest {
 
   @Autowired
-  private AuthorDaoJdbc authorDaoJdbc;
+  private AuthorDaoHibernate authorDaoHibernate;
 
 
   @DisplayName("should return all authors")
   @Test
   void shouldGetAllAuthorsTest() {
-    var authors = authorDaoJdbc.getAll();
+    var authors = authorDaoHibernate.getAll();
 
     assertThat(authors).isEqualTo(makeCorrectAllAuthorsList());
   }
@@ -38,7 +38,7 @@ class AuthorDaoJdbcTest {
   @Test
   void shouldReturnCorrectCountTest() {
 
-    var count = authorDaoJdbc.count();
+    var count = authorDaoHibernate.count();
 
     assertThat(count).isEqualTo(makeCorrectAllAuthorsList().size());
 
@@ -53,7 +53,7 @@ class AuthorDaoJdbcTest {
     var authors = makeCorrectAllAuthorsList();
     var correctAuthor = getAuthorByIdFromList(authors, id);
 
-    var author = authorDaoJdbc.getById(id);
+    var author = authorDaoHibernate.getById(id);
 
     assertThat(author).isEqualTo(correctAuthor);
 
@@ -65,7 +65,7 @@ class AuthorDaoJdbcTest {
 
     var id = 999L;
 
-    assertThatThrownBy(() -> authorDaoJdbc.getById(id))
+    assertThatThrownBy(() -> authorDaoHibernate.getById(id))
         .isInstanceOf(AuthorDaoException.class);
 
   }
@@ -76,11 +76,11 @@ class AuthorDaoJdbcTest {
 
     var authorName = "author4";
 
-    var id = authorDaoJdbc.insert(authorName);
+    var id = authorDaoHibernate.insertOrUpdate(authorName);
 
     var expected = new Author(id, authorName);
 
-    var actual = authorDaoJdbc.getById(id);
+    var actual = authorDaoHibernate.getById(id);
 
     assertThat(expected).isEqualTo(actual);
 
@@ -92,12 +92,12 @@ class AuthorDaoJdbcTest {
 
     var id = 4L;
 
-    assertThatCode(() -> authorDaoJdbc.getById(id))
+    assertThatCode(() -> authorDaoHibernate.getById(id))
         .doesNotThrowAnyException();
 
-    authorDaoJdbc.deleteById(id);
+    authorDaoHibernate.deleteById(id);
 
-    assertThatThrownBy(() -> authorDaoJdbc.getById(id))
+    assertThatThrownBy(() -> authorDaoHibernate.getById(id))
         .isInstanceOf(AuthorDaoException.class);
 
   }
@@ -108,10 +108,10 @@ class AuthorDaoJdbcTest {
 
     var id = 1L;
 
-    assertThatCode(() -> authorDaoJdbc.getById(id))
+    assertThatCode(() -> authorDaoHibernate.getById(id))
         .doesNotThrowAnyException();
 
-    assertThatThrownBy(() -> authorDaoJdbc.deleteById(id))
+    assertThatThrownBy(() -> authorDaoHibernate.deleteById(id))
         .isInstanceOf(DataIntegrityViolationException.class);
 
   }
@@ -122,10 +122,10 @@ class AuthorDaoJdbcTest {
 
     var id = 999L;
 
-    var countBefore = authorDaoJdbc.count();
-    authorDaoJdbc.deleteById(id);
+    var countBefore = authorDaoHibernate.count();
+    authorDaoHibernate.deleteById(id);
 
-    var countAfter = authorDaoJdbc.count();
+    var countAfter = authorDaoHibernate.count();
 
     assertThat(countBefore - countAfter).isZero();
 
@@ -139,9 +139,9 @@ class AuthorDaoJdbcTest {
     var id = 1;
     var authorToUpdate = new Author(1, "newName");
 
-    authorDaoJdbc.update(authorToUpdate);
+    authorDaoHibernate.update(authorToUpdate);
 
-    var fromDb = authorDaoJdbc.getById(id);
+    var fromDb = authorDaoHibernate.getById(id);
 
     assertThat(fromDb).isEqualTo(authorToUpdate);
 

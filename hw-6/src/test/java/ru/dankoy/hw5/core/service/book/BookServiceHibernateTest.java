@@ -24,14 +24,14 @@ import ru.dankoy.hw5.core.exceptions.BookDaoException;
 
 @DisplayName("Test BookServiceJdbc ")
 @JdbcTest
-@Import({BookServiceJdbc.class, BookDao.class})
-class BookServiceJdbcTest {
+@Import({BookServiceHibernate.class, BookDao.class})
+class BookServiceHibernateTest {
 
   @MockBean
   private BookDao bookDao;
 
   @Autowired
-  private BookServiceJdbc bookServiceJdbc;
+  private BookServiceHibernate bookServiceHibernate;
 
 
   @DisplayName("should return all books")
@@ -40,7 +40,7 @@ class BookServiceJdbcTest {
 
     given(bookDao.getAll()).willReturn(makeCorrectAllBooksList());
 
-    var books = bookServiceJdbc.getAll();
+    var books = bookServiceHibernate.getAll();
 
     assertThat(books).isEqualTo(makeCorrectAllBooksList());
     Mockito.verify(bookDao, times(1)).getAll();
@@ -53,7 +53,7 @@ class BookServiceJdbcTest {
 
     given(bookDao.count()).willReturn(3L);
 
-    var count = bookServiceJdbc.count();
+    var count = bookServiceHibernate.count();
 
     assertThat(count).isEqualTo(makeCorrectAllBooksList().size());
     Mockito.verify(bookDao, times(1)).count();
@@ -71,7 +71,7 @@ class BookServiceJdbcTest {
 
     given(bookDao.getById(id)).willReturn(correctbook);
 
-    var book = bookServiceJdbc.getById(id);
+    var book = bookServiceHibernate.getById(id);
 
     assertThat(book).isEqualTo(correctbook);
     Mockito.verify(bookDao, times(1)).getById(id);
@@ -86,7 +86,7 @@ class BookServiceJdbcTest {
 
     Mockito.doThrow(new BookDaoException(new Exception())).when(bookDao).getById(id);
 
-    assertThatThrownBy(() -> bookServiceJdbc.getById(id))
+    assertThatThrownBy(() -> bookServiceHibernate.getById(id))
         .isInstanceOf(BookDaoException.class);
 
   }
@@ -104,14 +104,14 @@ class BookServiceJdbcTest {
     var bookToInsert = new Book(0L, bookName, List.of(author), List.of(genre));
     var correctInsertedId = 4L;
 
-    given(bookDao.insert(bookToInsert, listOfIds, listOfIds)).willReturn(
+    given(bookDao.insert(bookToInsert)).willReturn(
         correctInsertedId);
 
-    var insertedId = bookServiceJdbc.insert(bookToInsert, listOfIds, listOfIds);
+    var insertedId = bookServiceHibernate.insert(bookToInsert, listOfIds, listOfIds);
 
     assertThat(insertedId).isEqualTo(correctInsertedId);
     Mockito.verify(bookDao, times(1))
-        .insert(bookToInsert, listOfIds, listOfIds);
+        .insert(bookToInsert);
 
   }
 
@@ -121,7 +121,7 @@ class BookServiceJdbcTest {
 
     var id = 1L;
 
-    bookServiceJdbc.deleteById(id);
+    bookServiceHibernate.deleteById(id);
 
     Mockito.verify(bookDao, times(1)).deleteById(id);
 
@@ -135,7 +135,7 @@ class BookServiceJdbcTest {
 
     Mockito.doThrow(new BookDaoException(new Exception())).when(bookDao).deleteById(id);
 
-    assertThatThrownBy(() -> bookServiceJdbc.deleteById(id))
+    assertThatThrownBy(() -> bookServiceHibernate.deleteById(id))
         .isInstanceOf(BookDaoException.class);
 
     Mockito.verify(bookDao, times(1)).deleteById(id);
@@ -153,7 +153,7 @@ class BookServiceJdbcTest {
     var genre = new Genre(id, "genre1");
     var bookToUpdate = new Book(id, "newName", List.of(author), List.of(genre));
 
-    bookServiceJdbc.update(bookToUpdate, listOfIds, listOfIds);
+    bookServiceHibernate.update(bookToUpdate, listOfIds, listOfIds);
 
     Mockito.verify(bookDao, times(1))
         .update(bookToUpdate, listOfIds, listOfIds);
@@ -172,7 +172,7 @@ class BookServiceJdbcTest {
 
     Mockito.doThrow(new BookDaoException(new Exception())).when(bookDao).getById(id);
 
-    assertThatThrownBy(() -> bookServiceJdbc.update(bookToUpdate, listOfIds, listOfIds))
+    assertThatThrownBy(() -> bookServiceHibernate.update(bookToUpdate, listOfIds, listOfIds))
         .isInstanceOf(BookDaoException.class);
 
     Mockito.verify(bookDao, times(1))

@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
-import ru.dankoy.hw5.core.dao.author.AuthorDaoJdbc;
-import ru.dankoy.hw5.core.dao.genre.GenreDaoJdbc;
+import ru.dankoy.hw5.core.dao.author.AuthorDaoHibernate;
+import ru.dankoy.hw5.core.dao.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Genre;
@@ -24,7 +24,7 @@ import ru.dankoy.hw5.core.exceptions.BookDaoException;
 
 @DisplayName("Test BookDaoJdbcJoin ")
 @JdbcTest
-@Import({BookDaoJdbcJoin.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
+@Import({BookDaoJdbcJoin.class, AuthorDaoHibernate.class, GenreDaoHibernate.class})
 class BookDaoJdbcJoinTest {
 
   @Autowired

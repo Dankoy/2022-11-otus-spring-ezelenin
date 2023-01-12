@@ -21,14 +21,14 @@ import ru.dankoy.hw5.core.exceptions.GenreDaoException;
 
 @DisplayName("Test GenreServiceJdbc ")
 @JdbcTest
-@Import({GenreServiceJdbc.class, GenreDao.class})
-class GenreServiceJdbcTest {
+@Import({GenreServiceHibernate.class, GenreDao.class})
+class GenreServiceHibernateTest {
 
   @MockBean
   private GenreDao genreDao;
 
   @Autowired
-  private GenreServiceJdbc genreServiceJdbc;
+  private GenreServiceHibernate genreServiceHibernate;
 
 
   @DisplayName("should return all genres")
@@ -37,7 +37,7 @@ class GenreServiceJdbcTest {
 
     given(genreDao.getAll()).willReturn(makeCorrectAllGenresList());
 
-    var genres = genreServiceJdbc.getAll();
+    var genres = genreServiceHibernate.getAll();
 
     assertThat(genres).isEqualTo(makeCorrectAllGenresList());
     Mockito.verify(genreDao, times(1)).getAll();
@@ -49,7 +49,7 @@ class GenreServiceJdbcTest {
   void shouldReturnCorrectCountTest() {
 
     given(genreDao.count()).willReturn(3L);
-    var count = genreServiceJdbc.count();
+    var count = genreServiceHibernate.count();
 
     assertThat(count).isEqualTo(makeCorrectAllGenresList().size());
     Mockito.verify(genreDao, times(1)).count();
@@ -67,7 +67,7 @@ class GenreServiceJdbcTest {
 
     given(genreDao.getById(id)).willReturn(correctgenre);
 
-    var genre = genreServiceJdbc.getById(id);
+    var genre = genreServiceHibernate.getById(id);
 
     assertThat(genre).isEqualTo(correctgenre);
     Mockito.verify(genreDao, times(1)).getById(id);
@@ -82,7 +82,7 @@ class GenreServiceJdbcTest {
 
     Mockito.doThrow(new GenreDaoException(new Exception())).when(genreDao).getById(id);
 
-    assertThatThrownBy(() -> genreServiceJdbc.getById(id))
+    assertThatThrownBy(() -> genreServiceHibernate.getById(id))
         .isInstanceOf(GenreDaoException.class);
   }
 
@@ -93,12 +93,12 @@ class GenreServiceJdbcTest {
     var genreName = "genre4";
     var insertedId = 4L;
 
-    given(genreDao.insert(genreName)).willReturn(insertedId);
+    given(genreDao.insertOrUpdate(genreName)).willReturn(insertedId);
 
-    var id = genreServiceJdbc.insert(genreName);
+    var id = genreServiceHibernate.insert(genreName);
 
     assertThat(id).isEqualTo(insertedId);
-    Mockito.verify(genreDao, times(1)).insert(genreName);
+    Mockito.verify(genreDao, times(1)).insertOrUpdate(genreName);
 
   }
 
@@ -108,7 +108,7 @@ class GenreServiceJdbcTest {
 
     var id = 1L;
 
-    genreServiceJdbc.deleteById(id);
+    genreServiceHibernate.deleteById(id);
 
     Mockito.verify(genreDao, times(1)).deleteById(id);
 
@@ -122,7 +122,7 @@ class GenreServiceJdbcTest {
 
     Mockito.doThrow(new GenreDaoException(new Exception())).when(genreDao).deleteById(id);
 
-    assertThatThrownBy(() -> genreServiceJdbc.deleteById(id))
+    assertThatThrownBy(() -> genreServiceHibernate.deleteById(id))
         .isInstanceOf(GenreDaoException.class);
     Mockito.verify(genreDao, times(1)).deleteById(id);
 
@@ -136,7 +136,7 @@ class GenreServiceJdbcTest {
     var id = 1L;
     var genreToUpdate = new Genre(id, "newName");
 
-    genreServiceJdbc.update(genreToUpdate);
+    genreServiceHibernate.update(genreToUpdate);
 
     Mockito.verify(genreDao, times(1)).update(genreToUpdate);
 

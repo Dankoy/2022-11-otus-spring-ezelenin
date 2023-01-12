@@ -12,12 +12,12 @@ import org.springframework.context.ApplicationContext;
 import ru.dankoy.hw5.core.commands.AuthorCommand;
 import ru.dankoy.hw5.core.commands.BookCommand;
 import ru.dankoy.hw5.core.commands.GenreCommand;
-import ru.dankoy.hw5.core.dao.author.AuthorDaoJdbc;
+import ru.dankoy.hw5.core.dao.author.AuthorDaoHibernate;
 import ru.dankoy.hw5.core.dao.book.mergemanytomanybyjoin.BookDaoJdbcJoin;
-import ru.dankoy.hw5.core.dao.genre.GenreDaoJdbc;
-import ru.dankoy.hw5.core.service.author.AuthorServiceJdbc;
-import ru.dankoy.hw5.core.service.book.BookServiceJdbc;
-import ru.dankoy.hw5.core.service.genre.GenreServiceJdbc;
+import ru.dankoy.hw5.core.dao.genre.GenreDaoHibernate;
+import ru.dankoy.hw5.core.service.author.AuthorServiceHibernate;
+import ru.dankoy.hw5.core.service.book.BookServiceHibernate;
+import ru.dankoy.hw5.core.service.genre.GenreServiceHibernate;
 import ru.dankoy.hw5.core.service.objectmapper.ObjectMapperServiceImpl;
 
 @DisplayName("Test default context ")
@@ -33,11 +33,11 @@ class Hw5ApplicationDefaultTests {
   void contextLoads() {
 
     var bookDaoJdbc = context.getBean(BookDaoJdbcJoin.class);
-    var authorDaoJdbc = context.getBean(AuthorDaoJdbc.class);
-    var genreDaoJdbc = context.getBean(GenreDaoJdbc.class);
-    var bookServiceJdbc = context.getBean(BookServiceJdbc.class);
-    var authorServiceJdbc = context.getBean(AuthorServiceJdbc.class);
-    var genreServiceJdbc = context.getBean(GenreServiceJdbc.class);
+    var authorDaoJdbc = context.getBean(AuthorDaoHibernate.class);
+    var genreDaoJdbc = context.getBean(GenreDaoHibernate.class);
+    var bookServiceJdbc = context.getBean(BookServiceHibernate.class);
+    var authorServiceJdbc = context.getBean(AuthorServiceHibernate.class);
+    var genreServiceJdbc = context.getBean(GenreServiceHibernate.class);
     var objectMapper = context.getBean(ObjectMapper.class);
     var authorCommand = context.getBean(AuthorCommand.class);
     var bookCommand = context.getBean(BookCommand.class);

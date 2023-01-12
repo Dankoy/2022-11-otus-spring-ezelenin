@@ -18,17 +18,17 @@ import ru.dankoy.hw5.core.exceptions.GenreDaoException;
 
 @DisplayName("Test GenreDaoJdbc ")
 @JdbcTest
-@Import(GenreDaoJdbc.class)
-class GenreDaoJdbcTest {
+@Import(GenreDaoHibernate.class)
+class GenreDaoHibernateTest {
 
   @Autowired
-  private GenreDaoJdbc genreDaoJdbc;
+  private GenreDaoHibernate genreDaoHibernate;
 
 
   @DisplayName("should return all genres")
   @Test
   void shouldGetAllGenresTest() {
-    var genres = genreDaoJdbc.getAll();
+    var genres = genreDaoHibernate.getAll();
 
     assertThat(genres).isEqualTo(makeCorrectAllGenresList());
   }
@@ -38,7 +38,7 @@ class GenreDaoJdbcTest {
   @Test
   void shouldReturnCorrectCountTest() {
 
-    var count = genreDaoJdbc.count();
+    var count = genreDaoHibernate.count();
 
     assertThat(count).isEqualTo(makeCorrectAllGenresList().size());
 
@@ -53,7 +53,7 @@ class GenreDaoJdbcTest {
     var genres = makeCorrectAllGenresList();
     var correctgenre = getGenreByIdFromList(genres, id);
 
-    var genre = genreDaoJdbc.getById(id);
+    var genre = genreDaoHibernate.getById(id);
 
     assertThat(genre).isEqualTo(correctgenre);
 
@@ -65,7 +65,7 @@ class GenreDaoJdbcTest {
 
     var id = 999;
 
-    assertThatThrownBy(() -> genreDaoJdbc.getById(id))
+    assertThatThrownBy(() -> genreDaoHibernate.getById(id))
         .isInstanceOf(GenreDaoException.class);
   }
 
@@ -75,11 +75,11 @@ class GenreDaoJdbcTest {
 
     var genreName = "genre4";
 
-    var id = genreDaoJdbc.insert(genreName);
+    var id = genreDaoHibernate.insertOrUpdate(genreName);
 
     var expected = new Genre(id, genreName);
 
-    var actual = genreDaoJdbc.getById(id);
+    var actual = genreDaoHibernate.getById(id);
 
     assertThat(expected).isEqualTo(actual);
 
@@ -91,12 +91,12 @@ class GenreDaoJdbcTest {
 
     var id = 4L;
 
-    assertThatCode(() -> genreDaoJdbc.getById(id))
+    assertThatCode(() -> genreDaoHibernate.getById(id))
         .doesNotThrowAnyException();
 
-    genreDaoJdbc.deleteById(id);
+    genreDaoHibernate.deleteById(id);
 
-    assertThatThrownBy(() -> genreDaoJdbc.getById(id))
+    assertThatThrownBy(() -> genreDaoHibernate.getById(id))
         .isInstanceOf(GenreDaoException.class);
   }
 
@@ -106,10 +106,10 @@ class GenreDaoJdbcTest {
 
     var id = 1L;
 
-    assertThatCode(() -> genreDaoJdbc.getById(id))
+    assertThatCode(() -> genreDaoHibernate.getById(id))
         .doesNotThrowAnyException();
 
-    assertThatThrownBy(() -> genreDaoJdbc.deleteById(id))
+    assertThatThrownBy(() -> genreDaoHibernate.deleteById(id))
         .isInstanceOf(DataIntegrityViolationException.class);
 
   }
@@ -119,10 +119,10 @@ class GenreDaoJdbcTest {
   void shouldNotDeleteNonExistingGenreById() {
 
     var id = 999L;
-    var countBefore = genreDaoJdbc.count();
-    genreDaoJdbc.deleteById(id);
+    var countBefore = genreDaoHibernate.count();
+    genreDaoHibernate.deleteById(id);
 
-    var countAfter = genreDaoJdbc.count();
+    var countAfter = genreDaoHibernate.count();
 
     assertThat(countBefore - countAfter).isZero();
 
@@ -136,9 +136,9 @@ class GenreDaoJdbcTest {
     var id = 1L;
     var genreToUpdate = new Genre(1, "newName");
 
-    genreDaoJdbc.update(genreToUpdate);
+    genreDaoHibernate.update(genreToUpdate);
 
-    var fromDb = genreDaoJdbc.getById(id);
+    var fromDb = genreDaoHibernate.getById(id);
 
     assertThat(fromDb).isEqualTo(genreToUpdate);
 
