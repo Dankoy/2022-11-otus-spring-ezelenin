@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: "jdbc:h2:mem:./library;DB_CLOSE_DELAY=-1"
+    url: "jdbc:h2:./library;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE"
     username: user
     password: password
     driver-class-name: org.h2.Driver
@@ -16,6 +16,6 @@ spring:
   jpa:
     generate-ddl: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
 
     show-sql: true
