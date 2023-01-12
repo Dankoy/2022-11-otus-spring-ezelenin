@@ -2,28 +2,29 @@ package ru.dankoy.hw5.core.dao.author;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import java.util.List;
+import javax.persistence.PersistenceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import org.springframework.dao.DataIntegrityViolationException;
 import ru.dankoy.hw5.core.domain.Author;
-import ru.dankoy.hw5.core.exceptions.AuthorDaoException;
 
 
 @DisplayName("Test AuthorDaoJdbc ")
-@JdbcTest
+@DataJpaTest
 @Import(AuthorDaoHibernate.class)
 class AuthorDaoHibernateTest {
 
   @Autowired
   private AuthorDaoHibernate authorDaoHibernate;
 
+  @Autowired
+  private TestEntityManager testEntityManager;
 
   @DisplayName("should return all authors")
   @Test
@@ -55,18 +56,7 @@ class AuthorDaoHibernateTest {
 
     var author = authorDaoHibernate.getById(id);
 
-    assertThat(author).isEqualTo(correctAuthor);
-
-  }
-
-  @DisplayName("should throw AuthorDaoException for non existing author")
-  @Test
-  void shouldThrowAuthorDaoExceptionWhenGetById() {
-
-    var id = 999L;
-
-    assertThatThrownBy(() -> authorDaoHibernate.getById(id))
-        .isInstanceOf(AuthorDaoException.class);
+    assertThat(author).isPresent().get().isEqualTo(correctAuthor);
 
   }
 
@@ -76,13 +66,14 @@ class AuthorDaoHibernateTest {
 
     var authorName = "author4";
 
-    var id = authorDaoHibernate.insertOrUpdate(authorName);
+    var authorToInsert = new Author(0L, authorName);
+    var insertedAuthor = authorDaoHibernate.insertOrUpdate(authorToInsert);
 
-    var expected = new Author(id, authorName);
+    testEntityManager.detach(insertedAuthor);
 
-    var actual = authorDaoHibernate.getById(id);
+    var actual = authorDaoHibernate.getById(insertedAuthor.getId());
 
-    assertThat(expected).isEqualTo(actual);
+    assertThat(actual).isPresent().get().isEqualTo(authorToInsert);
 
   }
 
@@ -92,13 +83,15 @@ class AuthorDaoHibernateTest {
 
     var id = 4L;
 
-    assertThatCode(() -> authorDaoHibernate.getById(id))
-        .doesNotThrowAnyException();
+    var author = testEntityManager.find(Author.class, id);
 
-    authorDaoHibernate.deleteById(id);
+    authorDaoHibernate.delete(author);
 
-    assertThatThrownBy(() -> authorDaoHibernate.getById(id))
-        .isInstanceOf(AuthorDaoException.class);
+    testEntityManager.flush();
+
+    var actual = authorDaoHibernate.getById(id);
+
+    assertThat(actual).isNotPresent();
 
   }
 
@@ -107,41 +100,28 @@ class AuthorDaoHibernateTest {
   void shouldThrowDataIntegrityViolationExceptionWhenDeleteAuthorById() {
 
     var id = 1L;
+    var author = testEntityManager.find(Author.class, id);
 
-    assertThatCode(() -> authorDaoHibernate.getById(id))
-        .doesNotThrowAnyException();
-
-    assertThatThrownBy(() -> authorDaoHibernate.deleteById(id))
-        .isInstanceOf(DataIntegrityViolationException.class);
-
-  }
-
-  @DisplayName("should not delete author by id")
-  @Test
-  void shouldNotDeleteNonExistingAuthorById() {
-
-    var id = 999L;
-
-    var countBefore = authorDaoHibernate.count();
-    authorDaoHibernate.deleteById(id);
-
-    var countAfter = authorDaoHibernate.count();
-
-    assertThat(countBefore - countAfter).isZero();
+    assertThatThrownBy(() -> {
+      authorDaoHibernate.delete(author);
+      testEntityManager.flush();
+    }).isInstanceOf(PersistenceException.class);
 
   }
-
 
   @DisplayName("should update author by id")
   @Test
   void shouldCorrectlyUpdateAuthor() {
 
-    var id = 1;
-    var authorToUpdate = new Author(1, "newName");
+    var id = 1L;
+    var authorToUpdate = new Author(id, "newName");
 
-    authorDaoHibernate.update(authorToUpdate);
+    var author = authorDaoHibernate.update(authorToUpdate);
+    testEntityManager.flush();
 
-    var fromDb = authorDaoHibernate.getById(id);
+    testEntityManager.detach(author);
+
+    var fromDb = testEntityManager.find(Author.class, id);
 
     assertThat(fromDb).isEqualTo(authorToUpdate);
 
