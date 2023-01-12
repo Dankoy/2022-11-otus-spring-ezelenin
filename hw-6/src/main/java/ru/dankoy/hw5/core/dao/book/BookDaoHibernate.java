@@ -18,7 +18,10 @@ public class BookDaoHibernate implements BookDao {
 
   @Override
   public List<Book> getAll() {
-    var query = entityManager.createQuery("select b from Book b", Book.class);
+    // дя решения проблемы n+1 используются решение с графом и join fetch
+    var entityGraph = entityManager.getEntityGraph("authors-entity-graph");
+    var query = entityManager.createQuery("select b from Book b join fetch b.genres", Book.class);
+    query.setHint("javax.persistence.fetchgraph", entityGraph);
     return query.getResultList();
   }
 

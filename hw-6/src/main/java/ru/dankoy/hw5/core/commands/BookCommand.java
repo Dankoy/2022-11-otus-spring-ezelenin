@@ -67,8 +67,8 @@ public class BookCommand {
       @ShellOption long[] authorIds, @ShellOption long[] genreIds) {
 
     var book = new Book(id, bookName, new HashSet<>(), new HashSet<>());
-    bookService.update(book, authorIds, genreIds);
-    return String.format("Updated book - %s", objectMapperService.convertToString(book));
+    var updated = bookService.update(book, authorIds, genreIds);
+    return String.format("Updated book - %s", objectMapperService.convertToString(updated));
   }
 
 }

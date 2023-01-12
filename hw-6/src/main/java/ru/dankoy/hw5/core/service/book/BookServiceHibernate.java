@@ -32,7 +32,15 @@ public class BookServiceHibernate implements BookService {
   @Transactional(readOnly = true)
   @Override
   public Optional<Book> getById(long id) {
-    return bookDao.getById(id);
+    var book = bookDao.getById(id);
+
+    // Инициируем вложенные списки. Может есть вариант получше?
+    book.ifPresent(b -> {
+      b.getGenres().size();
+      b.getAuthors().size();
+    });
+
+    return book;
   }
 
   @Transactional
@@ -101,6 +109,9 @@ public class BookServiceHibernate implements BookService {
 
   private List<Genre> convertGenreIdsToObjects(long[] ids) {
 
+    // Просто формирует объекты жанров. Для этого был создан отдельный конструктор с одним параметром - id
+    // Этого для hibernate достаточно, что бы добавить или обновить книгу, но тогда что бы вернуть
+    // в ответе полные данные книги - надо делать отдельный запрос в бд по id (fetch).
     return Arrays.stream(ids)
         .mapToObj(Genre::new)
         .collect(Collectors.toList());
@@ -109,6 +120,9 @@ public class BookServiceHibernate implements BookService {
 
   private List<Author> convertAuthorIdsToObjects(long[] ids) {
 
+    // Просто формирует объекты жанров. Для этого был создан отдельный конструктор с одним параметром - id
+    // Этого для hibernate достаточно, что бы добавить или обновить книгу, но тогда что бы вернуть
+    // в ответе полные данные книги - надо делать отдельный запрос в бд по id (fetch).
     return Arrays.stream(ids)
         .mapToObj(Author::new)
         .collect(Collectors.toList());
