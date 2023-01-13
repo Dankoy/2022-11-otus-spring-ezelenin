@@ -3,28 +3,38 @@ package ru.dankoy.hw5.core.service.book;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import ru.dankoy.hw5.core.dao.author.AuthorDaoHibernate;
 import ru.dankoy.hw5.core.dao.book.BookDao;
+import ru.dankoy.hw5.core.dao.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.BookDaoException;
+import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 
 
-@DisplayName("Test BookServiceJdbc ")
-@JdbcTest
-@Import({BookServiceHibernate.class, BookDao.class})
+@Transactional(propagation = Propagation.NEVER)
+@DisplayName("Test BookServiceHibernate ")
+@DataJpaTest
+@Import({BookServiceHibernate.class, BookDao.class, GenreDaoHibernate.class,
+    AuthorDaoHibernate.class})
 class BookServiceHibernateTest {
 
   @MockBean
@@ -69,11 +79,11 @@ class BookServiceHibernateTest {
     var books = makeCorrectAllBooksList();
     var correctbook = getBookByIdFromList(books, id);
 
-    given(bookDao.getById(id)).willReturn(correctbook);
+    given(bookDao.getById(id)).willReturn(Optional.ofNullable(correctbook));
 
     var book = bookServiceHibernate.getById(id);
 
-    assertThat(book).isEqualTo(correctbook);
+    assertThat(book).isPresent().get().isEqualTo(correctbook);
     Mockito.verify(bookDao, times(1)).getById(id);
 
   }
@@ -95,23 +105,28 @@ class BookServiceHibernateTest {
   @Test
   void shouldCorrectlyInsertBook() {
 
+    var authors = new HashSet<Author>();
+    var genres = new HashSet<Genre>();
+
     var bookName = "book4";
 
     var id = 1L;
+    var correctInsertedId = 4L;
     var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
-    var bookToInsert = new Book(0L, bookName, List.of(author), List.of(genre));
-    var correctInsertedId = 4L;
+    authors.add(author);
+    genres.add(genre);
 
-    given(bookDao.insert(bookToInsert)).willReturn(
-        correctInsertedId);
+    var bookToInsert = new Book(0L, bookName, authors, genres);
+    var insertedBook = new Book(correctInsertedId, bookName, authors, genres);
 
-    var insertedId = bookServiceHibernate.insert(bookToInsert, listOfIds, listOfIds);
+    given(bookDao.insertOrUpdate(bookToInsert)).willReturn(insertedBook);
 
-    assertThat(insertedId).isEqualTo(correctInsertedId);
-    Mockito.verify(bookDao, times(1))
-        .insert(bookToInsert);
+    var actual = bookServiceHibernate.insert(bookToInsert, listOfIds, listOfIds);
+
+    assertThat(actual).isEqualTo(insertedBook);
+    Mockito.verify(bookDao, times(1)).insertOrUpdate(bookToInsert);
 
   }
 
@@ -120,10 +135,13 @@ class BookServiceHibernateTest {
   void shouldCorrectlyDeleteBookById() {
 
     var id = 1L;
+    var toDelete = new Book(id, "name", new HashSet<>(), new HashSet<>());
+
+    given(bookDao.getById(id)).willReturn(Optional.of(toDelete));
 
     bookServiceHibernate.deleteById(id);
 
-    Mockito.verify(bookDao, times(1)).deleteById(id);
+    Mockito.verify(bookDao, times(1)).delete(toDelete);
 
   }
 
@@ -133,12 +151,12 @@ class BookServiceHibernateTest {
 
     var id = 999L;
 
-    Mockito.doThrow(new BookDaoException(new Exception())).when(bookDao).deleteById(id);
+    given(bookDao.getById(id)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> bookServiceHibernate.deleteById(id))
-        .isInstanceOf(BookDaoException.class);
+        .isInstanceOf(EntityNotFoundException.class);
 
-    Mockito.verify(bookDao, times(1)).deleteById(id);
+    Mockito.verify(bookDao, times(0)).delete(any());
 
   }
 
@@ -147,16 +165,23 @@ class BookServiceHibernateTest {
   @Test
   void shouldCorrectlyUpdateBook() {
 
+    var authors = new HashSet<Author>();
+    var genres = new HashSet<Genre>();
     var id = 1L;
     var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
-    var bookToUpdate = new Book(id, "newName", List.of(author), List.of(genre));
+    authors.add(author);
+    genres.add(genre);
+
+    var bookToUpdate = new Book(id, "newName", authors, genres);
+    var found = bookToUpdate;
+
+    given(bookDao.getById(id)).willReturn(Optional.of(found));
 
     bookServiceHibernate.update(bookToUpdate, listOfIds, listOfIds);
 
-    Mockito.verify(bookDao, times(1))
-        .update(bookToUpdate, listOfIds, listOfIds);
+    Mockito.verify(bookDao, times(1)).update(bookToUpdate);
 
   }
 
@@ -168,17 +193,15 @@ class BookServiceHibernateTest {
     var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
-    var bookToUpdate = new Book(id, "newName", List.of(author), List.of(genre));
+    var bookToUpdate = new Book(id, "newName", Set.of(author), Set.of(genre));
 
-    Mockito.doThrow(new BookDaoException(new Exception())).when(bookDao).getById(id);
+    given(bookDao.getById(id)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> bookServiceHibernate.update(bookToUpdate, listOfIds, listOfIds))
-        .isInstanceOf(BookDaoException.class);
+        .isInstanceOf(EntityNotFoundException.class);
 
-    Mockito.verify(bookDao, times(1))
-        .getById(id);
-    Mockito.verify(bookDao, times(0))
-        .update(bookToUpdate, listOfIds, listOfIds);
+    Mockito.verify(bookDao, times(1)).getById(id);
+    Mockito.verify(bookDao, times(0)).update(any());
 
   }
 
@@ -191,22 +214,22 @@ class BookServiceHibernateTest {
 
     return bookOptional.orElse(
         new Book(nonExistingId, "nonexisting",
-            new ArrayList<>(),
-            new ArrayList<>()));
+            new HashSet<>(),
+            new HashSet<>()));
 
   }
 
   private List<Book> makeCorrectAllBooksList() {
     return List.of(
         new Book(1L, "book1",
-            List.of(new Author(1L, "author1"), new Author(2L, "author2")),
-            List.of(new Genre(1L, "genre1"), new Genre(2L, "genre2"))),
+            Set.of(new Author(1L, "author1"), new Author(2L, "author2")),
+            Set.of(new Genre(1L, "genre1"), new Genre(2L, "genre2"))),
         new Book(2L, "book2",
-            List.of(new Author(2L, "author2"), new Author(3L, "author3")),
-            List.of(new Genre(2L, "genre2"), new Genre(3L, "genre3"))),
+            Set.of(new Author(2L, "author2"), new Author(3L, "author3")),
+            Set.of(new Genre(2L, "genre2"), new Genre(3L, "genre3"))),
         new Book(3L, "book3",
-            List.of(new Author(1L, "author1"), new Author(3L, "author3")),
-            List.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")))
+            Set.of(new Author(1L, "author1"), new Author(3L, "author3")),
+            Set.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")))
     );
   }
 
