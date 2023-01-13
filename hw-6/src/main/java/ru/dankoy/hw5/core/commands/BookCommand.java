@@ -48,7 +48,7 @@ public class BookCommand {
   public String insert(@ShellOption String bookName, @ShellOption long[] authorIds,
       @ShellOption long[] genreIds) {
 
-    var book = new Book(0L, bookName, new HashSet<>(), new HashSet<>());
+    var book = new Book(0L, bookName, new HashSet<>(), new HashSet<>(), new HashSet<>());
 
     var created = bookService.insert(book, authorIds, genreIds);
 
@@ -66,7 +66,7 @@ public class BookCommand {
   public String update(@ShellOption long id, @ShellOption String bookName,
       @ShellOption long[] authorIds, @ShellOption long[] genreIds) {
 
-    var book = new Book(id, bookName, new HashSet<>(), new HashSet<>());
+    var book = new Book(id, bookName, new HashSet<>(), new HashSet<>(), new HashSet<>());
     var updated = bookService.update(book, authorIds, genreIds);
     return String.format("Updated book - %s", objectMapperService.convertToString(updated));
   }

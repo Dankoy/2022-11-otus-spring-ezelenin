@@ -2,6 +2,7 @@ package ru.dankoy.hw5.core.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -45,8 +47,9 @@ public class Book {
   // Используется только в методе запроса книги по id
   @Fetch(FetchMode.SUBSELECT)
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "books_authors", joinColumns = @JoinColumn(name = "book_id"),
-      inverseJoinColumns = @JoinColumn(name = "author_id"))
+  @JoinTable(name = "books_authors",
+      joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
   private Set<Author> authors = new HashSet<>();
 
 
@@ -54,8 +57,15 @@ public class Book {
   @Fetch(FetchMode.SELECT)
   @BatchSize(size = 2)
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "books_genres", joinColumns = @JoinColumn(name = "book_id"),
-      inverseJoinColumns = @JoinColumn(name = "genre_id"))
+  @JoinTable(name = "books_genres",
+      joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "genre_id", referencedColumnName = "id"))
   private Set<Genre> genres = new HashSet<>();
 
+
+  @Fetch(FetchMode.SELECT)
+  @BatchSize(size = 3)
+  @OneToMany(targetEntity = Commentary.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(name = "book_id", referencedColumnName = "id")
+  private Set<Commentary> commentaries = new HashSet<>();
 }

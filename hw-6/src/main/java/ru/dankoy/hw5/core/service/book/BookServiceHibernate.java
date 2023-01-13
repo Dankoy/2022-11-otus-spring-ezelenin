@@ -26,7 +26,13 @@ public class BookServiceHibernate implements BookService {
   @Transactional(readOnly = true)
   @Override
   public List<Book> getAll() {
-    return bookDao.getAll();
+
+    // получаем комментарии.
+    // Fetch - EAGER не работает, если есть графы fetch join и прочие аннотации n+1
+    var books = bookDao.getAll();
+    books.forEach(b -> b.getCommentaries().size());
+
+    return books;
   }
 
   @Transactional(readOnly = true)
@@ -38,6 +44,7 @@ public class BookServiceHibernate implements BookService {
     book.ifPresent(b -> {
       b.getGenres().size();
       b.getAuthors().size();
+      b.getCommentaries().size();
     });
 
     return book;
@@ -71,7 +78,8 @@ public class BookServiceHibernate implements BookService {
 
     var optional = bookDao.getById(book.getId());
     var found = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %d", Book.class.getName(), book.getId())));
+        String.format("Entity %s has not been found with id - %d", Book.class.getName(),
+            book.getId())));
 
     List<Author> authors = convertAuthorIdsToObjects(authorIds);
     List<Genre> genres = convertGenreIdsToObjects(genreIds);
