@@ -2,27 +2,29 @@ package ru.dankoy.hw5.core.dao.genre;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import java.util.List;
+import javax.persistence.PersistenceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import org.springframework.dao.DataIntegrityViolationException;
 import ru.dankoy.hw5.core.domain.Genre;
-import ru.dankoy.hw5.core.exceptions.GenreDaoException;
 
 
 @DisplayName("Test GenreDaoJdbc ")
-@JdbcTest
+@DataJpaTest
 @Import(GenreDaoHibernate.class)
 class GenreDaoHibernateTest {
 
   @Autowired
   private GenreDaoHibernate genreDaoHibernate;
+
+  @Autowired
+  private TestEntityManager testEntityManager;
 
 
   @DisplayName("should return all genres")
@@ -55,18 +57,8 @@ class GenreDaoHibernateTest {
 
     var genre = genreDaoHibernate.getById(id);
 
-    assertThat(genre).isEqualTo(correctgenre);
+    assertThat(genre).isPresent().get().isEqualTo(correctgenre);
 
-  }
-
-  @DisplayName("should throw genreDaoException for non existing genre")
-  @Test
-  void shouldThrowGenreDaoExceptionWhenGetById() {
-
-    var id = 999;
-
-    assertThatThrownBy(() -> genreDaoHibernate.getById(id))
-        .isInstanceOf(GenreDaoException.class);
   }
 
   @DisplayName("should correctly insert genre in db")
@@ -75,13 +67,14 @@ class GenreDaoHibernateTest {
 
     var genreName = "genre4";
 
-    var id = genreDaoHibernate.insertOrUpdate(genreName);
+    var genreToInsert = new Genre(0L, genreName);
+    var inserted = genreDaoHibernate.insertOrUpdate(genreToInsert);
 
-    var expected = new Genre(id, genreName);
+    testEntityManager.detach(inserted);
 
-    var actual = genreDaoHibernate.getById(id);
+    var actual = genreDaoHibernate.getById(inserted.getId());
 
-    assertThat(expected).isEqualTo(actual);
+    assertThat(actual).isPresent().get().isEqualTo(actual);
 
   }
 
@@ -91,43 +84,31 @@ class GenreDaoHibernateTest {
 
     var id = 4L;
 
-    assertThatCode(() -> genreDaoHibernate.getById(id))
-        .doesNotThrowAnyException();
+    var genre = testEntityManager.find(Genre.class, id);
 
-    genreDaoHibernate.deleteById(id);
+    genreDaoHibernate.delete(genre);
 
-    assertThatThrownBy(() -> genreDaoHibernate.getById(id))
-        .isInstanceOf(GenreDaoException.class);
+    testEntityManager.flush();
+
+    var actual = genreDaoHibernate.getById(id);
+
+    assertThat(actual).isNotPresent();
   }
 
-  @DisplayName("should throw data integrity exception when deleting genre that is used in many-to-many table")
+  @DisplayName("should throw persistence exception when deleting genre that is used in many-to-many table")
   @Test
-  void shouldThrowDataIntegrityViolationExceptionWhenDeleteAuthorById() {
+  void shouldThrowPersistenceExceptionWhenDeleteAuthorById() {
 
     var id = 1L;
 
-    assertThatCode(() -> genreDaoHibernate.getById(id))
-        .doesNotThrowAnyException();
+    var genre = testEntityManager.find(Genre.class, id);
 
-    assertThatThrownBy(() -> genreDaoHibernate.deleteById(id))
-        .isInstanceOf(DataIntegrityViolationException.class);
-
-  }
-
-  @DisplayName("should not delete genre by id")
-  @Test
-  void shouldNotDeleteNonExistingGenreById() {
-
-    var id = 999L;
-    var countBefore = genreDaoHibernate.count();
-    genreDaoHibernate.deleteById(id);
-
-    var countAfter = genreDaoHibernate.count();
-
-    assertThat(countBefore - countAfter).isZero();
+    assertThatThrownBy(() -> {
+      genreDaoHibernate.delete(genre);
+      testEntityManager.flush();
+    }).isInstanceOf(PersistenceException.class);
 
   }
-
 
   @DisplayName("should update genre by id")
   @Test
@@ -136,9 +117,12 @@ class GenreDaoHibernateTest {
     var id = 1L;
     var genreToUpdate = new Genre(1, "newName");
 
-    genreDaoHibernate.update(genreToUpdate);
+    var genre = genreDaoHibernate.update(genreToUpdate);
+    testEntityManager.flush();
 
-    var fromDb = genreDaoHibernate.getById(id);
+    testEntityManager.detach(genre);
+
+    var fromDb = testEntityManager.find(Genre.class, id);
 
     assertThat(fromDb).isEqualTo(genreToUpdate);
 

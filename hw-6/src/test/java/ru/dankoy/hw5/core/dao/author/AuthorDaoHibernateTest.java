@@ -95,9 +95,9 @@ class AuthorDaoHibernateTest {
 
   }
 
-  @DisplayName("should throw data integrity exception when deleting author that is used in many-to-many table")
+  @DisplayName("should throw persistence exception exception when deleting author that is used in many-to-many table")
   @Test
-  void shouldThrowDataIntegrityViolationExceptionWhenDeleteAuthorById() {
+  void shouldThrowPersistenceExceptionWhenDeleteAuthorById() {
 
     var id = 1L;
     var author = testEntityManager.find(Author.class, id);
