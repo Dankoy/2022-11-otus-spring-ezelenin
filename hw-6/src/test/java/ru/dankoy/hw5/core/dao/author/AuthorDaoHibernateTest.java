@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 import ru.dankoy.hw5.core.domain.Author;
 
 
-@DisplayName("Test AuthorDaoJdbc ")
+@DisplayName("Test AuthorDaoHibernate ")
 @DataJpaTest
 @Import(AuthorDaoHibernate.class)
 class AuthorDaoHibernateTest {

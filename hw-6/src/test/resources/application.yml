@@ -13,8 +13,9 @@ spring:
   main:
     allow-circular-references: true
 
-  h2:
-    console:
-      path: /h2-console
-      settings:
-        web-allow-others: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+
+    show-sql: true

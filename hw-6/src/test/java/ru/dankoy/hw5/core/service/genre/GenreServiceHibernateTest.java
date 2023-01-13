@@ -3,10 +3,12 @@ package ru.dankoy.hw5.core.service.genre;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,12 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw5.core.dao.genre.GenreDao;
 import ru.dankoy.hw5.core.domain.Genre;
+import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw5.core.exceptions.GenreDaoException;
 
 
-@DisplayName("Test GenreServiceJdbc ")
+@Transactional(propagation = Propagation.NEVER)
+@DisplayName("Test GenreServiceHibernate ")
 @JdbcTest
 @Import({GenreServiceHibernate.class, GenreDao.class})
 class GenreServiceHibernateTest {
@@ -65,11 +71,11 @@ class GenreServiceHibernateTest {
     var genres = makeCorrectAllGenresList();
     var correctgenre = getGenreByIdFromList(genres, id);
 
-    given(genreDao.getById(id)).willReturn(correctgenre);
+    given(genreDao.getById(id)).willReturn(Optional.ofNullable(correctgenre));
 
     var genre = genreServiceHibernate.getById(id);
 
-    assertThat(genre).isEqualTo(correctgenre);
+    assertThat(genre).isPresent().get().isEqualTo(correctgenre);
     Mockito.verify(genreDao, times(1)).getById(id);
 
   }
@@ -93,12 +99,15 @@ class GenreServiceHibernateTest {
     var genreName = "genre4";
     var insertedId = 4L;
 
-    given(genreDao.insertOrUpdate(genreName)).willReturn(insertedId);
+    var genreToInsert = new Genre(0L, genreName);
+    var insertedGenre = new Genre(insertedId, genreName);
 
-    var id = genreServiceHibernate.insert(genreName);
+    given(genreDao.insertOrUpdate(genreToInsert)).willReturn(insertedGenre);
 
-    assertThat(id).isEqualTo(insertedId);
-    Mockito.verify(genreDao, times(1)).insertOrUpdate(genreName);
+    var actual = genreServiceHibernate.insert(genreToInsert);
+
+    assertThat(actual).isEqualTo(insertedGenre);
+    Mockito.verify(genreDao, times(1)).insertOrUpdate(genreToInsert);
 
   }
 
@@ -108,23 +117,26 @@ class GenreServiceHibernateTest {
 
     var id = 1L;
 
+    var toDelete = new Genre(id, "name");
+    given(genreDao.getById(id)).willReturn(Optional.of(toDelete));
     genreServiceHibernate.deleteById(id);
 
-    Mockito.verify(genreDao, times(1)).deleteById(id);
+    Mockito.verify(genreDao, times(1)).delete(toDelete);
 
   }
 
-  @DisplayName("should correctly delete genre by id")
+  @DisplayName("should throw exception when delete genre by id")
   @Test
   void shouldThrowExceptionWhenDeleteNonExistingGenreById() {
 
     var id = 999L;
 
-    Mockito.doThrow(new GenreDaoException(new Exception())).when(genreDao).deleteById(id);
+    given(genreDao.getById(id)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> genreServiceHibernate.deleteById(id))
-        .isInstanceOf(GenreDaoException.class);
-    Mockito.verify(genreDao, times(1)).deleteById(id);
+        .isInstanceOf(EntityNotFoundException.class);
+
+    Mockito.verify(genreDao, times(0)).delete(any());
 
   }
 

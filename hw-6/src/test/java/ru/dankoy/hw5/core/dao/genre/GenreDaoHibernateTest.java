@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 import ru.dankoy.hw5.core.domain.Genre;
 
 
-@DisplayName("Test GenreDaoJdbc ")
+@DisplayName("Test GenreDaoHibernate ")
 @DataJpaTest
 @Import(GenreDaoHibernate.class)
 class GenreDaoHibernateTest {

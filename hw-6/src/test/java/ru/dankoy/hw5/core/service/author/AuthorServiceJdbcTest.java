@@ -3,24 +3,29 @@ package ru.dankoy.hw5.core.service.author;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw5.core.dao.author.AuthorDao;
 import ru.dankoy.hw5.core.domain.Author;
-import ru.dankoy.hw5.core.exceptions.AuthorDaoException;
+import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 
 
-@DisplayName("Test AuthorServiceJdbc ")
-@JdbcTest
+@Transactional(propagation = Propagation.NEVER)
+@DisplayName("Test AuthorServiceHibernate ")
+@DataJpaTest
 @Import({AuthorServiceHibernate.class, AuthorDao.class})
 class AuthorServiceJdbcTest {
 
@@ -68,27 +73,14 @@ class AuthorServiceJdbcTest {
     var authors = makeCorrectAllAuthorsList();
     var correctAuthor = getAuthorByIdFromList(authors, id);
 
-    given(authorDao.getById(id)).willReturn(correctAuthor);
+    given(authorDao.getById(id)).willReturn(Optional.ofNullable(correctAuthor));
 
     var author = authorServiceJdbc.getById(id);
 
-    assertThat(author).isEqualTo(correctAuthor);
+    assertThat(author).isPresent().get().isEqualTo(correctAuthor);
     Mockito.verify(authorDao, times(1)).getById(id);
 
   }
-
-  @DisplayName("should throw AuthorDaoException for non existing author")
-  @Test
-  void shouldThrowAuthorDaoExceptionWhenGetById() {
-
-    var id = 999L;
-
-    Mockito.doThrow(new AuthorDaoException(new Exception())).when(authorDao).getById(id);
-
-    assertThatThrownBy(() -> authorServiceJdbc.getById(id))
-        .isInstanceOf(AuthorDaoException.class);
-  }
-
 
   @DisplayName("should correctly insert author in db")
   @Test
@@ -97,12 +89,15 @@ class AuthorServiceJdbcTest {
     var authorName = "author4";
     var insertedId = 4L;
 
-    given(authorDao.insertOrUpdate(authorName)).willReturn(insertedId);
+    var authorToInsert = new Author(0L, authorName);
+    var insertedAuthor = new Author(insertedId, authorName);
 
-    var id = authorServiceJdbc.insert(authorName);
+    given(authorDao.insertOrUpdate(authorToInsert)).willReturn(insertedAuthor);
 
-    assertThat(id).isEqualTo(insertedId);
-    Mockito.verify(authorDao, times(1)).insertOrUpdate(authorName);
+    var actual = authorServiceJdbc.insert(authorToInsert);
+
+    assertThat(actual).isEqualTo(insertedAuthor);
+    Mockito.verify(authorDao, times(1)).insertOrUpdate(authorToInsert);
 
   }
 
@@ -112,9 +107,12 @@ class AuthorServiceJdbcTest {
 
     var id = 1L;
 
+    var toDelete = new Author(id, "name");
+    given(authorDao.getById(id)).willReturn(Optional.of(toDelete));
+
     authorServiceJdbc.deleteById(id);
 
-    Mockito.verify(authorDao, times(1)).deleteById(id);
+    Mockito.verify(authorDao, times(1)).delete(toDelete);
 
   }
 
@@ -124,11 +122,12 @@ class AuthorServiceJdbcTest {
 
     var id = 999L;
 
-    Mockito.doThrow(new AuthorDaoException(new Exception())).when(authorDao).deleteById(id);
+    given(authorDao.getById(id)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> authorServiceJdbc.deleteById(id))
-        .isInstanceOf(AuthorDaoException.class);
-    Mockito.verify(authorDao, times(1)).deleteById(id);
+        .isInstanceOf(EntityNotFoundException.class);
+
+    Mockito.verify(authorDao, times(0)).delete(any());
 
   }
 
