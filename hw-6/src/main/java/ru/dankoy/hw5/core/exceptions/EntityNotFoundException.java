@@ -6,8 +6,4 @@ public class EntityNotFoundException extends Hw5RootException {
     super(message);
   }
 
-  public EntityNotFoundException() {
-    super();
-  }
-
 }

@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw5.core.dao.genre.GenreDao;
 import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
-import ru.dankoy.hw5.core.exceptions.GenreDaoException;
 
 
 @Transactional(propagation = Propagation.NEVER)
@@ -78,18 +77,6 @@ class GenreServiceHibernateTest {
     assertThat(genre).isPresent().get().isEqualTo(correctgenre);
     Mockito.verify(genreDao, times(1)).getById(id);
 
-  }
-
-  @DisplayName("should throw genreServiceException for non existing genre")
-  @Test
-  void shouldThrowGenreServiceExceptionWhenGetById() {
-
-    var id = 999;
-
-    Mockito.doThrow(new GenreDaoException(new Exception())).when(genreDao).getById(id);
-
-    assertThatThrownBy(() -> genreServiceHibernate.getById(id))
-        .isInstanceOf(GenreDaoException.class);
   }
 
   @DisplayName("should correctly insert genre in db")

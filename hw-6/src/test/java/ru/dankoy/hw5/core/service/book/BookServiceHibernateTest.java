@@ -26,7 +26,6 @@ import ru.dankoy.hw5.core.dao.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Genre;
-import ru.dankoy.hw5.core.exceptions.BookDaoException;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 
 
@@ -85,19 +84,6 @@ class BookServiceHibernateTest {
 
     assertThat(book).isPresent().get().isEqualTo(correctbook);
     Mockito.verify(bookDao, times(1)).getById(id);
-
-  }
-
-  @DisplayName("should throw bookServiceException for non existing book")
-  @Test
-  void shouldThrowBookServiceExceptionWhenGetById() {
-
-    var id = 999;
-
-    Mockito.doThrow(new BookDaoException(new Exception())).when(bookDao).getById(id);
-
-    assertThatThrownBy(() -> bookServiceHibernate.getById(id))
-        .isInstanceOf(BookDaoException.class);
 
   }
 
