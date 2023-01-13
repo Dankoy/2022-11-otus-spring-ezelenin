@@ -10,7 +10,7 @@ public interface BookDao {
 
   Optional<Book> getById(long id);
 
-  Book insert(Book book);
+  Book insertOrUpdate(Book book);
 
   void delete(Book book);
 

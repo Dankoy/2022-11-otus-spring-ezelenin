@@ -53,7 +53,7 @@ public class BookServiceHibernate implements BookService {
     book.getAuthors().addAll(authors);
     book.getGenres().addAll(genres);
 
-    return bookDao.insert(book);
+    return bookDao.insertOrUpdate(book);
   }
 
   @Transactional

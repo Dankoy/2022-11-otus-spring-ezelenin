@@ -31,7 +31,7 @@ public class BookDaoHibernate implements BookDao {
   }
 
   @Override
-  public Book insert(Book book) {
+  public Book insertOrUpdate(Book book) {
     if (book.getId() == 0) {
       entityManager.persist(book);
       return book;
