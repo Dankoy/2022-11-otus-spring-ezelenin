@@ -17,7 +17,7 @@ import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Genre;
 
 
-@DisplayName("Test BookDaoJdbcMerge ")
+@DisplayName("Test BookDaoJdbcHibernate ")
 @DataJpaTest
 @Import({BookDaoHibernate.class})
 class BookDaoHibernateTest {
