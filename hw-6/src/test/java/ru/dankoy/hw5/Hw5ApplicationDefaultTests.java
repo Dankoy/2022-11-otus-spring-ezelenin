@@ -13,7 +13,7 @@ import ru.dankoy.hw5.core.commands.AuthorCommand;
 import ru.dankoy.hw5.core.commands.BookCommand;
 import ru.dankoy.hw5.core.commands.GenreCommand;
 import ru.dankoy.hw5.core.dao.author.AuthorDaoHibernate;
-import ru.dankoy.hw5.core.dao.book.mergemanytomanybyjoin.BookDaoJdbcJoin;
+import ru.dankoy.hw5.core.dao.book.BookDaoHibernate;
 import ru.dankoy.hw5.core.dao.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.service.author.AuthorServiceHibernate;
 import ru.dankoy.hw5.core.service.book.BookServiceHibernate;
@@ -32,24 +32,24 @@ class Hw5ApplicationDefaultTests {
   @Test
   void contextLoads() {
 
-    var bookDaoJdbc = context.getBean(BookDaoJdbcJoin.class);
-    var authorDaoJdbc = context.getBean(AuthorDaoHibernate.class);
-    var genreDaoJdbc = context.getBean(GenreDaoHibernate.class);
-    var bookServiceJdbc = context.getBean(BookServiceHibernate.class);
-    var authorServiceJdbc = context.getBean(AuthorServiceHibernate.class);
-    var genreServiceJdbc = context.getBean(GenreServiceHibernate.class);
+    var bookDaoHibernate = context.getBean(BookDaoHibernate.class);
+    var authorDaoHibernate = context.getBean(AuthorDaoHibernate.class);
+    var genreDaoHibernate = context.getBean(GenreDaoHibernate.class);
+    var bookServiceHibernate = context.getBean(BookServiceHibernate.class);
+    var authorServiceHibernate = context.getBean(AuthorServiceHibernate.class);
+    var genreServiceHibernate = context.getBean(GenreServiceHibernate.class);
     var objectMapper = context.getBean(ObjectMapper.class);
     var authorCommand = context.getBean(AuthorCommand.class);
     var bookCommand = context.getBean(BookCommand.class);
     var genreCommand = context.getBean(GenreCommand.class);
     var objectMapperService = context.getBean(ObjectMapperServiceImpl.class);
 
-    assertNotNull(bookDaoJdbc);
-    assertNotNull(authorDaoJdbc);
-    assertNotNull(genreDaoJdbc);
-    assertNotNull(bookServiceJdbc);
-    assertNotNull(authorServiceJdbc);
-    assertNotNull(genreServiceJdbc);
+    assertNotNull(bookDaoHibernate);
+    assertNotNull(authorDaoHibernate);
+    assertNotNull(genreDaoHibernate);
+    assertNotNull(bookServiceHibernate);
+    assertNotNull(authorServiceHibernate);
+    assertNotNull(genreServiceHibernate);
     assertNotNull(objectMapper);
     assertNotNull(authorCommand);
     assertNotNull(bookCommand);
