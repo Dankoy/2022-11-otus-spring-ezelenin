@@ -74,7 +74,7 @@ class GenreDaoHibernateTest {
 
     var actual = genreDaoHibernate.getById(inserted.getId());
 
-    assertThat(actual).isPresent().get().isEqualTo(actual);
+    assertThat(actual).isPresent().get().isEqualTo(inserted);
 
   }
 
