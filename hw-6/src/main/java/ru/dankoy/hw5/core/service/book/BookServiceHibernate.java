@@ -69,11 +69,15 @@ public class BookServiceHibernate implements BookService {
   @Override
   public Book update(Book book, long[] authorIds, long[] genreIds) {
 
+    var optional = bookDao.getById(book.getId());
+    var found = optional.orElseThrow(() -> new EntityNotFoundException(
+        String.format("Entity %s has not been found with id - %d", Book.class.getName(), book.getId())));
+
     List<Author> authors = convertAuthorIdsToObjects(authorIds);
     List<Genre> genres = convertGenreIdsToObjects(genreIds);
 
-    book.getAuthors().addAll(authors);
-    book.getGenres().addAll(genres);
+    found.getAuthors().addAll(authors);
+    found.getGenres().addAll(genres);
 
     return bookDao.update(book);
   }
