@@ -8,6 +8,8 @@ from GENRES;
 delete
 from AUTHORS;
 delete
+from COMMENTARIES;
+delete
 from BOOKS;
 
 -- make autoincrement start with 1 again
@@ -16,6 +18,8 @@ ALTER TABLE genres
 ALTER TABLE authors
     ALTER COLUMN id RESTART WITH 1;
 ALTER TABLE books
+    ALTER COLUMN id RESTART WITH 1;
+ALTER TABLE commentaries
     ALTER COLUMN id RESTART WITH 1;
 
 insert into GENRES(NAME)
@@ -51,3 +55,11 @@ values (1, 1),
        (2, 3),
        (3, 1),
        (3, 3);
+
+insert into COMMENTARIES(text, book_id)
+values ('com1', 1),
+       ('com2', 1),
+       ('com3', 1),
+       ('com4', 2),
+       ('com5', 2),
+       ('com6', 2);
