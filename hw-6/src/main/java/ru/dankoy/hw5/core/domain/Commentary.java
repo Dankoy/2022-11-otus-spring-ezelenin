@@ -1,6 +1,7 @@
 package ru.dankoy.hw5.core.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,10 @@ public class Commentary {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @Column(name = "book_id")
+  @JsonProperty("book_id")
+  private long bookId;
 
   @Column(name = "text", nullable = false, unique = false)
   private String text;

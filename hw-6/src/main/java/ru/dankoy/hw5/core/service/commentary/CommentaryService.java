@@ -1,10 +1,10 @@
-package ru.dankoy.hw5.core.dao.commentary;
+package ru.dankoy.hw5.core.service.commentary;
 
 import java.util.List;
 import java.util.Optional;
 import ru.dankoy.hw5.core.domain.Commentary;
 
-public interface CommentaryDao {
+public interface CommentaryService {
 
   List<Commentary> getAllByBookId(long id);
 
@@ -12,6 +12,7 @@ public interface CommentaryDao {
 
   Commentary insertOrUpdate(Commentary commentary);
 
-  void delete(Commentary commentary);
+  void deleteById(long id);
+
 
 }

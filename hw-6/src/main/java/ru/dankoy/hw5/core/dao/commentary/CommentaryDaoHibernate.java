@@ -18,31 +18,30 @@ public class CommentaryDaoHibernate implements CommentaryDao {
 
   @Override
   public List<Commentary> getAllByBookId(long id) {
-    return null;
+    var query = entityManager.createQuery("select c from Commentary c where c.bookId = :book_id",
+        Commentary.class);
+    query.setParameter("book_id", id);
+    return query.getResultList();
   }
 
   @Override
   public Optional<Commentary> getById(long id) {
-    return Optional.empty();
+    return Optional.ofNullable(entityManager.find(Commentary.class, id));
   }
 
   @Override
   public Commentary insertOrUpdate(Commentary commentary) {
-    return null;
+    if (commentary.getId() == 0) {
+      entityManager.persist(commentary);
+      return commentary;
+    } else {
+      return entityManager.merge(commentary);
+    }
   }
 
   @Override
   public void delete(Commentary commentary) {
-
+    entityManager.remove(commentary);
   }
 
-  @Override
-  public Commentary update(Commentary commentary) {
-    return null;
-  }
-
-  @Override
-  public long count() {
-    return 0;
-  }
 }
