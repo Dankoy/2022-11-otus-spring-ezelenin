@@ -25,19 +25,30 @@ import ru.dankoy.hw5.core.dao.book.BookDao;
 import ru.dankoy.hw5.core.dao.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
+import ru.dankoy.hw5.core.domain.Commentary;
 import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw5.core.service.author.AuthorService;
+import ru.dankoy.hw5.core.service.author.AuthorServiceHibernate;
+import ru.dankoy.hw5.core.service.genre.GenreService;
+import ru.dankoy.hw5.core.service.genre.GenreServiceHibernate;
 
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test BookServiceHibernate ")
 @DataJpaTest
-@Import({BookServiceHibernate.class, BookDao.class, GenreDaoHibernate.class,
-    AuthorDaoHibernate.class})
+@Import({BookServiceHibernate.class, BookDao.class, GenreServiceHibernate.class,
+    AuthorServiceHibernate.class, GenreDaoHibernate.class, AuthorDaoHibernate.class})
 class BookServiceHibernateTest {
 
   @MockBean
   private BookDao bookDao;
+
+  @MockBean
+  private GenreService genreService;
+
+  @MockBean
+  private AuthorService authorService;
 
   @Autowired
   private BookServiceHibernate bookServiceHibernate;
@@ -104,12 +115,14 @@ class BookServiceHibernateTest {
     authors.add(author);
     genres.add(genre);
 
-    var bookToInsert = new Book(0L, bookName, authors, genres);
-    var insertedBook = new Book(correctInsertedId, bookName, authors, genres);
+    var bookToInsert = new Book(0L, bookName, authors, genres, new HashSet<>());
+    var insertedBook = new Book(correctInsertedId, bookName, authors, genres, new HashSet<>());
 
     given(bookDao.insertOrUpdate(bookToInsert)).willReturn(insertedBook);
+    given(genreService.getById(id)).willReturn(Optional.of(genre));
+    given(authorService.getById(id)).willReturn(Optional.of(author));
 
-    var actual = bookServiceHibernate.insert(bookToInsert, listOfIds, listOfIds);
+    var actual = bookServiceHibernate.insertOrUpdate(bookToInsert, listOfIds, listOfIds);
 
     assertThat(actual).isEqualTo(insertedBook);
     Mockito.verify(bookDao, times(1)).insertOrUpdate(bookToInsert);
@@ -121,7 +134,7 @@ class BookServiceHibernateTest {
   void shouldCorrectlyDeleteBookById() {
 
     var id = 1L;
-    var toDelete = new Book(id, "name", new HashSet<>(), new HashSet<>());
+    var toDelete = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
 
     given(bookDao.getById(id)).willReturn(Optional.of(toDelete));
 
@@ -160,10 +173,9 @@ class BookServiceHibernateTest {
     authors.add(author);
     genres.add(genre);
 
-    var bookToUpdate = new Book(id, "newName", authors, genres);
-    var found = bookToUpdate;
+    var bookToUpdate = new Book(id, "newName", authors, genres, new HashSet<>());
 
-    given(bookDao.getById(id)).willReturn(Optional.of(found));
+    given(bookDao.getById(id)).willReturn(Optional.of(bookToUpdate));
 
     bookServiceHibernate.update(bookToUpdate, listOfIds, listOfIds);
 
@@ -179,9 +191,30 @@ class BookServiceHibernateTest {
     var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
-    var bookToUpdate = new Book(id, "newName", Set.of(author), Set.of(genre));
+    var bookToUpdate = new Book(id, "newName", Set.of(author), Set.of(genre), new HashSet<>());
 
     given(bookDao.getById(id)).willReturn(Optional.empty());
+
+    assertThatThrownBy(() -> bookServiceHibernate.update(bookToUpdate, listOfIds, listOfIds))
+        .isInstanceOf(EntityNotFoundException.class);
+
+    Mockito.verify(bookDao, times(1)).getById(id);
+    Mockito.verify(bookDao, times(0)).update(any());
+
+  }
+
+  @DisplayName("should throw exception when updating book with non existing genre")
+  @Test
+  void shouldThrowExceptionWhenUpdatingNonExistingGenreInBook() {
+
+    var id = 1L;
+    var listOfIds = new long[]{id};
+    var author = new Author(id, "author1");
+    var genre = new Genre(id, "genre1");
+    var bookToUpdate = new Book(id, "newName", Set.of(author), Set.of(genre), new HashSet<>());
+
+    given(bookDao.getById(id)).willReturn(Optional.empty());
+    given(genreService.getById(id)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> bookServiceHibernate.update(bookToUpdate, listOfIds, listOfIds))
         .isInstanceOf(EntityNotFoundException.class);
@@ -201,6 +234,7 @@ class BookServiceHibernateTest {
     return bookOptional.orElse(
         new Book(nonExistingId, "nonexisting",
             new HashSet<>(),
+            new HashSet<>(),
             new HashSet<>()));
 
   }
@@ -209,13 +243,18 @@ class BookServiceHibernateTest {
     return List.of(
         new Book(1L, "book1",
             Set.of(new Author(1L, "author1"), new Author(2L, "author2")),
-            Set.of(new Genre(1L, "genre1"), new Genre(2L, "genre2"))),
+            Set.of(new Genre(1L, "genre1"), new Genre(2L, "genre2")),
+            Set.of(new Commentary(1L, "com1"), new Commentary(2L, "com2"),
+                new Commentary(3L, "com3"))),
         new Book(2L, "book2",
             Set.of(new Author(2L, "author2"), new Author(3L, "author3")),
-            Set.of(new Genre(2L, "genre2"), new Genre(3L, "genre3"))),
+            Set.of(new Genre(2L, "genre2"), new Genre(3L, "genre3")),
+            Set.of(new Commentary(4L, "com4"), new Commentary(5L, "com5"),
+                new Commentary(6L, "com6"))),
         new Book(3L, "book3",
             Set.of(new Author(1L, "author1"), new Author(3L, "author3")),
-            Set.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")))
+            Set.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")),
+            new HashSet<>())
     );
   }
 

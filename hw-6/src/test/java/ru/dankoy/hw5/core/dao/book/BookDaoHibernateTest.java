@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
+import ru.dankoy.hw5.core.domain.Commentary;
 import ru.dankoy.hw5.core.domain.Genre;
 
 
@@ -72,12 +73,13 @@ class BookDaoHibernateTest {
     var id = 1L;
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
-    var bookToInsert = new Book(0L, bookName, Set.of(author), Set.of(genre));
+    var bookToInsert = new Book(0L, bookName, Set.of(author), Set.of(genre), new HashSet<>());
 
     var insertedBook = bookDaoHibernate.insertOrUpdate(bookToInsert);
     testEntityManager.flush();
 
-    var expected = new Book(insertedBook.getId(), bookName, Set.of(author), Set.of(genre));
+    var expected = new Book(insertedBook.getId(), bookName, Set.of(author), Set.of(genre),
+        new HashSet<>());
 
     testEntityManager.detach(insertedBook);
 
@@ -109,7 +111,7 @@ class BookDaoHibernateTest {
   void shouldCorrectlyUpdateBook() {
 
     var id = 1L;
-    var bookToUpdate = new Book(id, "newName", new HashSet<>(), new HashSet<>());
+    var bookToUpdate = new Book(id, "newName", new HashSet<>(), new HashSet<>(), new HashSet<>());
 
     var updated = bookDaoHibernate.update(bookToUpdate);
     testEntityManager.flush();
@@ -131,6 +133,7 @@ class BookDaoHibernateTest {
     return bookOptional.orElse(
         new Book(nonExistingId, "nonexisting",
             new HashSet<>(),
+            new HashSet<>(),
             new HashSet<>()));
 
   }
@@ -139,13 +142,18 @@ class BookDaoHibernateTest {
     return List.of(
         new Book(1L, "book1",
             Set.of(new Author(1L, "author1"), new Author(2L, "author2")),
-            Set.of(new Genre(1L, "genre1"), new Genre(2L, "genre2"))),
+            Set.of(new Genre(1L, "genre1"), new Genre(2L, "genre2")),
+            Set.of(new Commentary(1L, "com1"), new Commentary(2L, "com2"),
+                new Commentary(3L, "com3"))),
         new Book(2L, "book2",
             Set.of(new Author(2L, "author2"), new Author(3L, "author3")),
-            Set.of(new Genre(2L, "genre2"), new Genre(3L, "genre3"))),
+            Set.of(new Genre(2L, "genre2"), new Genre(3L, "genre3")),
+            Set.of(new Commentary(4L, "com4"), new Commentary(5L, "com5"),
+                new Commentary(6L, "com6"))),
         new Book(3L, "book3",
             Set.of(new Author(1L, "author1"), new Author(3L, "author3")),
-            Set.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")))
+            Set.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")),
+            new HashSet<>())
     );
   }
 

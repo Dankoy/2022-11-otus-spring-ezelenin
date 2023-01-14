@@ -94,7 +94,7 @@ class AuthorServiceJdbcTest {
 
     given(authorDao.insertOrUpdate(authorToInsert)).willReturn(insertedAuthor);
 
-    var actual = authorServiceJdbc.insert(authorToInsert);
+    var actual = authorServiceJdbc.insertOrUpdate(authorToInsert);
 
     assertThat(actual).isEqualTo(insertedAuthor);
     Mockito.verify(authorDao, times(1)).insertOrUpdate(authorToInsert);
@@ -128,20 +128,6 @@ class AuthorServiceJdbcTest {
         .isInstanceOf(EntityNotFoundException.class);
 
     Mockito.verify(authorDao, times(0)).delete(any());
-
-  }
-
-
-  @DisplayName("should update author by id")
-  @Test
-  void shouldCorrectlyUpdateAuthor() {
-
-    var id = 1;
-    var authorToUpdate = new Author(id, "newName");
-
-    authorServiceJdbc.update(authorToUpdate);
-
-    Mockito.verify(authorDao, times(1)).update(authorToUpdate);
 
   }
 

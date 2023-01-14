@@ -109,24 +109,6 @@ class AuthorDaoHibernateTest {
 
   }
 
-  @DisplayName("should update author by id")
-  @Test
-  void shouldCorrectlyUpdateAuthor() {
-
-    var id = 1L;
-    var authorToUpdate = new Author(id, "newName");
-
-    var author = authorDaoHibernate.update(authorToUpdate);
-    testEntityManager.flush();
-
-    testEntityManager.detach(author);
-
-    var fromDb = testEntityManager.find(Author.class, id);
-
-    assertThat(fromDb).isEqualTo(authorToUpdate);
-
-  }
-
 
   private Author getAuthorByIdFromList(List<Author> authors, long id) {
 

@@ -91,7 +91,7 @@ class GenreServiceHibernateTest {
 
     given(genreDao.insertOrUpdate(genreToInsert)).willReturn(insertedGenre);
 
-    var actual = genreServiceHibernate.insert(genreToInsert);
+    var actual = genreServiceHibernate.insertOrUpdate(genreToInsert);
 
     assertThat(actual).isEqualTo(insertedGenre);
     Mockito.verify(genreDao, times(1)).insertOrUpdate(genreToInsert);
@@ -124,20 +124,6 @@ class GenreServiceHibernateTest {
         .isInstanceOf(EntityNotFoundException.class);
 
     Mockito.verify(genreDao, times(0)).delete(any());
-
-  }
-
-
-  @DisplayName("should update genre by id")
-  @Test
-  void shouldCorrectlyUpdateGenre() {
-
-    var id = 1L;
-    var genreToUpdate = new Genre(id, "newName");
-
-    genreServiceHibernate.update(genreToUpdate);
-
-    Mockito.verify(genreDao, times(1)).update(genreToUpdate);
 
   }
 

@@ -110,24 +110,6 @@ class GenreDaoHibernateTest {
 
   }
 
-  @DisplayName("should update genre by id")
-  @Test
-  void shouldCorrectlyUpdateGenre() {
-
-    var id = 1L;
-    var genreToUpdate = new Genre(1, "newName");
-
-    var genre = genreDaoHibernate.update(genreToUpdate);
-    testEntityManager.flush();
-
-    testEntityManager.detach(genre);
-
-    var fromDb = testEntityManager.find(Genre.class, id);
-
-    assertThat(fromDb).isEqualTo(genreToUpdate);
-
-  }
-
 
   private Genre getGenreByIdFromList(List<Genre> genres, long id) {
 
