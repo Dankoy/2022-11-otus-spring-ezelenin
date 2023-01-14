@@ -43,11 +43,6 @@ public class AuthorDaoHibernate implements AuthorDao {
   }
 
   @Override
-  public Author update(Author author) {
-    return entityManager.merge(author);
-  }
-
-  @Override
   public long count() {
     return getAll().size();
   }

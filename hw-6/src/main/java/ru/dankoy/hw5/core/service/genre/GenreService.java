@@ -10,11 +10,9 @@ public interface GenreService {
 
   Optional<Genre> getById(long id);
 
-  Genre insert(Genre genre);
+  Genre insertOrUpdate(Genre genre);
 
   void deleteById(long id);
-
-  Genre update(Genre genre);
 
   long count();
 

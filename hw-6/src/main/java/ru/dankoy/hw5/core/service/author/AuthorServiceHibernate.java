@@ -29,7 +29,7 @@ public class AuthorServiceHibernate implements AuthorService {
 
   @Transactional
   @Override
-  public Author insert(Author author) {
+  public Author insertOrUpdate(Author author) {
     return authorDao.insertOrUpdate(author);
   }
 
@@ -40,12 +40,6 @@ public class AuthorServiceHibernate implements AuthorService {
     var author = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Author.class.getName(), id)));
     authorDao.delete(author);
-  }
-
-  @Transactional
-  @Override
-  public void update(Author author) {
-    authorDao.update(author);
   }
 
   @Transactional(readOnly = true)

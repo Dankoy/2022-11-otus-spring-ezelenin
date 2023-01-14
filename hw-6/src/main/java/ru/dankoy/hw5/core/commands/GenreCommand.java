@@ -47,7 +47,7 @@ public class GenreCommand {
   @ShellMethod(key = {"genre-insert", "gi"}, value = "Insert new genre")
   public String insert(@ShellOption String genreName) {
     var genre = new Genre(0L, genreName);
-    var inserted = genreService.insert(genre);
+    var inserted = genreService.insertOrUpdate(genre);
     return objectMapperService.convertToString(inserted);
   }
 
@@ -61,7 +61,7 @@ public class GenreCommand {
   @ShellMethod(key = {"genre-update", "gu"}, value = "Update genre")
   public String update(@ShellOption long id, @ShellOption String genreName) {
     var genre = new Genre(id, genreName);
-    genreService.update(genre);
+    genreService.insertOrUpdate(genre);
     return String.format("Updated genre - %s", objectMapperService.convertToString(genre));
   }
 

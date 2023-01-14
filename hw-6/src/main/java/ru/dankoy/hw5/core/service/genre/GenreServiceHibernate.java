@@ -29,7 +29,7 @@ public class GenreServiceHibernate implements GenreService {
 
   @Transactional
   @Override
-  public Genre insert(Genre genre) {
+  public Genre insertOrUpdate(Genre genre) {
     return genreDao.insertOrUpdate(genre);
   }
 
@@ -40,12 +40,6 @@ public class GenreServiceHibernate implements GenreService {
     var genre = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Genre.class.getName(), id)));
     genreDao.delete(genre);
-  }
-
-  @Transactional
-  @Override
-  public Genre update(Genre genre) {
-    return genreDao.update(genre);
   }
 
   @Transactional(readOnly = true)

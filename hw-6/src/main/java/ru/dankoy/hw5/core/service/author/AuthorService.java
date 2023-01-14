@@ -10,11 +10,9 @@ public interface AuthorService {
 
   Optional<Author> getById(long id);
 
-  Author insert(Author author);
+  Author insertOrUpdate(Author author);
 
   void deleteById(long id);
-
-  void update(Author author);
 
   long count();
 

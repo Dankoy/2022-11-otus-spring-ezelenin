@@ -44,11 +44,6 @@ public class GenreDaoHibernate implements GenreDao {
   }
 
   @Override
-  public Genre update(Genre genre) {
-    return entityManager.merge(genre);
-  }
-
-  @Override
   public long count() {
     return getAll().size();
   }

@@ -7,28 +7,28 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.dao.author.AuthorDao;
 import ru.dankoy.hw5.core.dao.book.BookDao;
-import ru.dankoy.hw5.core.dao.genre.GenreDao;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw5.core.service.author.AuthorService;
+import ru.dankoy.hw5.core.service.genre.GenreService;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceHibernate implements BookService {
 
   private final BookDao bookDao;
-  private final GenreDao genreDao;
-  private final AuthorDao authorDao;
+  private final GenreService genreService;
+  private final AuthorService authorService;
 
   @Transactional(readOnly = true)
   @Override
   public List<Book> getAll() {
 
     // получаем комментарии.
-    // Fetch - EAGER не работает, если есть графы fetch join и прочие аннотации n+1
+    // Fetch.EAGER не работает, если есть графы fetch join и прочие аннотации n+1
     var books = bookDao.getAll();
     books.forEach(b -> b.getCommentaries().size());
 
@@ -52,7 +52,7 @@ public class BookServiceHibernate implements BookService {
 
   @Transactional
   @Override
-  public Book insert(Book book, long[] authorIds, long[] genreIds) {
+  public Book insertOrUpdate(Book book, long[] authorIds, long[] genreIds) {
 
     List<Author> authors = getRealAuthors(authorIds);
     List<Genre> genres = getRealGenres(genreIds);
@@ -84,8 +84,13 @@ public class BookServiceHibernate implements BookService {
     List<Author> authors = convertAuthorIdsToObjects(authorIds);
     List<Genre> genres = convertGenreIdsToObjects(genreIds);
 
-    found.getAuthors().addAll(authors);
-    found.getGenres().addAll(genres);
+    book.getAuthors().addAll(authors);
+    book.getGenres().addAll(genres);
+
+    // Добавляем комментарии к обновляемой книги, иначе они будут удалены, а это нам не нужно
+    if (book.getCommentaries().isEmpty()) {
+      book.getCommentaries().addAll(found.getCommentaries());
+    }
 
     return bookDao.update(book);
   }
@@ -101,7 +106,7 @@ public class BookServiceHibernate implements BookService {
 
     // получает реальные объекты жанров из бд + выбрасывает исключение, если жанр не был найден
     return Arrays.stream(ids).mapToObj(id -> {
-      var optional = genreDao.getById(id);
+      var optional = genreService.getById(id);
       return optional.orElseThrow(() -> new EntityNotFoundException(
           String.format("Entity %s has not been found with id - %d", Genre.class.getName(), id)));
     }).collect(Collectors.toList());
@@ -112,7 +117,7 @@ public class BookServiceHibernate implements BookService {
 
     // получает реальные объекты авторов из бд + выбрасывает исключение, если автор не был найден
     return Arrays.stream(ids).mapToObj(id -> {
-      var optional = authorDao.getById(id);
+      var optional = authorService.getById(id);
       return optional.orElseThrow(() -> new EntityNotFoundException(
           String.format("Entity %s has not been found with id - %d", Author.class.getName(), id)));
     }).collect(Collectors.toList());

@@ -47,7 +47,7 @@ public class AuthorCommand {
   @ShellMethod(key = {"author-insert", "ai"}, value = "Insert new author")
   public String insert(@ShellOption String authorName) {
     var newAuthor = new Author(0L, authorName);
-    var createdAuthor = authorService.insert(newAuthor);
+    var createdAuthor = authorService.insertOrUpdate(newAuthor);
     return objectMapperService.convertToString(createdAuthor);
   }
 
@@ -61,7 +61,7 @@ public class AuthorCommand {
   @ShellMethod(key = {"author-update", "au"}, value = "Update author")
   public String update(@ShellOption long id, @ShellOption String authorName) {
     var author = new Author(id, authorName);
-    authorService.update(author);
+    authorService.insertOrUpdate(author);
     return String.format("Updated author - %s", objectMapperService.convertToString(author));
   }
 

@@ -50,7 +50,7 @@ public class BookCommand {
 
     var book = new Book(0L, bookName, new HashSet<>(), new HashSet<>(), new HashSet<>());
 
-    var created = bookService.insert(book, authorIds, genreIds);
+    var created = bookService.insertOrUpdate(book, authorIds, genreIds);
 
     return String.format("Created new book with id - %d", created.getId());
   }

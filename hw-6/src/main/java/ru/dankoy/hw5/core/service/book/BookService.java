@@ -10,7 +10,7 @@ public interface BookService {
 
   Optional<Book> getById(long id);
 
-  Book insert(Book book, long[] authorIds, long[] genreIds);
+  Book insertOrUpdate(Book book, long[] authorIds, long[] genreIds);
 
   void deleteById(long id);
 

@@ -14,8 +14,6 @@ public interface GenreDao {
 
   void delete(Genre genre);
 
-  Genre update(Genre genre);
-
   long count();
 
 }

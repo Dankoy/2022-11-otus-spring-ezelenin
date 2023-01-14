@@ -14,8 +14,6 @@ public interface AuthorDao {
 
   void delete(Author author);
 
-  Author update(Author author);
-
   long count();
 
 }
