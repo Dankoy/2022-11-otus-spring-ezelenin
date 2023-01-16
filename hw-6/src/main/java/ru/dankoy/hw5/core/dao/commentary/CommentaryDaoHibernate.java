@@ -1,6 +1,5 @@
 package ru.dankoy.hw5.core.dao.commentary;
 
-import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,14 +14,6 @@ public class CommentaryDaoHibernate implements CommentaryDao {
 
   @PersistenceContext
   private final EntityManager entityManager;
-
-  @Override
-  public List<Commentary> getAllByBookId(long id) {
-    var query = entityManager.createQuery("select c from Commentary c where c.bookId = :book_id",
-        Commentary.class);
-    query.setParameter("book_id", id);
-    return query.getResultList();
-  }
 
   @Override
   public Optional<Commentary> getById(long id) {
