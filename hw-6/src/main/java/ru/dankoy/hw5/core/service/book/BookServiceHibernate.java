@@ -78,7 +78,6 @@ public class BookServiceHibernate implements BookService {
     return bookDao.update(book);
   }
 
-  @Transactional(readOnly = true)
   @Override
   public long count() {
     return bookDao.count();
