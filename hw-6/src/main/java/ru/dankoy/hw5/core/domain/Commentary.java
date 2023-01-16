@@ -1,18 +1,19 @@
 package ru.dankoy.hw5.core.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 
 // https://www.jpa-buddy.com/blog/lombok-and-jpa-what-may-go-wrong/
 // https://thorben-janssen.com/ultimate-guide-to-implementing-equals-and-hashcode-with-hibernate/#Using_a_Generated_Primary_Key
@@ -27,7 +28,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "book")
+// фиксит рекурсивный высов equals и hashcode комментария и книги
 @Getter
 @Entity
 @Table(name = "commentaries")
@@ -38,11 +40,11 @@ public class Commentary {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
-  @Column(name = "book_id")
-  @JsonProperty("book_id")
-  private long bookId;
-
   @Column(name = "text", nullable = false, unique = false)
   private String text;
+
+  @ManyToOne(targetEntity = Book.class, fetch = FetchType.LAZY)
+  @JsonBackReference
+  private Book book;
 
 }
