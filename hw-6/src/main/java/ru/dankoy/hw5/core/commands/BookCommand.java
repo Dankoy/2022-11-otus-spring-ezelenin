@@ -1,12 +1,14 @@
 package ru.dankoy.hw5.core.commands;
 
 import java.util.HashSet;
+import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.dankoy.hw5.core.domain.Book;
+import ru.dankoy.hw5.core.dto.mapper.BookMapper;
 import ru.dankoy.hw5.core.service.book.BookService;
 import ru.dankoy.hw5.core.service.objectmapper.ObjectMapperService;
 
@@ -16,6 +18,7 @@ public class BookCommand {
 
   private final BookService bookService;
   private final ObjectMapperService objectMapperService;
+  private final BookMapper bookMapper;
 
 
   @ShellMethod(key = {"book-count", "bc"}, value = "Count all book")
@@ -33,14 +36,21 @@ public class BookCommand {
         () -> new EntityNotFoundException(
             String.format("No book has been found with id - %d", id))
     );
-    return objectMapperService.convertToString(book);
+
+    var bookDto = bookMapper.toDTO(book);
+
+    return objectMapperService.convertToString(bookDto);
   }
 
 
   @ShellMethod(key = {"book-get-all", "bga"}, value = "Get all book")
   public String getAll() {
     var books = bookService.getAll();
-    return objectMapperService.convertToString(books);
+
+    var booksDto = books.stream().map(bookMapper::toDTO)
+        .collect(Collectors.toList());
+
+    return objectMapperService.convertToString(booksDto);
   }
 
 
@@ -68,7 +78,9 @@ public class BookCommand {
 
     var book = new Book(id, bookName, new HashSet<>(), new HashSet<>(), new HashSet<>());
     var updated = bookService.update(book, authorIds, genreIds);
-    return String.format("Updated book - %s", objectMapperService.convertToString(updated));
+    var booksDto = bookMapper.toDTO(updated);
+
+    return String.format("Updated book - %s", objectMapperService.convertToString(booksDto));
   }
 
 }
