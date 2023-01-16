@@ -5,23 +5,23 @@ drop table if exists books;
 
 create table authors
 (
-    id   bigint auto_increment primary key,
+    id   bigserial primary key,
     name varchar(255) not null
 );
 create table genres
 (
-    id   bigint auto_increment primary key,
+    id   bigserial primary key,
     name varchar(255) not null
 );
 create table books
 (
-    id   bigint auto_increment primary key,
+    id   bigserial primary key,
     name varchar(255) not null
 );
 
 create table commentaries
 (
-    id      bigint auto_increment primary key,
+    id      bigserial primary key,
     text    varchar(255) not null,
     book_id bigint references books (id) on delete cascade
 );
