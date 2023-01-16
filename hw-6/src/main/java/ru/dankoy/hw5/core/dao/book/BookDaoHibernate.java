@@ -3,6 +3,7 @@ package ru.dankoy.hw5.core.dao.book;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -28,7 +29,17 @@ public class BookDaoHibernate implements BookDao {
 
   @Override
   public Optional<Book> getById(long id) {
-    return Optional.ofNullable(entityManager.find(Book.class, id));
+    var authorEntityGraph = entityManager.getEntityGraph("authors-entity-graph");
+    var query = entityManager.createQuery(
+        "select b from Book b join fetch b.genres where b.id = :id",
+        Book.class);
+    query.setParameter("id", id);
+    query.setHint("javax.persistence.fetchgraph", authorEntityGraph);
+    try {
+      return Optional.of(query.getSingleResult());
+    } catch (NoResultException e) {
+      return Optional.empty();
+    }
   }
 
   @Override

@@ -26,28 +26,13 @@ public class BookServiceHibernate implements BookService {
   @Transactional(readOnly = true)
   @Override
   public List<Book> getAll() {
-
-    // получаем комментарии.
-    // Fetch.EAGER не работает, если есть графы fetch join и прочие аннотации n+1
-    var books = bookDao.getAll();
-    books.forEach(b -> b.getCommentaries().size());
-
-    return books;
+    return bookDao.getAll();
   }
 
   @Transactional(readOnly = true)
   @Override
   public Optional<Book> getById(long id) {
-    var book = bookDao.getById(id);
-
-    // Инициируем вложенные списки. Может есть вариант получше?
-    book.ifPresent(b -> {
-      b.getGenres().size();
-      b.getAuthors().size();
-      b.getCommentaries().size();
-    });
-
-    return book;
+    return bookDao.getById(id);
   }
 
   @Transactional
