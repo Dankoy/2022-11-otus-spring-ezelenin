@@ -1,11 +1,13 @@
 package ru.dankoy.hw5.core.commands;
 
 
+import java.util.HashSet;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Commentary;
 import ru.dankoy.hw5.core.service.commentary.CommentaryService;
 import ru.dankoy.hw5.core.service.objectmapper.ObjectMapperService;
@@ -37,15 +39,15 @@ public class CommentaryCommand {
   @ShellMethod(key = {"commentary-get-all-by-book",
       "cgabb"}, value = "Get all commentaries for book")
   public String getAllByBookId(@ShellOption long bookId) {
-    var authors = commentaryService.getAllByBookId(bookId);
-    return objectMapperService.convertToString(authors);
+    var commentaries = commentaryService.getAllByBookId(bookId);
+    return objectMapperService.convertToString(commentaries);
   }
 
 
   @ShellMethod(key = {"commentary-insert", "ci"}, value = "Insert new commentary")
   public String insert(@ShellOption long bookId, @ShellOption String comment) {
-
-    var commentary = new Commentary(0L, bookId, comment);
+    var book = new Book(bookId, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var commentary = new Commentary(0L, comment, book);
     var createdCommentary = commentaryService.insertOrUpdate(commentary);
     return objectMapperService.convertToString(createdCommentary);
   }
@@ -60,7 +62,8 @@ public class CommentaryCommand {
   @ShellMethod(key = {"commentary-update", "cu"}, value = "Update commentary")
   public String update(@ShellOption long bookId, @ShellOption long commentaryId,
       @ShellOption String commentaryText) {
-    var commentary = new Commentary(commentaryId, bookId, commentaryText);
+    var book = new Book(bookId, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var commentary = new Commentary(commentaryId, commentaryText, book);
     commentaryService.insertOrUpdate(commentary);
     return String.format("Updated commentary - %s", objectMapperService.convertToString(commentary));
   }
