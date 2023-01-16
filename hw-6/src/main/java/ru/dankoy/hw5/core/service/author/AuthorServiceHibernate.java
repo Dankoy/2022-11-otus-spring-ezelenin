@@ -15,13 +15,11 @@ public class AuthorServiceHibernate implements AuthorService {
 
   private final AuthorDao authorDao;
 
-  @Transactional(readOnly = true)
   @Override
   public List<Author> getAll() {
     return authorDao.getAll();
   }
 
-  @Transactional(readOnly = true)
   @Override
   public Optional<Author> getById(long id) {
     return authorDao.getById(id);
@@ -42,7 +40,6 @@ public class AuthorServiceHibernate implements AuthorService {
     authorDao.delete(author);
   }
 
-  @Transactional(readOnly = true)
   @Override
   public long count() {
     return authorDao.count();

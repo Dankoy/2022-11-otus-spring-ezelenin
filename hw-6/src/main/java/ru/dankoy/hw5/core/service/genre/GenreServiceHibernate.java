@@ -15,13 +15,11 @@ public class GenreServiceHibernate implements GenreService {
 
   private final GenreDao genreDao;
 
-  @Transactional(readOnly = true)
   @Override
   public List<Genre> getAll() {
     return genreDao.getAll();
   }
 
-  @Transactional(readOnly = true)
   @Override
   public Optional<Genre> getById(long id) {
     return genreDao.getById(id);
@@ -42,7 +40,6 @@ public class GenreServiceHibernate implements GenreService {
     genreDao.delete(genre);
   }
 
-  @Transactional(readOnly = true)
   @Override
   public long count() {
     return genreDao.count();
