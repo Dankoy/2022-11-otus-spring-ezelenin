@@ -2,7 +2,6 @@ package ru.dankoy.hw5.core.domain;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,9 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 // https://www.jpa-buddy.com/blog/lombok-and-jpa-what-may-go-wrong/
 // https://thorben-janssen.com/ultimate-guide-to-implementing-equals-and-hashcode-with-hibernate/#Using_a_Generated_Primary_Key
@@ -52,8 +48,7 @@ public class Book {
   @Column(name = "name", nullable = false, unique = false)
   private String name;
 
-  // Используется только в методе запроса книги по id
-  @Fetch(FetchMode.SUBSELECT)
+
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "books_authors",
       joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
@@ -61,9 +56,6 @@ public class Book {
   private Set<Author> authors = new HashSet<>();
 
 
-  // Используется только в методе запроса книги по id
-  @Fetch(FetchMode.SELECT)
-  @BatchSize(size = 2)
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "books_genres",
       joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
@@ -71,9 +63,7 @@ public class Book {
   private Set<Genre> genres = new HashSet<>();
 
 
-  @Fetch(FetchMode.SELECT)
-  @BatchSize(size = 3)
-  @OneToMany(targetEntity = Commentary.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(targetEntity = Commentary.class, fetch = FetchType.LAZY, orphanRemoval = true)
   @JoinColumn(name = "book_id", referencedColumnName = "id")
   private Set<Commentary> commentaries = new HashSet<>();
 }
