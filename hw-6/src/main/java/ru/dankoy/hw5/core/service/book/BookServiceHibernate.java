@@ -23,13 +23,11 @@ public class BookServiceHibernate implements BookService {
   private final GenreService genreService;
   private final AuthorService authorService;
 
-  @Transactional(readOnly = true)
   @Override
   public List<Book> getAll() {
     return bookDao.getAll();
   }
 
-  @Transactional(readOnly = true)
   @Override
   public Optional<Book> getById(long id) {
     return bookDao.getById(id);
