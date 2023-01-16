@@ -7,9 +7,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -57,7 +58,8 @@ class CommentaryServiceHibernateTest {
 
     var id = 1L;
 
-    var found = new Commentary(id, id, "fd");
+    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var found = new Commentary(id, "com", book);
     given(commentaryDao.getById(id)).willReturn(Optional.of(found));
 
     var actual = commentaryService.getById(id);
@@ -90,14 +92,13 @@ class CommentaryServiceHibernateTest {
 
     var id = 1L;
 
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), makeCorrectCommentaryList());
     given(bookService.getById(id)).willReturn(Optional.of(book));
-    given(commentaryDao.getAllByBookId(id)).willReturn(makeCorrectCommentaryList());
 
     var actual = commentaryService.getAllByBookId(id);
 
-    assertThat(actual).isEqualTo(makeCorrectCommentaryList());
-    Mockito.verify(commentaryDao, times(1)).getAllByBookId(id);
+    assertThat(actual).isEqualTo(new ArrayList<>(makeCorrectCommentaryList()));
+    Mockito.verify(bookService, times(1)).getById(id);
 
   }
 
@@ -108,8 +109,8 @@ class CommentaryServiceHibernateTest {
 
     var id = 1L;
 
-    var commentary = new Commentary(id, id, "com");
     var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var commentary = new Commentary(id, "com", book);
     given(bookService.getById(id)).willReturn(Optional.of(book));
     given(commentaryDao.getById(id)).willReturn(Optional.of(commentary));
 
@@ -146,8 +147,8 @@ class CommentaryServiceHibernateTest {
 
     var id = 1L;
 
-    var commentary = new Commentary(id, id, "com");
     var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var commentary = new Commentary(id, "com", book);
     given(bookService.getById(id)).willReturn(Optional.of(book));
 
     commentaryService.insertOrUpdate(commentary);
@@ -165,7 +166,8 @@ class CommentaryServiceHibernateTest {
 
     var id = 1L;
 
-    var commentary = new Commentary(id, id, "com");
+    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var commentary = new Commentary(id, "com", book);
     given(bookService.getById(id)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> commentaryService.insertOrUpdate(commentary))
@@ -177,11 +179,12 @@ class CommentaryServiceHibernateTest {
   }
 
 
-  private List<Commentary> makeCorrectCommentaryList() {
+  private Set<Commentary> makeCorrectCommentaryList() {
 
-    return List.of(new Commentary(1L, 1L, "com1"),
-        new Commentary(2L, 1L, "com2"),
-        new Commentary(3L, 1L, "com3"));
+    var book = new Book(1L, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    return Set.of(new Commentary(1L, "com1", book),
+        new Commentary(2L, "com2", book),
+        new Commentary(3L, "com3", book));
 
   }
 

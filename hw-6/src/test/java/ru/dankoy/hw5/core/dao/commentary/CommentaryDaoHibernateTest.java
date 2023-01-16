@@ -3,13 +3,14 @@ package ru.dankoy.hw5.core.dao.commentary;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
+import java.util.HashSet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Commentary;
 
 @DisplayName("Test CommentaryDaoHibernate ")
@@ -72,38 +73,14 @@ class CommentaryDaoHibernateTest {
 
   }
 
-
-  @DisplayName(" should correctly return all commentaries by book id")
-  @Test
-  void shouldReturnAllCommentariesByBookId() {
-
-    var bookId = 1L;
-
-    List<Commentary> commentaries = commentaryDaoHibernate.getAllByBookId(bookId);
-
-    assertThat(commentaries).isEqualTo(makeCorrectCommentaryList());
-
-  }
-
-  @DisplayName(" should correctly return empty commentaries by book id")
-  @Test
-  void shouldReturnEmptyCommentariesByBookId() {
-
-    var bookId = 3L;
-
-    List<Commentary> commentaries = commentaryDaoHibernate.getAllByBookId(bookId);
-
-    assertThat(commentaries).isEmpty();
-
-  }
-
   @DisplayName(" should correctly insert new commentary")
   @Test
   void shouldCorrectlyInsertNewCommentary() {
 
     var id = 1;
 
-    var commentary = new Commentary(0L, id, "ttttt");
+    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var commentary = new Commentary(id, "com", book);
 
     var inserted = commentaryDaoHibernate.insertOrUpdate(commentary);
 
@@ -123,7 +100,8 @@ class CommentaryDaoHibernateTest {
 
     var id = 1;
 
-    var newCommentary = new Commentary(1L, id, "ttttt");
+    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var newCommentary = new Commentary(id, "com", book);
 
     var updated = commentaryDaoHibernate.insertOrUpdate(newCommentary);
 
@@ -133,15 +111,6 @@ class CommentaryDaoHibernateTest {
     var actual = testEntityManager.find(Commentary.class, updated.getId());
 
     assertThat(updated).isEqualTo(actual);
-
-  }
-
-
-  private List<Commentary> makeCorrectCommentaryList() {
-
-    return List.of(new Commentary(1L, 1L, "com1"),
-        new Commentary(2L, 1L, "com2"),
-        new Commentary(3L, 1L, "com3"));
 
   }
 

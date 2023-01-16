@@ -240,21 +240,38 @@ class BookServiceHibernateTest {
   }
 
   private List<Book> makeCorrectAllBooksList() {
+
+    var book1 = new Book(1L, "book1",
+        Set.of(new Author(1L, "author1"), new Author(2L, "author2")),
+        Set.of(new Genre(1L, "genre1"), new Genre(2L, "genre2")),
+        new HashSet<>());
+
+    var book2 = new Book(2L, "book2",
+        Set.of(new Author(2L, "author2"), new Author(3L, "author3")),
+        Set.of(new Genre(2L, "genre2"), new Genre(3L, "genre3")),
+        new HashSet<>());
+
+    var book3 = new Book(3L, "book3",
+        Set.of(new Author(1L, "author1"), new Author(3L, "author3")),
+        Set.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")),
+        new HashSet<>());
+
+    Set<Commentary> commentariesBook1 = Set.of(
+        new Commentary(1L, "com1", book1),
+        new Commentary(2L, "com2", book1),
+        new Commentary(3L, "com3", book1));
+    Set<Commentary> commentariesBook2 = Set.of(
+        new Commentary(4L, "com4", book2),
+        new Commentary(5L, "com5", book2),
+        new Commentary(6L, "com6", book2));
+
+    book1.setCommentaries(commentariesBook1);
+    book2.setCommentaries(commentariesBook2);
+
     return List.of(
-        new Book(1L, "book1",
-            Set.of(new Author(1L, "author1"), new Author(2L, "author2")),
-            Set.of(new Genre(1L, "genre1"), new Genre(2L, "genre2")),
-            Set.of(new Commentary(1L, 1L, "com1"), new Commentary(2L, 1L, "com2"),
-                new Commentary(3L, 1L, "com3"))),
-        new Book(2L, "book2",
-            Set.of(new Author(2L, "author2"), new Author(3L, "author3")),
-            Set.of(new Genre(2L, "genre2"), new Genre(3L, "genre3")),
-            Set.of(new Commentary(4L, 2L, "com4"), new Commentary(5L, 2L, "com5"),
-                new Commentary(6L, 2L, "com6"))),
-        new Book(3L, "book3",
-            Set.of(new Author(1L, "author1"), new Author(3L, "author3")),
-            Set.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")),
-            new HashSet<>())
+        book3,
+        book2,
+        book3
     );
   }
 
