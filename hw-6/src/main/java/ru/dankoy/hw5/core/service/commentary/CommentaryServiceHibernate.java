@@ -1,5 +1,6 @@
 package ru.dankoy.hw5.core.service.commentary;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +22,16 @@ public class CommentaryServiceHibernate implements CommentaryService {
   private final BookService bookService;
 
 
-  @Transactional(readOnly = true)
+  @Transactional(readOnly = true) // нужен для получения комментариев
   @Override
   public List<Commentary> getAllByBookId(long id) {
-    return commentaryDao.getAllByBookId(id);
+    var optional = bookService.getById(id);
+    var book = optional.orElseThrow(() -> new EntityNotFoundException(
+        String.format("Entity %s has not been found with id - %d", Book.class.getName(), id)));
+
+    return new ArrayList<>(book.getCommentaries());
   }
 
-  @Transactional(readOnly = true)
   @Override
   public Optional<Commentary> getById(long id) {
     return commentaryDao.getById(id);
@@ -38,10 +42,10 @@ public class CommentaryServiceHibernate implements CommentaryService {
   @Override
   public Commentary insertOrUpdate(Commentary commentary) {
 
-    bookService.getById(commentary.getBookId()).orElseThrow(
+    bookService.getById(commentary.getBook().getId()).orElseThrow(
         () -> new EntityNotFoundException(
             String.format("Entity %s has not been found with id - %d", Book.class.getName(),
-                commentary.getBookId()))
+                commentary.getBook().getId()))
     );
 
     return commentaryDao.insertOrUpdate(commentary);
