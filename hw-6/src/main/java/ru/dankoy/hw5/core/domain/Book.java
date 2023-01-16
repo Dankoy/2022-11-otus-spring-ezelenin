@@ -66,6 +66,6 @@ public class Book {
 
   @OneToMany(targetEntity = Commentary.class, fetch = FetchType.LAZY, orphanRemoval = true)
   @JoinColumn(name = "book_id", referencedColumnName = "id")
-  @JsonManagedReference
+  @JsonManagedReference // решает проблему с рекурсивной сериализацией
   private Set<Commentary> commentaries = new HashSet<>();
 }

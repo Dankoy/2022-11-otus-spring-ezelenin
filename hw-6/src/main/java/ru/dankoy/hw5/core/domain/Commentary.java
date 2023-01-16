@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "book")
-// фиксит рекурсивный высов equals и hashcode комментария и книги
+// фиксит рекурсивный вызов equals и hashcode комментария и книги
 @Getter
 @Entity
 @Table(name = "commentaries")
@@ -44,7 +44,7 @@ public class Commentary {
   private String text;
 
   @ManyToOne(targetEntity = Book.class, fetch = FetchType.LAZY)
-  @JsonBackReference
+  @JsonBackReference // решает проблему с рекурсивной сериализацией
   private Book book;
 
 }
