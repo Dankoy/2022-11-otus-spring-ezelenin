@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 // https://www.jpa-buddy.com/blog/lombok-and-jpa-what-may-go-wrong/
 // https://thorben-janssen.com/ultimate-guide-to-implementing-equals-and-hashcode-with-hibernate/#Using_a_Generated_Primary_Key
@@ -67,5 +68,6 @@ public class Book {
   @OneToMany(targetEntity = Commentary.class, fetch = FetchType.LAZY, orphanRemoval = true)
   @JoinColumn(name = "book_id", referencedColumnName = "id")
   @JsonManagedReference // решает проблему с рекурсивной сериализацией
+  @Setter
   private Set<Commentary> commentaries = new HashSet<>();
 }
