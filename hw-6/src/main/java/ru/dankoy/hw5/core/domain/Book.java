@@ -1,5 +1,6 @@
 package ru.dankoy.hw5.core.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -65,5 +66,6 @@ public class Book {
 
   @OneToMany(targetEntity = Commentary.class, fetch = FetchType.LAZY, orphanRemoval = true)
   @JoinColumn(name = "book_id", referencedColumnName = "id")
+  @JsonManagedReference
   private Set<Commentary> commentaries = new HashSet<>();
 }
