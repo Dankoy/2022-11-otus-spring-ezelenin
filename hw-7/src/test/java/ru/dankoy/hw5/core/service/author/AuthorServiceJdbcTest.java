@@ -18,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.repository.author.AuthorDao;
+import ru.dankoy.hw5.core.repository.author.AuthorRepository;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 
@@ -26,28 +26,28 @@ import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test AuthorServiceHibernate ")
 @DataJpaTest
-@Import({AuthorServiceHibernate.class, AuthorDao.class})
+@Import({AuthorServiceJpa.class, AuthorRepository.class})
 class AuthorServiceJdbcTest {
 
 
   @MockBean
-  private AuthorDao authorDao;
+  private AuthorRepository authorRepository;
 
   @Autowired
-  private AuthorServiceHibernate authorServiceJdbc;
+  private AuthorServiceJpa authorServiceJdbc;
 
 
   @DisplayName("should return all authors")
   @Test
   void shouldGetAllAuthorsTest() {
 
-    given(authorDao.getAll()).willReturn(makeCorrectAllAuthorsList());
+    given(authorRepository.getAll()).willReturn(makeCorrectAllAuthorsList());
 
     var authors = authorServiceJdbc.getAll();
 
     assertThat(authors).isEqualTo(makeCorrectAllAuthorsList());
 
-    Mockito.verify(authorDao, times(1)).getAll();
+    Mockito.verify(authorRepository, times(1)).getAll();
   }
 
 
@@ -55,12 +55,12 @@ class AuthorServiceJdbcTest {
   @Test
   void shouldReturnCorrectCountTest() {
 
-    given(authorDao.count()).willReturn(3L);
+    given(authorRepository.count()).willReturn(3L);
 
     var count = authorServiceJdbc.count();
 
     assertThat(count).isEqualTo(makeCorrectAllAuthorsList().size());
-    Mockito.verify(authorDao, times(1)).count();
+    Mockito.verify(authorRepository, times(1)).count();
 
   }
 
@@ -73,12 +73,12 @@ class AuthorServiceJdbcTest {
     var authors = makeCorrectAllAuthorsList();
     var correctAuthor = getAuthorByIdFromList(authors, id);
 
-    given(authorDao.getById(id)).willReturn(Optional.ofNullable(correctAuthor));
+    given(authorRepository.getById(id)).willReturn(Optional.ofNullable(correctAuthor));
 
     var author = authorServiceJdbc.getById(id);
 
     assertThat(author).isPresent().get().isEqualTo(correctAuthor);
-    Mockito.verify(authorDao, times(1)).getById(id);
+    Mockito.verify(authorRepository, times(1)).getById(id);
 
   }
 
@@ -92,12 +92,12 @@ class AuthorServiceJdbcTest {
     var authorToInsert = new Author(0L, authorName);
     var insertedAuthor = new Author(insertedId, authorName);
 
-    given(authorDao.insertOrUpdate(authorToInsert)).willReturn(insertedAuthor);
+    given(authorRepository.insertOrUpdate(authorToInsert)).willReturn(insertedAuthor);
 
     var actual = authorServiceJdbc.insertOrUpdate(authorToInsert);
 
     assertThat(actual).isEqualTo(insertedAuthor);
-    Mockito.verify(authorDao, times(1)).insertOrUpdate(authorToInsert);
+    Mockito.verify(authorRepository, times(1)).insertOrUpdate(authorToInsert);
 
   }
 
@@ -108,11 +108,11 @@ class AuthorServiceJdbcTest {
     var id = 1L;
 
     var toDelete = new Author(id, "name");
-    given(authorDao.getById(id)).willReturn(Optional.of(toDelete));
+    given(authorRepository.getById(id)).willReturn(Optional.of(toDelete));
 
     authorServiceJdbc.deleteById(id);
 
-    Mockito.verify(authorDao, times(1)).delete(toDelete);
+    Mockito.verify(authorRepository, times(1)).delete(toDelete);
 
   }
 
@@ -122,12 +122,12 @@ class AuthorServiceJdbcTest {
 
     var id = 999L;
 
-    given(authorDao.getById(id)).willReturn(Optional.empty());
+    given(authorRepository.getById(id)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> authorServiceJdbc.deleteById(id))
         .isInstanceOf(EntityNotFoundException.class);
 
-    Mockito.verify(authorDao, times(0)).delete(any());
+    Mockito.verify(authorRepository, times(0)).delete(any());
 
   }
 

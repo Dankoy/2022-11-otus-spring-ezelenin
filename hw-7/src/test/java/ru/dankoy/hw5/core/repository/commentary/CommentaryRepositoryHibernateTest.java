@@ -16,7 +16,7 @@ import ru.dankoy.hw5.core.domain.Commentary;
 @DisplayName("Test CommentaryDaoHibernate ")
 @DataJpaTest
 @Import(CommentaryDaoHibernate.class)
-class CommentaryDaoHibernateTest {
+class CommentaryRepositoryHibernateTest {
 
 
   @Autowired

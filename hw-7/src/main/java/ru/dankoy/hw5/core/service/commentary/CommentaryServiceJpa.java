@@ -6,7 +6,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.repository.commentary.CommentaryDao;
+import ru.dankoy.hw5.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Commentary;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
@@ -15,9 +15,9 @@ import ru.dankoy.hw5.core.service.book.BookService;
 
 @RequiredArgsConstructor
 @Service
-public class CommentaryServiceHibernate implements CommentaryService {
+public class CommentaryServiceJpa implements CommentaryService {
 
-  private final CommentaryDao commentaryDao;
+  private final CommentaryRepository commentaryRepository;
 
   private final BookService bookService;
 
@@ -34,7 +34,7 @@ public class CommentaryServiceHibernate implements CommentaryService {
 
   @Override
   public Optional<Commentary> getById(long id) {
-    return commentaryDao.getById(id);
+    return commentaryRepository.getById(id);
   }
 
 
@@ -48,18 +48,18 @@ public class CommentaryServiceHibernate implements CommentaryService {
                 commentary.getBook().getId()))
     );
 
-    return commentaryDao.insertOrUpdate(commentary);
+    return commentaryRepository.save(commentary);
   }
 
   @Transactional
   @Override
   public void deleteById(long id) {
-    var optional = commentaryDao.getById(id);
+    var optional = commentaryRepository.getById(id);
     var commentary = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Commentary.class.getName(),
             id)));
 
-    commentaryDao.delete(commentary);
+    commentaryRepository.delete(commentary);
 
   }
 

@@ -18,7 +18,7 @@ import ru.dankoy.hw5.core.domain.Author;
 @DisplayName("Test AuthorDaoHibernate ")
 @DataJpaTest
 @Import(AuthorDaoHibernate.class)
-class AuthorDaoHibernateTest {
+class AuthorRepositoryHibernateTest {
 
   @Autowired
   private AuthorDaoHibernate authorDaoHibernate;

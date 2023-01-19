@@ -20,7 +20,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.repository.author.AuthorDaoHibernate;
 import ru.dankoy.hw5.core.repository.book.BookDao;
 import ru.dankoy.hw5.core.repository.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.domain.Author;
@@ -29,7 +28,7 @@ import ru.dankoy.hw5.core.domain.Commentary;
 import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw5.core.service.author.AuthorService;
-import ru.dankoy.hw5.core.service.author.AuthorServiceHibernate;
+import ru.dankoy.hw5.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw5.core.service.genre.GenreService;
 import ru.dankoy.hw5.core.service.genre.GenreServiceHibernate;
 
@@ -38,7 +37,7 @@ import ru.dankoy.hw5.core.service.genre.GenreServiceHibernate;
 @DisplayName("Test BookServiceHibernate ")
 @DataJpaTest
 @Import({BookServiceHibernate.class, BookDao.class, GenreServiceHibernate.class,
-    AuthorServiceHibernate.class, GenreDaoHibernate.class, AuthorDaoHibernate.class})
+    AuthorServiceJpa.class, GenreDaoHibernate.class, AuthorDaoHibernate.class})
 class BookServiceHibernateTest {
 
   @MockBean

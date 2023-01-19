@@ -20,14 +20,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.repository.author.AuthorDaoHibernate;
 import ru.dankoy.hw5.core.repository.book.BookDaoHibernate;
-import ru.dankoy.hw5.core.repository.commentary.CommentaryDao;
+import ru.dankoy.hw5.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw5.core.repository.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Commentary;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
-import ru.dankoy.hw5.core.service.author.AuthorServiceHibernate;
+import ru.dankoy.hw5.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw5.core.service.book.BookService;
 import ru.dankoy.hw5.core.service.book.BookServiceHibernate;
 import ru.dankoy.hw5.core.service.genre.GenreServiceHibernate;
@@ -36,17 +35,17 @@ import ru.dankoy.hw5.core.service.genre.GenreServiceHibernate;
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Tests for CommentaryServiceHibernate ")
 @DataJpaTest
-@Import({CommentaryServiceHibernate.class, BookServiceHibernate.class, GenreServiceHibernate.class,
-    AuthorServiceHibernate.class, BookDaoHibernate.class, GenreDaoHibernate.class,
+@Import({CommentaryServiceJpa.class, BookServiceHibernate.class, GenreServiceHibernate.class,
+    AuthorServiceJpa.class, BookDaoHibernate.class, GenreDaoHibernate.class,
     AuthorDaoHibernate.class})
-class CommentaryServiceHibernateTest {
+class CommentaryServiceJpaTest {
 
 
   @MockBean
   private BookService bookService;
 
   @MockBean
-  private CommentaryDao commentaryDao;
+  private CommentaryRepository commentaryRepository;
 
   @Autowired
   private CommentaryService commentaryService;
@@ -60,12 +59,12 @@ class CommentaryServiceHibernateTest {
 
     var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
     var found = new Commentary(id, "com", book);
-    given(commentaryDao.getById(id)).willReturn(Optional.of(found));
+    given(commentaryRepository.getById(id)).willReturn(Optional.of(found));
 
     var actual = commentaryService.getById(id);
 
     assertThat(actual).isPresent().get().isEqualTo(found);
-    Mockito.verify(commentaryDao, times(1)).getById(id);
+    Mockito.verify(commentaryRepository, times(1)).getById(id);
 
   }
 
@@ -76,12 +75,12 @@ class CommentaryServiceHibernateTest {
 
     var id = 1L;
 
-    given(commentaryDao.getById(id)).willReturn(Optional.empty());
+    given(commentaryRepository.getById(id)).willReturn(Optional.empty());
 
     var actual = commentaryService.getById(id);
 
     assertThat(actual).isEmpty();
-    Mockito.verify(commentaryDao, times(1)).getById(id);
+    Mockito.verify(commentaryRepository, times(1)).getById(id);
 
   }
 
@@ -112,12 +111,12 @@ class CommentaryServiceHibernateTest {
     var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
     var commentary = new Commentary(id, "com", book);
     given(bookService.getById(id)).willReturn(Optional.of(book));
-    given(commentaryDao.getById(id)).willReturn(Optional.of(commentary));
+    given(commentaryRepository.getById(id)).willReturn(Optional.of(commentary));
 
     commentaryService.deleteById(id);
 
-    Mockito.verify(commentaryDao, times(1)).getById(id);
-    Mockito.verify(commentaryDao, times(1)).delete(commentary);
+    Mockito.verify(commentaryRepository, times(1)).getById(id);
+    Mockito.verify(commentaryRepository, times(1)).delete(commentary);
 
   }
 
@@ -130,13 +129,13 @@ class CommentaryServiceHibernateTest {
 
     var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
     given(bookService.getById(id)).willReturn(Optional.of(book));
-    given(commentaryDao.getById(id)).willReturn(Optional.empty());
+    given(commentaryRepository.getById(id)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> commentaryService.deleteById(id))
         .isInstanceOf(EntityNotFoundException.class);
 
-    Mockito.verify(commentaryDao, times(1)).getById(id);
-    Mockito.verify(commentaryDao, times(0)).delete(any());
+    Mockito.verify(commentaryRepository, times(1)).getById(id);
+    Mockito.verify(commentaryRepository, times(0)).delete(any());
 
   }
 
@@ -153,7 +152,7 @@ class CommentaryServiceHibernateTest {
 
     commentaryService.insertOrUpdate(commentary);
 
-    Mockito.verify(commentaryDao, times(1)).insertOrUpdate(commentary);
+    Mockito.verify(commentaryRepository, times(1)).insertOrUpdate(commentary);
     Mockito.verify(bookService, times(1)).getById(id);
 
 
@@ -173,7 +172,7 @@ class CommentaryServiceHibernateTest {
     assertThatThrownBy(() -> commentaryService.insertOrUpdate(commentary))
         .isInstanceOf(EntityNotFoundException.class);
 
-    Mockito.verify(commentaryDao, times(0)).insertOrUpdate(commentary);
+    Mockito.verify(commentaryRepository, times(0)).insertOrUpdate(commentary);
     Mockito.verify(bookService, times(1)).getById(id);
 
   }

@@ -5,43 +5,43 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.repository.author.AuthorDao;
+import ru.dankoy.hw5.core.repository.author.AuthorRepository;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
-public class AuthorServiceHibernate implements AuthorService {
+public class AuthorServiceJpa implements AuthorService {
 
-  private final AuthorDao authorDao;
+  private final AuthorRepository authorRepository;
 
   @Override
   public List<Author> getAll() {
-    return authorDao.getAll();
+    return authorRepository.findAll();
   }
 
   @Override
   public Optional<Author> getById(long id) {
-    return authorDao.getById(id);
+    return authorRepository.getById(id);
   }
 
   @Transactional
   @Override
   public Author insertOrUpdate(Author author) {
-    return authorDao.insertOrUpdate(author);
+    return authorRepository.save(author);
   }
 
   @Transactional
   @Override
   public void deleteById(long id) {
-    var optional = authorDao.getById(id);
+    var optional = authorRepository.getById(id);
     var author = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Author.class.getName(), id)));
-    authorDao.delete(author);
+    authorRepository.delete(author);
   }
 
   @Override
   public long count() {
-    return authorDao.count();
+    return authorRepository.count();
   }
 }

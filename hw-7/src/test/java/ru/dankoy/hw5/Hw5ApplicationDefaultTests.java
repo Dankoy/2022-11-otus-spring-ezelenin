@@ -12,10 +12,9 @@ import org.springframework.context.ApplicationContext;
 import ru.dankoy.hw5.core.commands.AuthorCommand;
 import ru.dankoy.hw5.core.commands.BookCommand;
 import ru.dankoy.hw5.core.commands.GenreCommand;
-import ru.dankoy.hw5.core.repository.author.AuthorDaoHibernate;
 import ru.dankoy.hw5.core.repository.book.BookDaoHibernate;
 import ru.dankoy.hw5.core.repository.genre.GenreDaoHibernate;
-import ru.dankoy.hw5.core.service.author.AuthorServiceHibernate;
+import ru.dankoy.hw5.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw5.core.service.book.BookServiceHibernate;
 import ru.dankoy.hw5.core.service.genre.GenreServiceHibernate;
 import ru.dankoy.hw5.core.service.objectmapper.ObjectMapperServiceImpl;
@@ -33,10 +32,9 @@ class Hw5ApplicationDefaultTests {
   void contextLoads() {
 
     var bookDaoHibernate = context.getBean(BookDaoHibernate.class);
-    var authorDaoHibernate = context.getBean(AuthorDaoHibernate.class);
     var genreDaoHibernate = context.getBean(GenreDaoHibernate.class);
     var bookServiceHibernate = context.getBean(BookServiceHibernate.class);
-    var authorServiceHibernate = context.getBean(AuthorServiceHibernate.class);
+    var authorServiceHibernate = context.getBean(AuthorServiceJpa.class);
     var genreServiceHibernate = context.getBean(GenreServiceHibernate.class);
     var objectMapper = context.getBean(ObjectMapper.class);
     var authorCommand = context.getBean(AuthorCommand.class);
@@ -45,7 +43,6 @@ class Hw5ApplicationDefaultTests {
     var objectMapperService = context.getBean(ObjectMapperServiceImpl.class);
 
     assertNotNull(bookDaoHibernate);
-    assertNotNull(authorDaoHibernate);
     assertNotNull(genreDaoHibernate);
     assertNotNull(bookServiceHibernate);
     assertNotNull(authorServiceHibernate);
