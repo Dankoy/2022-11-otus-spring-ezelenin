@@ -4,12 +4,16 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.dankoy.hw5.core.domain.Commentary;
 
+// @Repository. Есть мнение что мы этим помечаем что класс хранилище.
+// Основная претензия к этому мнению - если хорошо описан интерфейс - то мы в класс и не заглянем,
+// а тем более в его аннотации. Мы по имени класса увидим что это репозиторий. И всё,
+// функциональность по трансляции исключений становится просто обузой.
 
+@Component
 @RequiredArgsConstructor
-@Repository
 public class CommentaryDaoHibernate implements CommentaryDao {
 
   @PersistenceContext
