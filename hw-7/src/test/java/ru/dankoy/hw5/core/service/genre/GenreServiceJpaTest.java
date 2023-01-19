@@ -18,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.repository.genre.GenreDao;
+import ru.dankoy.hw5.core.repository.genre.GenreRepository;
 import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 
@@ -26,26 +26,26 @@ import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test GenreServiceHibernate ")
 @JdbcTest
-@Import({GenreServiceHibernate.class, GenreDao.class})
-class GenreServiceHibernateTest {
+@Import({GenreServiceJpa.class, GenreRepository.class})
+class GenreServiceJpaTest {
 
   @MockBean
-  private GenreDao genreDao;
+  private GenreRepository genreRepository;
 
   @Autowired
-  private GenreServiceHibernate genreServiceHibernate;
+  private GenreServiceJpa genreServiceJpa;
 
 
   @DisplayName("should return all genres")
   @Test
   void shouldGetAllGenresTest() {
 
-    given(genreDao.getAll()).willReturn(makeCorrectAllGenresList());
+    given(genreRepository.getAll()).willReturn(makeCorrectAllGenresList());
 
-    var genres = genreServiceHibernate.getAll();
+    var genres = genreServiceJpa.getAll();
 
     assertThat(genres).isEqualTo(makeCorrectAllGenresList());
-    Mockito.verify(genreDao, times(1)).getAll();
+    Mockito.verify(genreRepository, times(1)).getAll();
   }
 
 
@@ -53,11 +53,11 @@ class GenreServiceHibernateTest {
   @Test
   void shouldReturnCorrectCountTest() {
 
-    given(genreDao.count()).willReturn(3L);
-    var count = genreServiceHibernate.count();
+    given(genreRepository.count()).willReturn(3L);
+    var count = genreServiceJpa.count();
 
     assertThat(count).isEqualTo(makeCorrectAllGenresList().size());
-    Mockito.verify(genreDao, times(1)).count();
+    Mockito.verify(genreRepository, times(1)).count();
 
   }
 
@@ -70,12 +70,12 @@ class GenreServiceHibernateTest {
     var genres = makeCorrectAllGenresList();
     var correctgenre = getGenreByIdFromList(genres, id);
 
-    given(genreDao.getById(id)).willReturn(Optional.ofNullable(correctgenre));
+    given(genreRepository.getById(id)).willReturn(Optional.ofNullable(correctgenre));
 
-    var genre = genreServiceHibernate.getById(id);
+    var genre = genreServiceJpa.getById(id);
 
     assertThat(genre).isPresent().get().isEqualTo(correctgenre);
-    Mockito.verify(genreDao, times(1)).getById(id);
+    Mockito.verify(genreRepository, times(1)).getById(id);
 
   }
 
@@ -89,12 +89,12 @@ class GenreServiceHibernateTest {
     var genreToInsert = new Genre(0L, genreName);
     var insertedGenre = new Genre(insertedId, genreName);
 
-    given(genreDao.insertOrUpdate(genreToInsert)).willReturn(insertedGenre);
+    given(genreRepository.insertOrUpdate(genreToInsert)).willReturn(insertedGenre);
 
-    var actual = genreServiceHibernate.insertOrUpdate(genreToInsert);
+    var actual = genreServiceJpa.insertOrUpdate(genreToInsert);
 
     assertThat(actual).isEqualTo(insertedGenre);
-    Mockito.verify(genreDao, times(1)).insertOrUpdate(genreToInsert);
+    Mockito.verify(genreRepository, times(1)).insertOrUpdate(genreToInsert);
 
   }
 
@@ -105,10 +105,10 @@ class GenreServiceHibernateTest {
     var id = 1L;
 
     var toDelete = new Genre(id, "name");
-    given(genreDao.getById(id)).willReturn(Optional.of(toDelete));
-    genreServiceHibernate.deleteById(id);
+    given(genreRepository.getById(id)).willReturn(Optional.of(toDelete));
+    genreServiceJpa.deleteById(id);
 
-    Mockito.verify(genreDao, times(1)).delete(toDelete);
+    Mockito.verify(genreRepository, times(1)).delete(toDelete);
 
   }
 
@@ -118,12 +118,12 @@ class GenreServiceHibernateTest {
 
     var id = 999L;
 
-    given(genreDao.getById(id)).willReturn(Optional.empty());
+    given(genreRepository.getById(id)).willReturn(Optional.empty());
 
-    assertThatThrownBy(() -> genreServiceHibernate.deleteById(id))
+    assertThatThrownBy(() -> genreServiceJpa.deleteById(id))
         .isInstanceOf(EntityNotFoundException.class);
 
-    Mockito.verify(genreDao, times(0)).delete(any());
+    Mockito.verify(genreRepository, times(0)).delete(any());
 
   }
 

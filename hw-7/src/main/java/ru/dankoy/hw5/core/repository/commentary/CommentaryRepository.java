@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.dankoy.hw5.core.domain.Commentary;
 
-public interface CommentaryRepository extends JpaRepository<Commentary, Long>, CommentaryRepositoryCustom {
+public interface CommentaryRepository extends JpaRepository<Commentary, Long>,
+    CommentaryRepositoryCustom {
 
+  @Override
   Optional<Commentary> getById(long id);
-
-  Commentary save(Commentary commentary);
 
   @Modifying
   @Query("delete from Commentary c where c.id = :id")

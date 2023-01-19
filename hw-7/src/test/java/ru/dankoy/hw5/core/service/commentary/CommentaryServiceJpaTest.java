@@ -22,20 +22,19 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw5.core.repository.book.BookDaoHibernate;
 import ru.dankoy.hw5.core.repository.commentary.CommentaryRepository;
-import ru.dankoy.hw5.core.repository.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Commentary;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw5.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw5.core.service.book.BookService;
 import ru.dankoy.hw5.core.service.book.BookServiceHibernate;
-import ru.dankoy.hw5.core.service.genre.GenreServiceHibernate;
+import ru.dankoy.hw5.core.service.genre.GenreServiceJpa;
 
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Tests for CommentaryServiceHibernate ")
 @DataJpaTest
-@Import({CommentaryServiceJpa.class, BookServiceHibernate.class, GenreServiceHibernate.class,
+@Import({CommentaryServiceJpa.class, BookServiceHibernate.class, GenreServiceJpa.class,
     AuthorServiceJpa.class, BookDaoHibernate.class, GenreDaoHibernate.class,
     AuthorDaoHibernate.class})
 class CommentaryServiceJpaTest {

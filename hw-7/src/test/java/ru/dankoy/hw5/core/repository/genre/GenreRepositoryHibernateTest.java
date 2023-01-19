@@ -18,7 +18,7 @@ import ru.dankoy.hw5.core.domain.Genre;
 @DisplayName("Test GenreDaoHibernate ")
 @DataJpaTest
 @Import(GenreDaoHibernate.class)
-class GenreDaoHibernateTest {
+class GenreRepositoryHibernateTest {
 
   @Autowired
   private GenreDaoHibernate genreDaoHibernate;

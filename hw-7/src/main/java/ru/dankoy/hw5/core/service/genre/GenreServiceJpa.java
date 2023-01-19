@@ -5,43 +5,43 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.repository.genre.GenreDao;
+import ru.dankoy.hw5.core.repository.genre.GenreRepository;
 import ru.dankoy.hw5.core.domain.Genre;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
-public class GenreServiceHibernate implements GenreService {
+public class GenreServiceJpa implements GenreService {
 
-  private final GenreDao genreDao;
+  private final GenreRepository genreRepository;
 
   @Override
   public List<Genre> getAll() {
-    return genreDao.getAll();
+    return genreRepository.findAll();
   }
 
   @Override
   public Optional<Genre> getById(long id) {
-    return genreDao.getById(id);
+    return genreRepository.getById(id);
   }
 
   @Transactional
   @Override
   public Genre insertOrUpdate(Genre genre) {
-    return genreDao.insertOrUpdate(genre);
+    return genreRepository.save(genre);
   }
 
   @Transactional
   @Override
   public void deleteById(long id) {
-    var optional = genreDao.getById(id);
+    var optional = genreRepository.getById(id);
     var genre = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Genre.class.getName(), id)));
-    genreDao.delete(genre);
+    genreRepository.delete(genre);
   }
 
   @Override
   public long count() {
-    return genreDao.count();
+    return genreRepository.count();
   }
 }

@@ -13,10 +13,9 @@ import ru.dankoy.hw5.core.commands.AuthorCommand;
 import ru.dankoy.hw5.core.commands.BookCommand;
 import ru.dankoy.hw5.core.commands.GenreCommand;
 import ru.dankoy.hw5.core.repository.book.BookDaoHibernate;
-import ru.dankoy.hw5.core.repository.genre.GenreDaoHibernate;
 import ru.dankoy.hw5.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw5.core.service.book.BookServiceHibernate;
-import ru.dankoy.hw5.core.service.genre.GenreServiceHibernate;
+import ru.dankoy.hw5.core.service.genre.GenreServiceJpa;
 import ru.dankoy.hw5.core.service.objectmapper.ObjectMapperServiceImpl;
 
 @DisplayName("Test default context ")
@@ -35,7 +34,7 @@ class Hw5ApplicationDefaultTests {
     var genreDaoHibernate = context.getBean(GenreDaoHibernate.class);
     var bookServiceHibernate = context.getBean(BookServiceHibernate.class);
     var authorServiceHibernate = context.getBean(AuthorServiceJpa.class);
-    var genreServiceHibernate = context.getBean(GenreServiceHibernate.class);
+    var genreServiceHibernate = context.getBean(GenreServiceJpa.class);
     var objectMapper = context.getBean(ObjectMapper.class);
     var authorCommand = context.getBean(AuthorCommand.class);
     var bookCommand = context.getBean(BookCommand.class);
