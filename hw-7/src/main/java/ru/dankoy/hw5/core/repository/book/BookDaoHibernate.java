@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.book;
+package ru.dankoy.hw5.core.repository.book;
 
 import java.util.List;
 import java.util.Optional;

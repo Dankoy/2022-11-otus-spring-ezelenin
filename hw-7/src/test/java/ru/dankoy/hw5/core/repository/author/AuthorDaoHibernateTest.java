@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.author;
+package ru.dankoy.hw5.core.repository.author;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

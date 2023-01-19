@@ -5,7 +5,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.dao.author.AuthorDao;
+import ru.dankoy.hw5.core.repository.author.AuthorDao;
 import ru.dankoy.hw5.core.domain.Author;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
 

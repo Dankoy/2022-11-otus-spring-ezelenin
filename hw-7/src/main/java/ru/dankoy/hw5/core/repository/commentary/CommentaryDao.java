@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.commentary;
+package ru.dankoy.hw5.core.repository.commentary;
 
 import java.util.Optional;
 import ru.dankoy.hw5.core.domain.Commentary;

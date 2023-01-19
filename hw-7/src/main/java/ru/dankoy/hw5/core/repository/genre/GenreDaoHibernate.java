@@ -1,4 +1,4 @@
-package ru.dankoy.hw5.core.dao.genre;
+package ru.dankoy.hw5.core.repository.genre;
 
 import java.util.List;
 import java.util.Optional;

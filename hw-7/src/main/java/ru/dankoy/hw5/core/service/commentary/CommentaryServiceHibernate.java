@@ -6,7 +6,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw5.core.dao.commentary.CommentaryDao;
+import ru.dankoy.hw5.core.repository.commentary.CommentaryDao;
 import ru.dankoy.hw5.core.domain.Book;
 import ru.dankoy.hw5.core.domain.Commentary;
 import ru.dankoy.hw5.core.exceptions.EntityNotFoundException;
