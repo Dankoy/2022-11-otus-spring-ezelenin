@@ -18,9 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw7.core.repository.genre.GenreRepository;
 import ru.dankoy.hw7.core.domain.Genre;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw7.core.repository.genre.GenreRepository;
 
 
 @Transactional(propagation = Propagation.NEVER)
