@@ -4,18 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import ru.dankoy.hw7.core.domain.Book;
 
-public interface BookDao {
-
-  List<Book> getAll();
+public interface BookRepositoryCustom {
 
   Optional<Book> getById(long id);
 
-  Book insertOrUpdate(Book book);
-
-  void delete(Book book);
-
-  Book update(Book book);
-
-  long count();
-
+  List<Book> getAllWithBooksAndGenres();
 }

@@ -20,22 +20,21 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw7.core.repository.book.BookDaoHibernate;
 import ru.dankoy.hw7.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw7.core.domain.Book;
 import ru.dankoy.hw7.core.domain.Commentary;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw7.core.service.book.BookService;
-import ru.dankoy.hw7.core.service.book.BookServiceHibernate;
+import ru.dankoy.hw7.core.service.book.BookServiceJpa;
 import ru.dankoy.hw7.core.service.genre.GenreServiceJpa;
 
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Tests for CommentaryServiceHibernate ")
 @DataJpaTest
-@Import({CommentaryServiceJpa.class, BookServiceHibernate.class, GenreServiceJpa.class,
-    AuthorServiceJpa.class, BookDaoHibernate.class, GenreDaoHibernate.class,
+@Import({CommentaryServiceJpa.class, BookServiceJpa.class, GenreServiceJpa.class,
+    AuthorServiceJpa.class, BookRepositoryHibernate.class, GenreDaoHibernate.class,
     AuthorDaoHibernate.class})
 class CommentaryServiceJpaTest {
 

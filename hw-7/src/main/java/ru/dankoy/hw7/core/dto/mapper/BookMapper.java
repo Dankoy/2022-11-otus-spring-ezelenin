@@ -1,11 +1,13 @@
 package ru.dankoy.hw7.core.dto.mapper;
 
 import ru.dankoy.hw7.core.domain.Book;
-import ru.dankoy.hw7.core.dto.BookWithoutCommentariesDTO;
+import ru.dankoy.hw7.core.dto.BookDTO;
 
 public interface BookMapper {
 
-  BookWithoutCommentariesDTO toDTO(Book book);
+  BookDTO toDTOWithoutCommentaries(Book book);
 
-  Book toBook(BookWithoutCommentariesDTO dto);
+  BookDTO toSimpleDTO(Book book);
+
+  Book toBook(BookDTO dto);
 }

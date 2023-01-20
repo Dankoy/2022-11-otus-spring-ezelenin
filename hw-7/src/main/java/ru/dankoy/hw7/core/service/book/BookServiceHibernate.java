@@ -7,11 +7,11 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw7.core.repository.book.BookDao;
 import ru.dankoy.hw7.core.domain.Author;
 import ru.dankoy.hw7.core.domain.Book;
 import ru.dankoy.hw7.core.domain.Genre;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw7.core.repository.book.BookRepository;
 import ru.dankoy.hw7.core.service.author.AuthorService;
 import ru.dankoy.hw7.core.service.genre.GenreService;
 
@@ -19,18 +19,18 @@ import ru.dankoy.hw7.core.service.genre.GenreService;
 @RequiredArgsConstructor
 public class BookServiceHibernate implements BookService {
 
-  private final BookDao bookDao;
+  private final BookRepository bookRepository;
   private final GenreService genreService;
   private final AuthorService authorService;
 
   @Override
-  public List<Book> getAll() {
-    return bookDao.getAll();
+  public List<Book> getAllWithAuthorsAndGenres() {
+    return bookRepository.getAllWithBooksAndGenres();
   }
 
   @Override
   public Optional<Book> getById(long id) {
-    return bookDao.getById(id);
+    return bookRepository.getById(id);
   }
 
   @Transactional
@@ -43,23 +43,23 @@ public class BookServiceHibernate implements BookService {
     book.getAuthors().addAll(authors);
     book.getGenres().addAll(genres);
 
-    return bookDao.insertOrUpdate(book);
+    return bookRepository.save(book);
   }
 
   @Transactional
   @Override
   public void deleteById(long id) {
-    var optional = bookDao.getById(id);
+    var optional = bookRepository.getById(id);
     var book = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Book.class.getName(), id)));
-    bookDao.delete(book);
+    bookRepository.delete(book);
   }
 
   @Transactional
   @Override
   public Book update(Book book, long[] authorIds, long[] genreIds) {
 
-    var optional = bookDao.getById(book.getId());
+    var optional = bookRepository.getById(book.getId());
     var found = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Book.class.getName(),
             book.getId())));
@@ -75,12 +75,12 @@ public class BookServiceHibernate implements BookService {
       book.getCommentaries().addAll(found.getCommentaries());
     }
 
-    return bookDao.update(book);
+    return bookRepository.save(book);
   }
 
   @Override
   public long count() {
-    return bookDao.count();
+    return bookRepository.count();
   }
 
 

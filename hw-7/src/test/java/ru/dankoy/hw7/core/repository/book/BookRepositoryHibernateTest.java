@@ -20,11 +20,11 @@ import ru.dankoy.hw7.core.domain.Genre;
 
 @DisplayName("Test BookDaoJdbcHibernate ")
 @DataJpaTest
-@Import({BookDaoHibernate.class})
-class BookDaoHibernateTest {
+@Import({BookRepositoryHibernate.class})
+class BookRepositoryHibernateTest {
 
   @Autowired
-  private BookDaoHibernate bookDaoHibernate;
+  private BookRepositoryHibernate bookDaoHibernate;
 
   @Autowired
   private TestEntityManager testEntityManager;

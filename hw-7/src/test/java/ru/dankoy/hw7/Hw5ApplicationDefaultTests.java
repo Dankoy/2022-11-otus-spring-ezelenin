@@ -12,9 +12,8 @@ import org.springframework.context.ApplicationContext;
 import ru.dankoy.hw7.core.commands.AuthorCommand;
 import ru.dankoy.hw7.core.commands.BookCommand;
 import ru.dankoy.hw7.core.commands.GenreCommand;
-import ru.dankoy.hw7.core.repository.book.BookDaoHibernate;
 import ru.dankoy.hw7.core.service.author.AuthorServiceJpa;
-import ru.dankoy.hw7.core.service.book.BookServiceHibernate;
+import ru.dankoy.hw7.core.service.book.BookServiceJpa;
 import ru.dankoy.hw7.core.service.genre.GenreServiceJpa;
 import ru.dankoy.hw7.core.service.objectmapper.ObjectMapperServiceImpl;
 
@@ -30,9 +29,9 @@ class Hw5ApplicationDefaultTests {
   @Test
   void contextLoads() {
 
-    var bookDaoHibernate = context.getBean(BookDaoHibernate.class);
+    var bookDaoHibernate = context.getBean(BookRepositoryHibernate.class);
     var genreDaoHibernate = context.getBean(GenreDaoHibernate.class);
-    var bookServiceHibernate = context.getBean(BookServiceHibernate.class);
+    var bookServiceHibernate = context.getBean(BookServiceJpa.class);
     var authorServiceHibernate = context.getBean(AuthorServiceJpa.class);
     var genreServiceHibernate = context.getBean(GenreServiceJpa.class);
     var objectMapper = context.getBean(ObjectMapper.class);

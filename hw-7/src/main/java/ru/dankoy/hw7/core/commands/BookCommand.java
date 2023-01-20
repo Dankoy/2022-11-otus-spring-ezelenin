@@ -37,7 +37,7 @@ public class BookCommand {
             String.format("No book has been found with id - %d", id))
     );
 
-    var bookDto = bookMapper.toDTO(book);
+    var bookDto = bookMapper.toDTOWithoutCommentaries(book);
 
     return objectMapperService.convertToString(bookDto);
   }
@@ -45,9 +45,9 @@ public class BookCommand {
 
   @ShellMethod(key = {"book-get-all", "bga"}, value = "Get all book")
   public String getAll() {
-    var books = bookService.getAll();
+    var books = bookService.getAllWithAuthorsAndGenres();
 
-    var booksDto = books.stream().map(bookMapper::toDTO)
+    var booksDto = books.stream().map(bookMapper::toDTOWithoutCommentaries)
         .collect(Collectors.toList());
 
     return objectMapperService.convertToString(booksDto);
@@ -78,7 +78,7 @@ public class BookCommand {
 
     var book = new Book(id, bookName, new HashSet<>(), new HashSet<>(), new HashSet<>());
     var updated = bookService.update(book, authorIds, genreIds);
-    var booksDto = bookMapper.toDTO(updated);
+    var booksDto = bookMapper.toDTOWithoutCommentaries(updated);
 
     return String.format("Updated book - %s", objectMapperService.convertToString(booksDto));
   }
