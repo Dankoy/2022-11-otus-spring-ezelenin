@@ -17,7 +17,7 @@ import ru.dankoy.hw7.core.service.genre.GenreService;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceHibernate implements BookService {
+public class BookServiceJpa implements BookService {
 
   private final BookRepository bookRepository;
   private final GenreService genreService;
