@@ -11,17 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.dankoy.hw7.core.domain.Author;
 import ru.dankoy.hw7.core.domain.Book;
 import ru.dankoy.hw7.core.domain.Commentary;
 import ru.dankoy.hw7.core.domain.Genre;
 
 
-@DisplayName("Test BookDaoJdbcHibernate ")
+@DisplayName("Test BookRepositoryJpa ")
 @DataJpaTest
-@Import({BookRepositoryImpl.class})
-class BookRepositoryHibernateTest {
+class BookRepositoryJpaTest {
 
   @Autowired
   private BookRepositoryImpl bookRepository;

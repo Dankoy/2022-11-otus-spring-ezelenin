@@ -24,7 +24,7 @@ import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 
 
 @Transactional(propagation = Propagation.NEVER)
-@DisplayName("Test GenreServiceHibernate ")
+@DisplayName("Test GenreServiceJpa ")
 @JdbcTest
 @Import({GenreServiceJpa.class, GenreRepository.class})
 class GenreServiceJpaTest {
@@ -40,12 +40,12 @@ class GenreServiceJpaTest {
   @Test
   void shouldGetAllGenresTest() {
 
-    given(genreRepository.getAll()).willReturn(makeCorrectAllGenresList());
+    given(genreRepository.findAll()).willReturn(makeCorrectAllGenresList());
 
     var genres = genreServiceJpa.getAll();
 
     assertThat(genres).isEqualTo(makeCorrectAllGenresList());
-    Mockito.verify(genreRepository, times(1)).getAll();
+    Mockito.verify(genreRepository, times(1)).findAll();
   }
 
 
@@ -89,12 +89,12 @@ class GenreServiceJpaTest {
     var genreToInsert = new Genre(0L, genreName);
     var insertedGenre = new Genre(insertedId, genreName);
 
-    given(genreRepository.insertOrUpdate(genreToInsert)).willReturn(insertedGenre);
+    given(genreRepository.save(genreToInsert)).willReturn(insertedGenre);
 
     var actual = genreServiceJpa.insertOrUpdate(genreToInsert);
 
     assertThat(actual).isEqualTo(insertedGenre);
-    Mockito.verify(genreRepository, times(1)).insertOrUpdate(genreToInsert);
+    Mockito.verify(genreRepository, times(1)).save(genreToInsert);
 
   }
 

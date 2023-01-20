@@ -34,7 +34,7 @@ import ru.dankoy.hw7.core.service.genre.GenreServiceJpa;
 
 
 @Transactional(propagation = Propagation.NEVER)
-@DisplayName("Tests for CommentaryServiceHibernate ")
+@DisplayName("Tests for CommentaryServiceJpa ")
 @DataJpaTest
 @Import({CommentaryServiceJpa.class, BookServiceJpa.class, GenreServiceJpa.class,
     AuthorServiceJpa.class, BookRepositoryImpl.class, GenreRepositoryImpl.class,

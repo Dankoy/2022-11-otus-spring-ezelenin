@@ -8,14 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.dankoy.hw7.core.domain.Genre;
 
 
-@DisplayName("Test GenreDaoHibernate ")
+@DisplayName("Test GenreRepository ")
 @DataJpaTest
-@Import(GenreRepositoryImpl.class)
-class GenreRepositoryHibernateTest {
+class GenreRepositoryTest {
 
   @Autowired
   private GenreRepositoryImpl genreRepository;

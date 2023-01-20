@@ -8,14 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.dankoy.hw7.core.domain.Author;
 
 
-@DisplayName("Test AuthorDaoHibernate ")
+@DisplayName("Test AuthorRepository ")
 @DataJpaTest
-@Import(AuthorRepositoryImpl.class)
-class AuthorRepositoryHibernateTest {
+class AuthorRepositoryTest {
 
   @Autowired
   private AuthorRepositoryImpl authorRepository;

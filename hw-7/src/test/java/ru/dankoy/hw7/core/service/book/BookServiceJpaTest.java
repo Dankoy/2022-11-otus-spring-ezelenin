@@ -20,12 +20,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dankoy.hw7.core.repository.author.AuthorRepositoryImpl;
 import ru.dankoy.hw7.core.repository.book.BookRepository;
 import ru.dankoy.hw7.core.domain.Author;
 import ru.dankoy.hw7.core.domain.Book;
 import ru.dankoy.hw7.core.domain.Commentary;
 import ru.dankoy.hw7.core.domain.Genre;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw7.core.repository.genre.GenreRepositoryImpl;
 import ru.dankoy.hw7.core.service.author.AuthorService;
 import ru.dankoy.hw7.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw7.core.service.genre.GenreService;
@@ -33,10 +35,10 @@ import ru.dankoy.hw7.core.service.genre.GenreServiceJpa;
 
 
 @Transactional(propagation = Propagation.NEVER)
-@DisplayName("Test BookServiceHibernate ")
+@DisplayName("Test BookServiceJpa ")
 @DataJpaTest
-@Import({BookServiceJpa.class, BookRepository.class, GenreServiceJpa.class,
-    AuthorServiceJpa.class, GenreDaoHibernate.class, AuthorDaoHibernate.class})
+@Import({BookServiceJpa.class, GenreServiceJpa.class,
+    AuthorServiceJpa.class, GenreRepositoryImpl.class, AuthorRepositoryImpl.class})
 class BookServiceJpaTest {
 
   @MockBean
@@ -56,12 +58,12 @@ class BookServiceJpaTest {
   @Test
   void shouldGetAllBooksTest() {
 
-    given(bookRepository.getAll()).willReturn(makeCorrectAllBooksList());
+    given(bookRepository.getAllWithBooksAndGenres()).willReturn(makeCorrectAllBooksList());
 
-    var books = bookServiceJpa.getAll();
+    var books = bookServiceJpa.getAllWithAuthorsAndGenres();
 
     assertThat(books).isEqualTo(makeCorrectAllBooksList());
-    Mockito.verify(bookRepository, times(1)).getAll();
+    Mockito.verify(bookRepository, times(1)).getAllWithBooksAndGenres();
   }
 
 
@@ -116,14 +118,14 @@ class BookServiceJpaTest {
     var bookToInsert = new Book(0L, bookName, authors, genres, new HashSet<>());
     var insertedBook = new Book(correctInsertedId, bookName, authors, genres, new HashSet<>());
 
-    given(bookRepository.insertOrUpdate(bookToInsert)).willReturn(insertedBook);
+    given(bookRepository.save(bookToInsert)).willReturn(insertedBook);
     given(genreService.getById(id)).willReturn(Optional.of(genre));
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
     var actual = bookServiceJpa.insertOrUpdate(bookToInsert, listOfIds, listOfIds);
 
     assertThat(actual).isEqualTo(insertedBook);
-    Mockito.verify(bookRepository, times(1)).insertOrUpdate(bookToInsert);
+    Mockito.verify(bookRepository, times(1)).save(bookToInsert);
 
   }
 
@@ -177,7 +179,7 @@ class BookServiceJpaTest {
 
     bookServiceJpa.update(bookToUpdate, listOfIds, listOfIds);
 
-    Mockito.verify(bookRepository, times(1)).update(bookToUpdate);
+    Mockito.verify(bookRepository, times(1)).save(bookToUpdate);
 
   }
 
@@ -197,7 +199,7 @@ class BookServiceJpaTest {
         .isInstanceOf(EntityNotFoundException.class);
 
     Mockito.verify(bookRepository, times(1)).getById(id);
-    Mockito.verify(bookRepository, times(0)).update(any());
+    Mockito.verify(bookRepository, times(0)).save(any());
 
   }
 
@@ -218,7 +220,7 @@ class BookServiceJpaTest {
         .isInstanceOf(EntityNotFoundException.class);
 
     Mockito.verify(bookRepository, times(1)).getById(id);
-    Mockito.verify(bookRepository, times(0)).update(any());
+    Mockito.verify(bookRepository, times(0)).save(any());
 
   }
 

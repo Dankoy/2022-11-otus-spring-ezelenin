@@ -18,16 +18,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw7.core.repository.author.AuthorRepository;
 import ru.dankoy.hw7.core.domain.Author;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw7.core.repository.author.AuthorRepository;
 
 
 @Transactional(propagation = Propagation.NEVER)
-@DisplayName("Test AuthorServiceHibernate ")
+@DisplayName("Test AuthorServiceJpa ")
 @DataJpaTest
-@Import({AuthorServiceJpa.class, AuthorRepository.class})
-class AuthorServiceJdbcTest {
+@Import({AuthorServiceJpa.class})
+class AuthorServiceJpaTest {
 
 
   @MockBean
@@ -41,13 +41,13 @@ class AuthorServiceJdbcTest {
   @Test
   void shouldGetAllAuthorsTest() {
 
-    given(authorRepository.getAll()).willReturn(makeCorrectAllAuthorsList());
+    given(authorRepository.findAll()).willReturn(makeCorrectAllAuthorsList());
 
     var authors = authorServiceJdbc.getAll();
 
     assertThat(authors).isEqualTo(makeCorrectAllAuthorsList());
 
-    Mockito.verify(authorRepository, times(1)).getAll();
+    Mockito.verify(authorRepository, times(1)).findAll();
   }
 
 
@@ -92,12 +92,12 @@ class AuthorServiceJdbcTest {
     var authorToInsert = new Author(0L, authorName);
     var insertedAuthor = new Author(insertedId, authorName);
 
-    given(authorRepository.insertOrUpdate(authorToInsert)).willReturn(insertedAuthor);
+    given(authorRepository.save(authorToInsert)).willReturn(insertedAuthor);
 
     var actual = authorServiceJdbc.insertOrUpdate(authorToInsert);
 
     assertThat(actual).isEqualTo(insertedAuthor);
-    Mockito.verify(authorRepository, times(1)).insertOrUpdate(authorToInsert);
+    Mockito.verify(authorRepository, times(1)).save(authorToInsert);
 
   }
 
