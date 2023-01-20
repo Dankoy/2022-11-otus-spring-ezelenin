@@ -12,6 +12,9 @@ import org.springframework.context.ApplicationContext;
 import ru.dankoy.hw7.core.commands.AuthorCommand;
 import ru.dankoy.hw7.core.commands.BookCommand;
 import ru.dankoy.hw7.core.commands.GenreCommand;
+import ru.dankoy.hw7.core.repository.author.AuthorRepositoryImpl;
+import ru.dankoy.hw7.core.repository.book.BookRepositoryImpl;
+import ru.dankoy.hw7.core.repository.genre.GenreRepositoryImpl;
 import ru.dankoy.hw7.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw7.core.service.book.BookServiceJpa;
 import ru.dankoy.hw7.core.service.genre.GenreServiceJpa;
@@ -29,8 +32,9 @@ class Hw5ApplicationDefaultTests {
   @Test
   void contextLoads() {
 
-    var bookDaoHibernate = context.getBean(BookRepositoryHibernate.class);
-    var genreDaoHibernate = context.getBean(GenreDaoHibernate.class);
+    var bookDaoHibernate = context.getBean(BookRepositoryImpl.class);
+    var authorDaoHibernate = context.getBean(AuthorRepositoryImpl.class);
+    var genreDaoHibernate = context.getBean(GenreRepositoryImpl.class);
     var bookServiceHibernate = context.getBean(BookServiceJpa.class);
     var authorServiceHibernate = context.getBean(AuthorServiceJpa.class);
     var genreServiceHibernate = context.getBean(GenreServiceJpa.class);
@@ -42,6 +46,7 @@ class Hw5ApplicationDefaultTests {
 
     assertNotNull(bookDaoHibernate);
     assertNotNull(genreDaoHibernate);
+    assertNotNull(authorDaoHibernate);
     assertNotNull(bookServiceHibernate);
     assertNotNull(authorServiceHibernate);
     assertNotNull(genreServiceHibernate);

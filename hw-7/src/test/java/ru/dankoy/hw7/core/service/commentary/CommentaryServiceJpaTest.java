@@ -20,10 +20,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dankoy.hw7.core.repository.author.AuthorRepositoryImpl;
+import ru.dankoy.hw7.core.repository.book.BookRepositoryImpl;
 import ru.dankoy.hw7.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw7.core.domain.Book;
 import ru.dankoy.hw7.core.domain.Commentary;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw7.core.repository.genre.GenreRepositoryImpl;
 import ru.dankoy.hw7.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw7.core.service.book.BookService;
 import ru.dankoy.hw7.core.service.book.BookServiceJpa;
@@ -34,8 +37,8 @@ import ru.dankoy.hw7.core.service.genre.GenreServiceJpa;
 @DisplayName("Tests for CommentaryServiceHibernate ")
 @DataJpaTest
 @Import({CommentaryServiceJpa.class, BookServiceJpa.class, GenreServiceJpa.class,
-    AuthorServiceJpa.class, BookRepositoryHibernate.class, GenreDaoHibernate.class,
-    AuthorDaoHibernate.class})
+    AuthorServiceJpa.class, BookRepositoryImpl.class, GenreRepositoryImpl.class,
+    AuthorRepositoryImpl.class})
 class CommentaryServiceJpaTest {
 
 
@@ -150,7 +153,7 @@ class CommentaryServiceJpaTest {
 
     commentaryService.insertOrUpdate(commentary);
 
-    Mockito.verify(commentaryRepository, times(1)).insertOrUpdate(commentary);
+    Mockito.verify(commentaryRepository, times(1)).save(commentary);
     Mockito.verify(bookService, times(1)).getById(id);
 
 
@@ -170,7 +173,7 @@ class CommentaryServiceJpaTest {
     assertThatThrownBy(() -> commentaryService.insertOrUpdate(commentary))
         .isInstanceOf(EntityNotFoundException.class);
 
-    Mockito.verify(commentaryRepository, times(0)).insertOrUpdate(commentary);
+    Mockito.verify(commentaryRepository, times(0)).save(commentary);
     Mockito.verify(bookService, times(1)).getById(id);
 
   }

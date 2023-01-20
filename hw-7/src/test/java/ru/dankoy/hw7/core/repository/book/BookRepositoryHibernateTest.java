@@ -20,11 +20,11 @@ import ru.dankoy.hw7.core.domain.Genre;
 
 @DisplayName("Test BookDaoJdbcHibernate ")
 @DataJpaTest
-@Import({BookRepositoryHibernate.class})
+@Import({BookRepositoryImpl.class})
 class BookRepositoryHibernateTest {
 
   @Autowired
-  private BookRepositoryHibernate bookDaoHibernate;
+  private BookRepositoryImpl bookRepository;
 
   @Autowired
   private TestEntityManager testEntityManager;
@@ -33,109 +33,23 @@ class BookRepositoryHibernateTest {
   @DisplayName("should return all books")
   @Test
   void shouldGetAllBooksTest() {
-    var books = bookDaoHibernate.getAll();
+    var books = bookRepository.getAllWithBooksAndGenres();
 
     assertThat(books).isEqualTo(makeCorrectAllBooksList());
   }
 
 
-  @DisplayName("should return correct count")
-  @Test
-  void shouldReturnCorrectCountTest() {
-
-    var count = bookDaoHibernate.count();
-
-    assertThat(count).isEqualTo(makeCorrectAllBooksList().size());
-
-  }
-
   @DisplayName("should return correct book by id")
   @Test
   void shouldReturnCorrectBookById() {
 
-    var id = 1;
-
-    var books = makeCorrectAllBooksList();
-    var correctbook = getBookByIdFromList(books, id);
-
-    var book = bookDaoHibernate.getById(id);
-
-    assertThat(book).isPresent().get().isEqualTo(correctbook);
-
-  }
-
-  @DisplayName("should correctly insert book in db")
-  @Test
-  void shouldCorrectlyInsertBook() {
-
-    var bookName = "newName";
-
-    var id = 1L;
-    var author = new Author(id, "author1");
-    var genre = new Genre(id, "genre1");
-    var bookToInsert = new Book(0L, bookName, Set.of(author), Set.of(genre), new HashSet<>());
-
-    var insertedBook = bookDaoHibernate.insertOrUpdate(bookToInsert);
-    testEntityManager.flush();
-
-    var expected = new Book(insertedBook.getId(), bookName, Set.of(author), Set.of(genre),
-        new HashSet<>());
-
-    testEntityManager.detach(insertedBook);
-
-    var actual = bookDaoHibernate.getById(insertedBook.getId());
-
-    assertThat(actual).isPresent().get().isEqualTo(expected);
-
-  }
-
-  @DisplayName("should correctly delete book by id")
-  @Test
-  void shouldCorrectlyDeleteBookById() {
-
     var id = 1L;
 
-    var book = testEntityManager.find(Book.class, id);
+    var expected = testEntityManager.find(Book.class, id);
 
-    bookDaoHibernate.delete(book);
-    testEntityManager.flush();
+    var book = bookRepository.getById(id);
 
-    var actual = bookDaoHibernate.getById(id);
-
-    assertThat(actual).isNotPresent();
-
-  }
-
-  @DisplayName("should update book by id")
-  @Test
-  void shouldCorrectlyUpdateBook() {
-
-    var id = 1L;
-    var bookToUpdate = new Book(id, "newName", new HashSet<>(), new HashSet<>(), new HashSet<>());
-
-    var updated = bookDaoHibernate.update(bookToUpdate);
-    testEntityManager.flush();
-    testEntityManager.detach(updated);
-
-    var fromDb = testEntityManager.find(Book.class, id);
-    testEntityManager.flush();
-
-    assertThat(fromDb).isEqualTo(updated);
-
-  }
-
-
-  private Book getBookByIdFromList(List<Book> books, long id) {
-
-    var nonExistingId = 999999L;
-    var bookOptional = books.stream().filter(book -> book.getId() == id)
-        .findFirst();
-
-    return bookOptional.orElse(
-        new Book(nonExistingId, "nonexisting",
-            new HashSet<>(),
-            new HashSet<>(),
-            new HashSet<>()));
+    assertThat(book).isPresent().get().isEqualTo(expected);
 
   }
 
