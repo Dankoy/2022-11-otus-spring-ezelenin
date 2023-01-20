@@ -5,9 +5,9 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw7.core.repository.genre.GenreRepository;
 import ru.dankoy.hw7.core.domain.Genre;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw7.core.repository.genre.GenreRepository;
 
 @Service
 @RequiredArgsConstructor

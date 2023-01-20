@@ -65,7 +65,8 @@ public class CommentaryCommand {
     var book = new Book(bookId, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
     var commentary = new Commentary(commentaryId, commentaryText, book);
     commentaryService.insertOrUpdate(commentary);
-    return String.format("Updated commentary - %s", objectMapperService.convertToString(commentary));
+    return String.format("Updated commentary - %s",
+        objectMapperService.convertToString(commentary));
   }
 
 
