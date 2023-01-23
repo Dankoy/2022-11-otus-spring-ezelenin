@@ -33,7 +33,6 @@ public class BookServiceJpa implements BookService {
     return bookRepository.getById(id);
   }
 
-  @Transactional
   @Override
   public Book insertOrUpdate(Book book, long[] authorIds, long[] genreIds) {
 
@@ -46,7 +45,6 @@ public class BookServiceJpa implements BookService {
     return bookRepository.save(book);
   }
 
-  @Transactional
   @Override
   public void deleteById(long id) {
     var optional = bookRepository.getById(id);

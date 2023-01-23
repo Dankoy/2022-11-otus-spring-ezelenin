@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw7.core.domain.Genre;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.repository.genre.GenreRepository;
@@ -25,13 +24,11 @@ public class GenreServiceJpa implements GenreService {
     return genreRepository.getById(id);
   }
 
-  @Transactional
   @Override
   public Genre insertOrUpdate(Genre genre) {
     return genreRepository.save(genre);
   }
 
-  @Transactional
   @Override
   public void deleteById(long id) {
     var optional = genreRepository.getById(id);

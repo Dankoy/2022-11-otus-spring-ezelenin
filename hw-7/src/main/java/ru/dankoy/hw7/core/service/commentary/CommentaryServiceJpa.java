@@ -38,7 +38,6 @@ public class CommentaryServiceJpa implements CommentaryService {
   }
 
 
-  @Transactional
   @Override
   public Commentary insertOrUpdate(Commentary commentary) {
 
@@ -51,7 +50,6 @@ public class CommentaryServiceJpa implements CommentaryService {
     return commentaryRepository.save(commentary);
   }
 
-  @Transactional
   @Override
   public void deleteById(long id) {
     var optional = commentaryRepository.getById(id);
