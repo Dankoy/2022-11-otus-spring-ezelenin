@@ -6,11 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import ru.dankoy.hw7.core.domain.Book;
 
 @RequiredArgsConstructor
-@Component
 public class BookRepositoryImpl implements BookRepositoryCustom {
 
   @PersistenceContext

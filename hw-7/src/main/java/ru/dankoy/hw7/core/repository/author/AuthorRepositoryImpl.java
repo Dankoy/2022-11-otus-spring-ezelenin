@@ -4,12 +4,10 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import ru.dankoy.hw7.core.domain.Author;
 
 
 @RequiredArgsConstructor
-@Component
 public class AuthorRepositoryImpl implements AuthorRepositoryCustom {
 
   @PersistenceContext
