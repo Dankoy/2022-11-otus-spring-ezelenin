@@ -16,12 +16,12 @@ public class GenreServiceJpa implements GenreService {
 
   @Override
   public List<Genre> getAll() {
-    return genreRepository.findAll();
+    return (List<Genre>) genreRepository.findAll();
   }
 
   @Override
-  public Optional<Genre> getById(long id) {
-    return genreRepository.getById(id);
+  public Optional<Genre> getById(String id) {
+    return genreRepository.findById(id);
   }
 
   @Override
@@ -30,8 +30,8 @@ public class GenreServiceJpa implements GenreService {
   }
 
   @Override
-  public void deleteById(long id) {
-    var optional = genreRepository.getById(id);
+  public void deleteById(String id) {
+    var optional = genreRepository.findById(id);
     var genre = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Genre.class.getName(), id)));
     genreRepository.delete(genre);

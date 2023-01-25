@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
-@Document("author")
+@Document("authors")
 public class Author {
 
   @Id

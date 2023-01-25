@@ -10,17 +10,17 @@ import ru.dankoy.hw8.core.repository.author.AuthorRepository;
 
 @Service
 @RequiredArgsConstructor
-public class AuthorServiceJpa implements AuthorService {
+public class AuthorServiceMongo implements AuthorService {
 
   private final AuthorRepository authorRepository;
 
   @Override
   public List<Author> getAll() {
-    return authorRepository.findAll();
+    return (List<Author>) authorRepository.findAll();
   }
 
   @Override
-  public Optional<Author> getById(long id) {
+  public Optional<Author> getById(String id) {
     return authorRepository.getById(id);
   }
 
@@ -30,7 +30,7 @@ public class AuthorServiceJpa implements AuthorService {
   }
 
   @Override
-  public void deleteById(long id) {
+  public void deleteById(String id) {
     var optional = authorRepository.getById(id);
     var author = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Author.class.getName(), id)));

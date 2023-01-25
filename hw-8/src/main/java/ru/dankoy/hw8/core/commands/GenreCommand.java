@@ -1,6 +1,5 @@
 package ru.dankoy.hw8.core.commands;
 
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;

@@ -8,11 +8,11 @@ public interface AuthorService {
 
   List<Author> getAll();
 
-  Optional<Author> getById(long id);
+  Optional<Author> getById(String id);
 
   Author insertOrUpdate(Author author);
 
-  void deleteById(long id);
+  void deleteById(String id);
 
   long count();
 

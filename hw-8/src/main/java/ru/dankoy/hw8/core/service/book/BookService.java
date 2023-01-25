@@ -6,15 +6,13 @@ import ru.dankoy.hw8.core.domain.Book;
 
 public interface BookService {
 
-  List<Book> getAllWithAuthorsAndGenres();
+  Optional<Book> getById(String id);
 
-  Optional<Book> getById(long id);
+  Book insertOrUpdate(Book book, String[] authorIds, String[] genreIds);
 
-  Book insertOrUpdate(Book book, long[] authorIds, long[] genreIds);
+  void deleteById(String id);
 
-  void deleteById(long id);
-
-  Book update(Book book, long[] authorIds, long[] genreIds);
+  Book update(Book book, String[] authorIds, String[] genreIds);
 
   long count();
 

@@ -4,7 +4,7 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import ru.dankoy.hw8.core.domain.Author;
 
-public interface AuthorRepository extends CrudRepository<Author, Integer>, AuthorRepositoryCustom {
+public interface AuthorRepository extends CrudRepository<Author, String>, AuthorRepositoryCustom {
 
   @Override
   Optional<Author> getById(String id);

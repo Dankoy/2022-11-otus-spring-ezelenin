@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
-@Document("book")
+@Document("books")
 public class Book {
 
 
@@ -37,9 +37,6 @@ public class Book {
   @DBRef
   private Set<Genre> genres = new HashSet<>();
 
-
-  @DBRef(lazy = true)
-  @JsonManagedReference // решает проблему с рекурсивной сериализацией
   @Setter
   private Set<Commentary> commentaries = new HashSet<>();
 }

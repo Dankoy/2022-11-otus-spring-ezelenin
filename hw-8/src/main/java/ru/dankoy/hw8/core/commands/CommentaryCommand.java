@@ -2,13 +2,13 @@ package ru.dankoy.hw8.core.commands;
 
 
 import java.util.HashSet;
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Commentary;
+import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.service.commentary.CommentaryService;
 import ru.dankoy.hw8.core.service.objectmapper.ObjectMapperService;
 

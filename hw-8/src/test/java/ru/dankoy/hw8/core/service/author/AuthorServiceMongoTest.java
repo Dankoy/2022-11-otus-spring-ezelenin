@@ -26,15 +26,15 @@ import ru.dankoy.hw8.core.repository.author.AuthorRepository;
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test AuthorServiceJpa ")
 @DataJpaTest
-@Import({AuthorServiceJpa.class})
-class AuthorServiceJpaTest {
+@Import({AuthorServiceMongo.class})
+class AuthorServiceMongoTest {
 
 
   @MockBean
   private AuthorRepository authorRepository;
 
   @Autowired
-  private AuthorServiceJpa authorServiceJdbc;
+  private AuthorServiceMongo authorServiceJdbc;
 
 
   @DisplayName("should return all authors")

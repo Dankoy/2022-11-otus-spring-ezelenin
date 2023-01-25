@@ -28,7 +28,7 @@ import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.repository.author.AuthorRepositoryImpl;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
 import ru.dankoy.hw8.core.service.author.AuthorService;
-import ru.dankoy.hw8.core.service.author.AuthorServiceJpa;
+import ru.dankoy.hw8.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw8.core.service.genre.GenreService;
 import ru.dankoy.hw8.core.service.genre.GenreServiceJpa;
 
@@ -37,7 +37,7 @@ import ru.dankoy.hw8.core.service.genre.GenreServiceJpa;
 @DisplayName("Test BookServiceJpa ")
 @DataJpaTest
 @Import({BookServiceJpa.class, GenreServiceJpa.class,
-    AuthorServiceJpa.class, GenreRepositoryImpl.class, AuthorRepositoryImpl.class})
+    AuthorServiceMongo.class, GenreRepositoryImpl.class, AuthorRepositoryImpl.class})
 class BookServiceJpaTest {
 
   @MockBean

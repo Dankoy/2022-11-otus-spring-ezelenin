@@ -24,17 +24,12 @@ public class BookServiceJpa implements BookService {
   private final AuthorService authorService;
 
   @Override
-  public List<Book> getAllWithAuthorsAndGenres() {
-    return bookRepository.getAllWithBooksAndGenres();
+  public Optional<Book> getById(String id) {
+    return bookRepository.findById(id);
   }
 
   @Override
-  public Optional<Book> getById(long id) {
-    return bookRepository.getById(id);
-  }
-
-  @Override
-  public Book insertOrUpdate(Book book, long[] authorIds, long[] genreIds) {
+  public Book insertOrUpdate(Book book, String[] authorIds, String[] genreIds) {
 
     List<Author> authors = getRealAuthors(authorIds);
     List<Genre> genres = getRealGenres(genreIds);
@@ -46,8 +41,8 @@ public class BookServiceJpa implements BookService {
   }
 
   @Override
-  public void deleteById(long id) {
-    var optional = bookRepository.getById(id);
+  public void deleteById(String id) {
+    var optional = bookRepository.findById(id);
     var book = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Book.class.getName(), id)));
     bookRepository.delete(book);
@@ -55,9 +50,9 @@ public class BookServiceJpa implements BookService {
 
   @Transactional
   @Override
-  public Book update(Book book, long[] authorIds, long[] genreIds) {
+  public Book update(Book book, String[] authorIds, String[] genreIds) {
 
-    var optional = bookRepository.getById(book.getId());
+    var optional = bookRepository.findById(book.getId());
     var found = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Book.class.getName(),
             book.getId())));
@@ -82,10 +77,10 @@ public class BookServiceJpa implements BookService {
   }
 
 
-  private List<Genre> getRealGenres(long[] ids) {
+  private List<Genre> getRealGenres(String[] ids) {
 
     // получает реальные объекты жанров из бд + выбрасывает исключение, если жанр не был найден
-    return Arrays.stream(ids).mapToObj(id -> {
+    return Arrays.stream(ids).map(id -> {
       var optional = genreService.getById(id);
       return optional.orElseThrow(() -> new EntityNotFoundException(
           String.format("Entity %s has not been found with id - %d", Genre.class.getName(), id)));
@@ -93,10 +88,10 @@ public class BookServiceJpa implements BookService {
 
   }
 
-  private List<Author> getRealAuthors(long[] ids) {
+  private List<Author> getRealAuthors(String[] ids) {
 
     // получает реальные объекты авторов из бд + выбрасывает исключение, если автор не был найден
-    return Arrays.stream(ids).mapToObj(id -> {
+    return Arrays.stream(ids).map(id -> {
       var optional = authorService.getById(id);
       return optional.orElseThrow(() -> new EntityNotFoundException(
           String.format("Entity %s has not been found with id - %d", Author.class.getName(), id)));
@@ -104,24 +99,24 @@ public class BookServiceJpa implements BookService {
 
   }
 
-  private List<Genre> convertGenreIdsToObjects(long[] ids) {
+  private List<Genre> convertGenreIdsToObjects(String[] ids) {
 
     // Просто формирует объекты жанров. Для этого был создан отдельный конструктор с одним параметром - id
     // Этого для hibernate достаточно, что бы добавить или обновить книгу, но тогда что бы вернуть
     // в ответе полные данные книги - надо делать отдельный запрос в бд по id (fetch).
     return Arrays.stream(ids)
-        .mapToObj(Genre::new)
+        .map(Genre::new)
         .collect(Collectors.toList());
 
   }
 
-  private List<Author> convertAuthorIdsToObjects(long[] ids) {
+  private List<Author> convertAuthorIdsToObjects(String[] ids) {
 
     // Просто формирует объекты жанров. Для этого был создан отдельный конструктор с одним параметром - id
     // Этого для hibernate достаточно, что бы добавить или обновить книгу, но тогда что бы вернуть
     // в ответе полные данные книги - надо делать отдельный запрос в бд по id (fetch).
     return Arrays.stream(ids)
-        .mapToObj(Author::new)
+        .map(Author::new)
         .collect(Collectors.toList());
 
   }

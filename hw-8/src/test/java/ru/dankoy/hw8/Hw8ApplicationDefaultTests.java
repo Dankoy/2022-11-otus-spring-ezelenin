@@ -16,7 +16,7 @@ import ru.dankoy.hw8.core.dto.mapper.BookMapper;
 import ru.dankoy.hw8.core.repository.author.AuthorRepository;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
 import ru.dankoy.hw8.core.repository.genre.GenreRepository;
-import ru.dankoy.hw8.core.service.author.AuthorServiceJpa;
+import ru.dankoy.hw8.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw8.core.service.book.BookServiceJpa;
 import ru.dankoy.hw8.core.service.genre.GenreServiceJpa;
 import ru.dankoy.hw8.core.service.objectmapper.ObjectMapperServiceImpl;
@@ -37,7 +37,7 @@ class Hw8ApplicationDefaultTests {
     var authorRepository = context.getBean(AuthorRepository.class);
     var genreRepository = context.getBean(GenreRepository.class);
     var bookServiceJpa = context.getBean(BookServiceJpa.class);
-    var authorServiceJpa = context.getBean(AuthorServiceJpa.class);
+    var authorServiceJpa = context.getBean(AuthorServiceMongo.class);
     var genreServiceJpa = context.getBean(GenreServiceJpa.class);
     var objectMapper = context.getBean(ObjectMapper.class);
     var authorCommand = context.getBean(AuthorCommand.class);

@@ -24,7 +24,7 @@ public class CommentaryServiceJpa implements CommentaryService {
 
   @Transactional(readOnly = true) // нужен для получения комментариев
   @Override
-  public List<Commentary> getAllByBookId(long id) {
+  public List<Commentary> getAllByBookId(String id) {
     var optional = bookService.getById(id);
     var book = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Book.class.getName(), id)));
@@ -33,32 +33,28 @@ public class CommentaryServiceJpa implements CommentaryService {
   }
 
   @Override
-  public Optional<Commentary> getById(long id) {
-    return commentaryRepository.getById(id);
+  public Optional<Commentary> getById(String id) {
+    return commentaryRepository.findById(id);
   }
 
 
-  @Override
-  public Commentary insertOrUpdate(Commentary commentary) {
-
-    bookService.getById(commentary.getBook().getId()).orElseThrow(
-        () -> new EntityNotFoundException(
-            String.format("Entity %s has not been found with id - %d", Book.class.getName(),
-                commentary.getBook().getId()))
-    );
-
-    return commentaryRepository.save(commentary);
-  }
-
-  @Override
-  public void deleteById(long id) {
-    var optional = commentaryRepository.getById(id);
-    var commentary = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %d", Commentary.class.getName(),
-            id)));
-
-    commentaryRepository.delete(commentary);
-
-  }
+//  @Override
+//  public Commentary insertOrUpdate(Commentary commentary) {
+//
+//    var commentary = bookService.g
+//
+//    return commentaryRepository.save(commentary);
+//  }
+//
+//  @Override
+//  public void deleteById(String id) {
+//    var optional = commentaryRepository.getById(id);
+//    var commentary = optional.orElseThrow(() -> new EntityNotFoundException(
+//        String.format("Entity %s has not been found with id - %d", Commentary.class.getName(),
+//            id)));
+//
+//    commentaryRepository.delete(commentary);
+//
+//  }
 
 }

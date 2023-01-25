@@ -25,7 +25,7 @@ import ru.dankoy.hw8.core.domain.Commentary;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.repository.author.AuthorRepositoryImpl;
 import ru.dankoy.hw8.core.repository.commentary.CommentaryRepository;
-import ru.dankoy.hw8.core.service.author.AuthorServiceJpa;
+import ru.dankoy.hw8.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw8.core.service.book.BookService;
 import ru.dankoy.hw8.core.service.book.BookServiceJpa;
 import ru.dankoy.hw8.core.service.genre.GenreServiceJpa;
@@ -35,7 +35,7 @@ import ru.dankoy.hw8.core.service.genre.GenreServiceJpa;
 @DisplayName("Tests for CommentaryServiceJpa ")
 @DataJpaTest
 @Import({CommentaryServiceJpa.class, BookServiceJpa.class, GenreServiceJpa.class,
-    AuthorServiceJpa.class, BookRepositoryImpl.class, GenreRepositoryImpl.class,
+    AuthorServiceMongo.class, BookRepositoryImpl.class, GenreRepositoryImpl.class,
     AuthorRepositoryImpl.class})
 class CommentaryServiceJpaTest {
 

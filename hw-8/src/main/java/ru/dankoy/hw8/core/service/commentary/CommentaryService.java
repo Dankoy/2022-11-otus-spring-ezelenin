@@ -6,13 +6,13 @@ import ru.dankoy.hw8.core.domain.Commentary;
 
 public interface CommentaryService {
 
-  List<Commentary> getAllByBookId(long id);
+  List<Commentary> getAllByBookId(String id);
 
-  Optional<Commentary> getById(long id);
+  Optional<Commentary> getById(String id);
 
-  Commentary insertOrUpdate(Commentary commentary);
-
-  void deleteById(long id);
+//  Commentary insertOrUpdate(Commentary commentary);
+//
+//  void deleteById(String id);
 
 
 }

@@ -2,7 +2,6 @@ package ru.dankoy.hw8.core.commands;
 
 import java.util.HashSet;
 import java.util.stream.Collectors;
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
