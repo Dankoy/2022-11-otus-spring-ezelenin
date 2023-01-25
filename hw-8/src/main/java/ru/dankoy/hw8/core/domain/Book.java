@@ -17,7 +17,7 @@ import lombok.Setter;
 public class Book {
 
 
-  private long id;
+  private String id;
 
   private String name;
 

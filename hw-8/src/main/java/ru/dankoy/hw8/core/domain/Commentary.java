@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Commentary {
 
-  private long id;
+  private String id;
 
   private String text;
 

@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Author {
 
-  private long id;
+  private String id;
   private String name;
 
-  public Author(long id) {
+  public Author(String id) {
     this.id = id;
   }
 

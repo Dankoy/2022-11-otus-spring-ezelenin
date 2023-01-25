@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class Genre {
 
 
-  private long id;
+  private String id;
   private String name;
 
-  public Genre(long id) {
+  public Genre(String id) {
     this.id = id;
   }
 
