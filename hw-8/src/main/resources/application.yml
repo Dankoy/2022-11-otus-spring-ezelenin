@@ -8,4 +8,4 @@ mongock:
   runner-type: "ApplicationRunner" # default
   #runner-type: "InitializingBean"
   change-logs-scan-package:
-    - ru.otus.spring.mongock.changelog
+    - ru.dankoy.hw8.core.mongock.changelogs
