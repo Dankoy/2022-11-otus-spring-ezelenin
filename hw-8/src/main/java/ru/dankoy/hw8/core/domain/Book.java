@@ -8,26 +8,37 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
+@Document("book")
 public class Book {
 
 
+  @Id
   private String id;
 
+
+  @Field("name")
   private String name;
 
 
+  @DBRef
   private Set<Author> authors = new HashSet<>();
 
 
+  @DBRef
   private Set<Genre> genres = new HashSet<>();
 
 
+  @DBRef(lazy = true)
   @JsonManagedReference // решает проблему с рекурсивной сериализацией
   @Setter
   private Set<Commentary> commentaries = new HashSet<>();
