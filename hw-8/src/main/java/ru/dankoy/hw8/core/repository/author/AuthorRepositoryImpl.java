@@ -12,7 +12,7 @@ public class AuthorRepositoryImpl implements AuthorRepositoryCustom {
   private final KeyValueOperations keyValueTemplate;
 
   @Override
-  public Optional<Author> getById(int id) {
+  public Optional<Author> getById(String id) {
     return keyValueTemplate.findById(id, Author.class);
   }
 }

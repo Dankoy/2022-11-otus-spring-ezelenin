@@ -27,7 +27,6 @@ import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.repository.author.AuthorRepositoryImpl;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
-import ru.dankoy.hw8.core.repository.genre.GenreRepositoryImpl;
 import ru.dankoy.hw8.core.service.author.AuthorService;
 import ru.dankoy.hw8.core.service.author.AuthorServiceJpa;
 import ru.dankoy.hw8.core.service.genre.GenreService;

@@ -4,8 +4,6 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import ru.dankoy.hw8.core.domain.Book;
 
-public interface BookRepository extends CrudRepository<Book, Long>, BookRepositoryCustom {
-
-  Optional<Book> getById(long id);
+public interface BookRepository extends CrudRepository<Book, Long> {
 
 }

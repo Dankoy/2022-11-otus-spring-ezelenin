@@ -7,7 +7,7 @@ import ru.dankoy.hw8.core.domain.Author;
 public interface AuthorRepository extends CrudRepository<Author, Integer>, AuthorRepositoryCustom {
 
   @Override
-  Optional<Author> getById(int id);
+  Optional<Author> getById(String id);
 
 
 }
