@@ -1,20 +1,18 @@
 package ru.dankoy.hw8.core.repository.author;
 
 import java.util.Optional;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.keyvalue.core.KeyValueOperations;
 import ru.dankoy.hw8.core.domain.Author;
 
 
 @RequiredArgsConstructor
 public class AuthorRepositoryImpl implements AuthorRepositoryCustom {
 
-  @PersistenceContext
-  private final EntityManager entityManager;
+  private final KeyValueOperations keyValueTemplate;
 
   @Override
-  public Optional<Author> getById(long id) {
-    return Optional.ofNullable(entityManager.find(Author.class, id));
+  public Optional<Author> getById(int id) {
+    return keyValueTemplate.findById(id, Author.class);
   }
 }

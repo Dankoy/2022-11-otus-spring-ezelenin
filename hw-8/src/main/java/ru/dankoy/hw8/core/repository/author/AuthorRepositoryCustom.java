@@ -5,6 +5,6 @@ import ru.dankoy.hw8.core.domain.Author;
 
 public interface AuthorRepositoryCustom {
 
-  Optional<Author> getById(long id);
+  Optional<Author> getById(int id);
 
 }

@@ -2,19 +2,17 @@ package ru.dankoy.hw8.core.repository.genre;
 
 
 import java.util.Optional;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.keyvalue.core.KeyValueOperations;
 import ru.dankoy.hw8.core.domain.Genre;
 
 @RequiredArgsConstructor
 public class GenreRepositoryImpl implements GenreRepositoryCustom {
 
-  @PersistenceContext
-  private final EntityManager entityManager;
+  private final KeyValueOperations keyValueOperations;
 
   @Override
-  public Optional<Genre> getById(long id) {
-    return Optional.ofNullable(entityManager.find(Genre.class, id));
+  public Optional<Genre> getById(int id) {
+    return keyValueOperations.findById(id, Genre.class);
   }
 }

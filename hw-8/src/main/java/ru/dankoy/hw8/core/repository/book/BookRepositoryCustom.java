@@ -6,7 +6,7 @@ import ru.dankoy.hw8.core.domain.Book;
 
 public interface BookRepositoryCustom {
 
-  Optional<Book> getById(long id);
+  Optional<Book> getById(int id);
 
   List<Book> getAllWithBooksAndGenres();
 }

@@ -2,43 +2,22 @@ package ru.dankoy.hw8.core.repository.book;
 
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.keyvalue.core.KeyValueOperations;
 import ru.dankoy.hw8.core.domain.Book;
 
 @RequiredArgsConstructor
 public class BookRepositoryImpl implements BookRepositoryCustom {
 
-  @PersistenceContext
-  private final EntityManager entityManager;
+  private final KeyValueOperations keyValueOperations;
 
   @Override
-  public Optional<Book> getById(long id) {
-    var authorEntityGraph = entityManager.getEntityGraph("authors-entity-graph");
-    var query = entityManager.createQuery(
-        "select b from Book b join fetch b.genres where b.id = :id",
-        Book.class);
-    query.setParameter("id", id);
-    query.setHint("javax.persistence.fetchgraph", authorEntityGraph);
-    try {
-      return Optional.of(query.getSingleResult());
-    } catch (NoResultException e) {
-      return Optional.empty();
-    }
+  public Optional<Book> getById(int id) {
+    return keyValueOperations.findById(id, Book.class);
   }
 
   @Override
   public List<Book> getAllWithBooksAndGenres() {
-    // используется для того, что бы сохранить пример с использованием графов и join fetch.
-    // EAGER для many-to-many использовать не хочется.
-
-    // для решения проблемы n+1 используются решение с графом и join fetch
-    // часть списков обновляются в сервисе через метод size
-    var authorEntityGraph = entityManager.getEntityGraph("authors-entity-graph");
-    var query = entityManager.createQuery("select b from Book b join fetch b.genres", Book.class);
-    query.setHint("javax.persistence.fetchgraph", authorEntityGraph);
-    return query.getResultList();
+    return (List<Book>) keyValueOperations.findAll(Book.class);
   }
 }

@@ -5,5 +5,5 @@ import ru.dankoy.hw8.core.domain.Genre;
 
 public interface GenreRepositoryCustom {
 
-  Optional<Genre> getById(long id);
+  Optional<Genre> getById(int id);
 }

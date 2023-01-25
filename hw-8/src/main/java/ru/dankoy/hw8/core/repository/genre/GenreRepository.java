@@ -1,11 +1,11 @@
 package ru.dankoy.hw8.core.repository.genre;
 
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import ru.dankoy.hw8.core.domain.Genre;
 
-public interface GenreRepository extends JpaRepository<Genre, Long>, GenreRepositoryCustom {
+public interface GenreRepository extends CrudRepository<Genre, Integer>, GenreRepositoryCustom {
 
-  Optional<Genre> getById(long id);
+  Optional<Genre> getById(int id);
 
 }

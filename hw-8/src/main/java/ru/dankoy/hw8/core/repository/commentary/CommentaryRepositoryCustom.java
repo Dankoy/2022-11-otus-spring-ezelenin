@@ -5,6 +5,6 @@ import ru.dankoy.hw8.core.domain.Commentary;
 
 public interface CommentaryRepositoryCustom {
 
-  Optional<Commentary> getById(long id);
+  Optional<Commentary> getById(int id);
 
 }

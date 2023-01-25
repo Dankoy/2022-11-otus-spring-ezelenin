@@ -23,7 +23,7 @@ import ru.dankoy.hw8.core.service.objectmapper.ObjectMapperServiceImpl;
 
 @DisplayName("Test default context ")
 @SpringBootTest
-class Hw5ApplicationDefaultTests {
+class Hw8ApplicationDefaultTests {
 
   @Autowired
   ApplicationContext context;
