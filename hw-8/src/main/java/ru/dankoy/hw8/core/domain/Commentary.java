@@ -1,6 +1,7 @@
 package ru.dankoy.hw8.core.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Commentary {
   private String text;
 
   @DBRef(lazy = true)
+  @JsonBackReference
   private Book book;
 
 }
