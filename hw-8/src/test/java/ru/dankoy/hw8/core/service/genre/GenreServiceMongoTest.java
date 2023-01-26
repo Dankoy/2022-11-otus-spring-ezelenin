@@ -26,14 +26,14 @@ import ru.dankoy.hw8.core.repository.genre.GenreRepository;
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test GenreServiceJpa ")
 @JdbcTest
-@Import({GenreServiceJpa.class, GenreRepository.class})
-class GenreServiceJpaTest {
+@Import({GenreServiceMongo.class, GenreRepository.class})
+class GenreServiceMongoTest {
 
   @MockBean
   private GenreRepository genreRepository;
 
   @Autowired
-  private GenreServiceJpa genreServiceJpa;
+  private GenreServiceMongo genreServiceJpa;
 
 
   @DisplayName("should return all genres")

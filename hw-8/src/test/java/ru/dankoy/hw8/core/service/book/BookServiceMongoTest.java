@@ -25,20 +25,19 @@ import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Commentary;
 import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
-import ru.dankoy.hw8.core.repository.author.AuthorRepositoryImpl;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
 import ru.dankoy.hw8.core.service.author.AuthorService;
 import ru.dankoy.hw8.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw8.core.service.genre.GenreService;
-import ru.dankoy.hw8.core.service.genre.GenreServiceJpa;
+import ru.dankoy.hw8.core.service.genre.GenreServiceMongo;
 
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test BookServiceJpa ")
 @DataJpaTest
-@Import({BookServiceJpa.class, GenreServiceJpa.class,
+@Import({BookServiceMongo.class, GenreServiceMongo.class,
     AuthorServiceMongo.class, GenreRepositoryImpl.class, AuthorRepositoryImpl.class})
-class BookServiceJpaTest {
+class BookServiceMongoTest {
 
   @MockBean
   private BookRepository bookRepository;
@@ -50,7 +49,7 @@ class BookServiceJpaTest {
   private AuthorService authorService;
 
   @Autowired
-  private BookServiceJpa bookServiceJpa;
+  private BookServiceMongo bookServiceMongo;
 
 
   @DisplayName("should return all books")
@@ -59,7 +58,7 @@ class BookServiceJpaTest {
 
     given(bookRepository.getAllWithBooksAndGenres()).willReturn(makeCorrectAllBooksList());
 
-    var books = bookServiceJpa.getAllWithAuthorsAndGenres();
+    var books = bookServiceMongo.getAllWithAuthorsAndGenres();
 
     assertThat(books).isEqualTo(makeCorrectAllBooksList());
     Mockito.verify(bookRepository, times(1)).getAllWithBooksAndGenres();
@@ -72,7 +71,7 @@ class BookServiceJpaTest {
 
     given(bookRepository.count()).willReturn(3L);
 
-    var count = bookServiceJpa.count();
+    var count = bookServiceMongo.count();
 
     assertThat(count).isEqualTo(makeCorrectAllBooksList().size());
     Mockito.verify(bookRepository, times(1)).count();
@@ -90,7 +89,7 @@ class BookServiceJpaTest {
 
     given(bookRepository.getById(id)).willReturn(Optional.ofNullable(correctbook));
 
-    var book = bookServiceJpa.getById(id);
+    var book = bookServiceMongo.getById(id);
 
     assertThat(book).isPresent().get().isEqualTo(correctbook);
     Mockito.verify(bookRepository, times(1)).getById(id);
@@ -121,7 +120,7 @@ class BookServiceJpaTest {
     given(genreService.getById(id)).willReturn(Optional.of(genre));
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
-    var actual = bookServiceJpa.insertOrUpdate(bookToInsert, listOfIds, listOfIds);
+    var actual = bookServiceMongo.insertOrUpdate(bookToInsert, listOfIds, listOfIds);
 
     assertThat(actual).isEqualTo(insertedBook);
     Mockito.verify(bookRepository, times(1)).save(bookToInsert);
@@ -137,7 +136,7 @@ class BookServiceJpaTest {
 
     given(bookRepository.getById(id)).willReturn(Optional.of(toDelete));
 
-    bookServiceJpa.deleteById(id);
+    bookServiceMongo.deleteById(id);
 
     Mockito.verify(bookRepository, times(1)).delete(toDelete);
 
@@ -151,7 +150,7 @@ class BookServiceJpaTest {
 
     given(bookRepository.getById(id)).willReturn(Optional.empty());
 
-    assertThatThrownBy(() -> bookServiceJpa.deleteById(id))
+    assertThatThrownBy(() -> bookServiceMongo.deleteById(id))
         .isInstanceOf(EntityNotFoundException.class);
 
     Mockito.verify(bookRepository, times(0)).delete(any());
@@ -176,7 +175,7 @@ class BookServiceJpaTest {
 
     given(bookRepository.getById(id)).willReturn(Optional.of(bookToUpdate));
 
-    bookServiceJpa.update(bookToUpdate, listOfIds, listOfIds);
+    bookServiceMongo.update(bookToUpdate, listOfIds, listOfIds);
 
     Mockito.verify(bookRepository, times(1)).save(bookToUpdate);
 
@@ -194,7 +193,7 @@ class BookServiceJpaTest {
 
     given(bookRepository.getById(id)).willReturn(Optional.empty());
 
-    assertThatThrownBy(() -> bookServiceJpa.update(bookToUpdate, listOfIds, listOfIds))
+    assertThatThrownBy(() -> bookServiceMongo.update(bookToUpdate, listOfIds, listOfIds))
         .isInstanceOf(EntityNotFoundException.class);
 
     Mockito.verify(bookRepository, times(1)).getById(id);
@@ -215,7 +214,7 @@ class BookServiceJpaTest {
     given(bookRepository.getById(id)).willReturn(Optional.empty());
     given(genreService.getById(id)).willReturn(Optional.empty());
 
-    assertThatThrownBy(() -> bookServiceJpa.update(bookToUpdate, listOfIds, listOfIds))
+    assertThatThrownBy(() -> bookServiceMongo.update(bookToUpdate, listOfIds, listOfIds))
         .isInstanceOf(EntityNotFoundException.class);
 
     Mockito.verify(bookRepository, times(1)).getById(id);

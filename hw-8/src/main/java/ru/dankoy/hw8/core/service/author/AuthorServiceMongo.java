@@ -21,7 +21,7 @@ public class AuthorServiceMongo implements AuthorService {
 
   @Override
   public Optional<Author> getById(String id) {
-    return authorRepository.getById(id);
+    return authorRepository.findById(id);
   }
 
   @Override
@@ -31,7 +31,7 @@ public class AuthorServiceMongo implements AuthorService {
 
   @Override
   public void deleteById(String id) {
-    var optional = authorRepository.getById(id);
+    var optional = authorRepository.findById(id);
     var author = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %d", Author.class.getName(), id)));
     authorRepository.delete(author);

@@ -17,11 +17,16 @@ import ru.dankoy.hw8.core.service.genre.GenreService;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceJpa implements BookService {
+public class BookServiceMongo implements BookService {
 
   private final BookRepository bookRepository;
   private final GenreService genreService;
   private final AuthorService authorService;
+
+
+  public List<Book> findAll() {
+    return bookRepository.findAll();
+  }
 
   @Override
   public Optional<Book> getById(String id) {

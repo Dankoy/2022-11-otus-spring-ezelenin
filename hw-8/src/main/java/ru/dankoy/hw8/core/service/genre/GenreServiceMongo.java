@@ -6,11 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw8.core.repository.book.BookRepository;
 import ru.dankoy.hw8.core.repository.genre.GenreRepository;
+import ru.dankoy.hw8.core.service.book.BookService;
 
 @Service
 @RequiredArgsConstructor
-public class GenreServiceJpa implements GenreService {
+public class GenreServiceMongo implements GenreService {
 
   private final GenreRepository genreRepository;
 

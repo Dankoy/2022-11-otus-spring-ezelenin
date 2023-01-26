@@ -15,7 +15,7 @@ import ru.dankoy.hw8.core.service.book.BookService;
 
 @RequiredArgsConstructor
 @Service
-public class CommentaryServiceJpa implements CommentaryService {
+public class CommentaryServiceMongo implements CommentaryService {
 
   private final CommentaryRepository commentaryRepository;
 
