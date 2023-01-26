@@ -30,13 +30,15 @@ public class Book {
   private String name;
 
 
-  @DBRef
+  @DBRef(lazy = true)
+  @Field("authors")
   private Set<Author> authors = new HashSet<>();
 
 
-  @DBRef
+  @Field("genres")
   private Set<Genre> genres = new HashSet<>();
 
-  @Setter
+  @Field("commentaries")
+  @DBRef(lazy = true)
   private Set<Commentary> commentaries = new HashSet<>();
 }

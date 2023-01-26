@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
-@Document("genres")
 public class Genre {
 
   @Id
