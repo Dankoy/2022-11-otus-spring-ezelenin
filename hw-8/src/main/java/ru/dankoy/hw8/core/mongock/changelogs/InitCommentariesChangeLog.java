@@ -12,10 +12,10 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import ru.dankoy.hw8.core.domain.Commentary;
 
-@ChangeLog(order = "003")
+@ChangeLog(order = "004")
 public class InitCommentariesChangeLog {
 
-  @ChangeSet(order = "0001", id = "insertBooks", author = "dankoy")
+  @ChangeSet(order = "001", id = "insertCommentariesToBooks", author = "dankoy")
   public void updateBooksWithCommentaries(MongoDatabase db) {
 
     MongoCollection<Document> books = db.getCollection("books");
@@ -25,16 +25,16 @@ public class InitCommentariesChangeLog {
 
     books.updateOne(book1, book1.append("commentaries",
         List.of(
-            new Commentary(null, "com1"),
-            new Commentary(null, "com2"),
-            new Commentary(null, "com3")
+            new Document().append("text", "com1"),
+            new Document().append("text", "com2"),
+            new Document().append("text", "com3")
         )));
 
     books.updateOne(book2, book2.append("commentaries",
         List.of(
-            new Commentary(null, "com4"),
-            new Commentary(null, "com5"),
-            new Commentary(null, "com6")
+            new Document().append("text", "com4"),
+            new Document().append("text", "com5"),
+            new Document().append("text", "com6")
         )));
 
   }

@@ -11,7 +11,7 @@ import org.bson.Document;
 @ChangeLog(order = "002")
 public class InitAuthorsChangeLog {
 
-  @ChangeSet(order = "0001", id = "insertAuthors", author = "dankoy")
+  @ChangeSet(order = "001", id = "insertAuthors", author = "dankoy")
   public void insertAuthors(MongoDatabase db) {
     MongoCollection<Document> myCollection = db.getCollection("authors");
     List<Document> docs = List.of(

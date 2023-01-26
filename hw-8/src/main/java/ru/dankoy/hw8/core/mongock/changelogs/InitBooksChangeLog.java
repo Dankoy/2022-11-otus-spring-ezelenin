@@ -7,6 +7,7 @@ import com.github.cloudyrock.mongock.ChangeSet;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
+import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -14,7 +15,7 @@ import org.bson.conversions.Bson;
 @ChangeLog(order = "003")
 public class InitBooksChangeLog {
 
-  @ChangeSet(order = "0001", id = "insertBooks", author = "dankoy")
+  @ChangeSet(order = "001", id = "insertBooks", author = "dankoy")
   public void insertBooks(MongoDatabase db) {
 
     var genre1 = getDocumentByName(db, "genre1", "genres");
@@ -28,13 +29,16 @@ public class InitBooksChangeLog {
     List<Document> docs = List.of(
         new Document().append("name", "book1")
             .append("genres", List.of(genre1, genre2))
-            .append("authors", List.of(author1, author2)),
+            .append("authors", List.of(author1, author2))
+            .append("commentaries", new ArrayList<>()),
         new Document().append("name", "book2")
             .append("genres", List.of(genre2, genre3))
-            .append("authors", List.of(author2, author3)),
+            .append("authors", List.of(author2, author3))
+            .append("commentaries", new ArrayList<>()),
         new Document().append("name", "book3")
             .append("genres", List.of(genre1, genre3))
             .append("authors", List.of(author1, author3))
+            .append("commentaries", new ArrayList<>())
     );
 
     books.insertMany(docs);

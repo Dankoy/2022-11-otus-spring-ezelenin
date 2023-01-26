@@ -1,11 +1,15 @@
 spring:
   data:
     mongodb:
-      database: library
+        authentication-database: admin
+        database: library
+        port: 27017
+        host: localhost
+
 
 
 mongock:
-  runner-type: "ApplicationRunner" # default
-  #runner-type: "InitializingBean"
+#  runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
   change-logs-scan-package:
     - ru.dankoy.hw8.core.mongock.changelogs

@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 
@@ -14,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @EqualsAndHashCode
 // фиксит рекурсивный вызов equals и hashcode комментария и книги
 @Getter
+@Document("commentary")
 public class Commentary {
 
   @Id

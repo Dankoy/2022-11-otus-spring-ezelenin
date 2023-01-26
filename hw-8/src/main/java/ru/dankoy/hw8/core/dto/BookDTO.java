@@ -14,7 +14,7 @@ import ru.dankoy.hw8.core.domain.Genre;
 @JsonInclude(Include.NON_EMPTY)
 public class BookDTO {
 
-  private final long id;
+  private final String id;
 
   private final String name;
 

@@ -11,13 +11,13 @@ import org.bson.Document;
 @ChangeLog(order = "001")
 public class InitGenresChangeLog {
 
-  @ChangeSet(order = "0001", id = "dropDb", author = "dankoy", runAlways = true)
+  @ChangeSet(order = "001", id = "dropDb", author = "dankoy", runAlways = true)
   public void dropDb(MongoDatabase db) {
     db.drop();
   }
 
 
-  @ChangeSet(order = "0002", id = "insertGenres", author = "dankoy")
+  @ChangeSet(order = "002", id = "insertGenres", author = "dankoy")
   public void insertGenres(MongoDatabase db) {
     MongoCollection<Document> myCollection = db.getCollection("genres");
     List<Document> docs = List.of(
