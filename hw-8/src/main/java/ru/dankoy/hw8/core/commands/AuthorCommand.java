@@ -5,9 +5,9 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.dankoy.hw8.core.domain.Author;
-import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.service.author.AuthorService;
 import ru.dankoy.hw8.core.service.objectmapper.ObjectMapperService;
+import ru.dankoy.hw8.core.service.utils.OptionalChecker;
 
 @RequiredArgsConstructor
 @ShellComponent
@@ -15,6 +15,7 @@ public class AuthorCommand {
 
   private final AuthorService authorService;
   private final ObjectMapperService objectMapperService;
+  private final OptionalChecker optionalChecker;
 
 
   @ShellMethod(key = {"author-count", "ac"}, value = "Count all authors")
@@ -27,11 +28,7 @@ public class AuthorCommand {
   public String getById(@ShellOption String id) {
     var optional = authorService.getById(id);
 
-    // не уверен, нужно ли в контроллере обрабатывать null или делегировать логику в сервис
-    var author = optional.orElseThrow(
-        () -> new EntityNotFoundException(
-            String.format("No author has been found with id - %s", id))
-    );
+    var author = optionalChecker.getFromOptionalOrThrowException(Author.class, optional, id);
 
     return objectMapperService.convertToString(author);
   }

@@ -8,9 +8,9 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.dto.mapper.BookMapper;
-import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.service.book.BookService;
 import ru.dankoy.hw8.core.service.objectmapper.ObjectMapperService;
+import ru.dankoy.hw8.core.service.utils.OptionalChecker;
 
 @RequiredArgsConstructor
 @ShellComponent
@@ -19,6 +19,7 @@ public class BookCommand {
   private final BookService bookService;
   private final ObjectMapperService objectMapperService;
   private final BookMapper bookMapper;
+  private final OptionalChecker optionalChecker;
 
 
   @ShellMethod(key = {"book-count", "bc"}, value = "Count all book")
@@ -31,11 +32,7 @@ public class BookCommand {
   public String getById(@ShellOption String id) {
     var optional = bookService.getById(id);
 
-    // не уверен, нужно ли в контроллере обрабатывать null или делегировать логику в сервис
-    var book = optional.orElseThrow(
-        () -> new EntityNotFoundException(
-            String.format("No book has been found with id - %s", id))
-    );
+    var book = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, id);
 
     var bookDto = bookMapper.toDTOWithoutCommentaries(book);
 
@@ -77,9 +74,7 @@ public class BookCommand {
       @ShellOption String[] authorIds, @ShellOption String[] genreNames) {
 
     var optional = bookService.getById(id);
-    var found = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %s", Book.class.getName(),
-            id)));
+    var found = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, id);
 
     var book = new Book(found.getId(), bookName, found.getAuthors(), found.getGenres(),
         found.getCommentaries());
