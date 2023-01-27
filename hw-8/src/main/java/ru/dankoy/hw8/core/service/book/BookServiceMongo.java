@@ -24,6 +24,13 @@ public class BookServiceMongo implements BookService {
 
 
   @Override
+  public List<Book> findAllByGenreName(Genre genre) {
+
+    return bookRepository.findBookByGenres(genre.getName());
+
+  }
+
+  @Override
   public List<Book> findAll() {
     return bookRepository.findAll();
   }
@@ -77,6 +84,12 @@ public class BookServiceMongo implements BookService {
   @Override
   public long count() {
     return bookRepository.count();
+  }
+
+
+  @Override
+  public void updateMultiple(List<Book> books) {
+    bookRepository.saveAll(books);
   }
 
 

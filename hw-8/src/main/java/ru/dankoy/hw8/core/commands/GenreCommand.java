@@ -18,48 +18,13 @@ public class GenreCommand {
   private final OptionalChecker optionalChecker;
 
 
-  @ShellMethod(key = {"genre-count", "gc"}, value = "Count all genre")
-  public String count() {
-    var count = genreService.count();
-    return objectMapperService.convertToString(count);
-  }
-
-  @ShellMethod(key = {"genre-get-by-id", "ggbi"}, value = "Get genre by id")
-  public String getById(@ShellOption String id) {
-    var optional = genreService.getById(id);
-
-    var genre = optionalChecker.getFromOptionalOrThrowException(Genre.class, optional, id);
-
-    return objectMapperService.convertToString(genre);
-  }
-
-
-  @ShellMethod(key = {"genre-get-all", "gga"}, value = "Get all genre")
-  public String getAll() {
-    var genres = genreService.getAll();
-    return objectMapperService.convertToString(genres);
-  }
-
-
-  @ShellMethod(key = {"genre-insert", "gi"}, value = "Insert new genre")
-  public String insert(@ShellOption String genreName) {
-    var genre = new Genre(genreName);
-    var inserted = genreService.insertOrUpdate(genre);
-    return objectMapperService.convertToString(inserted);
-  }
-
-  @ShellMethod(key = {"genre-delete", "gd"}, value = "Delete genre by id")
-  public String deleteById(@ShellOption String id) {
-    genreService.deleteById(id);
-    return String.format("Deleted genre with id - %s", id);
-  }
-
-
   @ShellMethod(key = {"genre-update", "gu"}, value = "Update genre")
-  public String update(@ShellOption String id, @ShellOption String genreName) {
-    var genre = new Genre(genreName);
-    genreService.insertOrUpdate(genre);
-    return String.format("Updated genre - %s", objectMapperService.convertToString(genre));
+  public String update(@ShellOption String oldName, @ShellOption String newName) {
+    var oldGenre = new Genre(oldName);
+    var newGenre = new Genre(newName);
+    genreService.update(oldGenre, newGenre);
+    return String.format("Updated genre - %s to %s", objectMapperService.convertToString(oldGenre),
+        objectMapperService.convertToString(newGenre));
   }
 
 }

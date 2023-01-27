@@ -3,8 +3,11 @@ package ru.dankoy.hw8.core.service.book;
 import java.util.List;
 import java.util.Optional;
 import ru.dankoy.hw8.core.domain.Book;
+import ru.dankoy.hw8.core.domain.Genre;
 
 public interface BookService {
+
+  List<Book> findAllByGenreName(Genre genre);
 
   List<Book> findAll();
 
@@ -18,4 +21,5 @@ public interface BookService {
 
   long count();
 
+  void updateMultiple(List<Book> books);
 }
