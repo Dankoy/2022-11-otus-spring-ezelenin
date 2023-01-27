@@ -7,4 +7,5 @@ public interface GenreService {
   void update(Genre oldGenre, Genre newGenre);
 
 
+  void delete(Genre genre);
 }

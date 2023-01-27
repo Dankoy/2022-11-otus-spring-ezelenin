@@ -27,4 +27,15 @@ public class GenreServiceMongo implements GenreService {
 
   }
 
+  @Override
+  public void delete(Genre genre) {
+
+    List<Book> books = bookService.findAllByGenreName(genre);
+
+    books.forEach(b -> b.getGenres().remove(genre));
+
+    bookService.updateMultiple(books);
+
+  }
+
 }

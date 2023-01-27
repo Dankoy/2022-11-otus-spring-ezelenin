@@ -7,7 +7,6 @@ import org.springframework.shell.standard.ShellOption;
 import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.service.genre.GenreService;
 import ru.dankoy.hw8.core.service.objectmapper.ObjectMapperService;
-import ru.dankoy.hw8.core.service.utils.OptionalChecker;
 
 @RequiredArgsConstructor
 @ShellComponent
@@ -15,7 +14,6 @@ public class GenreCommand {
 
   private final GenreService genreService;
   private final ObjectMapperService objectMapperService;
-  private final OptionalChecker optionalChecker;
 
 
   @ShellMethod(key = {"genre-update", "gu"}, value = "Update genre")
@@ -26,5 +24,13 @@ public class GenreCommand {
     return String.format("Updated genre - %s to %s", objectMapperService.convertToString(oldGenre),
         objectMapperService.convertToString(newGenre));
   }
+
+  @ShellMethod(key = {"genre-delete", "gd"}, value = "Delete genre")
+  public String delete(@ShellOption String genre) {
+    var oldGenre = new Genre(genre);
+    genreService.delete(oldGenre);
+    return String.format("Deleted genre - %s", objectMapperService.convertToString(oldGenre));
+  }
+
 
 }
