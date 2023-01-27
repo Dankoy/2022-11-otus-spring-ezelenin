@@ -1,5 +1,6 @@
 package ru.dankoy.hw8.core.commands;
 
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -30,6 +31,12 @@ public class GenreCommand {
     var oldGenre = new Genre(genre);
     genreService.delete(oldGenre);
     return String.format("Deleted genre - %s", objectMapperService.convertToString(oldGenre));
+  }
+
+  @ShellMethod(key = {"genre-get-all", "gga"}, value = "Get all distinct genres")
+  public String getAll() {
+    Set<Genre> genres = genreService.getAllGenres();
+    return String.format("All genres - %s", objectMapperService.convertToString(genres));
   }
 
 

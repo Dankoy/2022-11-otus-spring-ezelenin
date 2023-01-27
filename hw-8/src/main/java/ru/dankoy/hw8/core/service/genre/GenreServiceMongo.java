@@ -1,6 +1,8 @@
 package ru.dankoy.hw8.core.service.genre;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw8.core.domain.Book;
@@ -35,6 +37,16 @@ public class GenreServiceMongo implements GenreService {
     books.forEach(b -> b.getGenres().remove(genre));
 
     bookService.updateMultiple(books);
+
+  }
+
+
+  @Override
+  public Set<Genre> getAllGenres() {
+    var books = bookService.findAll();
+
+    return books.stream().flatMap(b -> b.getGenres().stream())
+        .collect(Collectors.toSet());
 
   }
 

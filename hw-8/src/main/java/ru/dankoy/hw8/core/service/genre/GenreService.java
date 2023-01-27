@@ -1,5 +1,6 @@
 package ru.dankoy.hw8.core.service.genre;
 
+import java.util.Set;
 import ru.dankoy.hw8.core.domain.Genre;
 
 public interface GenreService {
@@ -8,4 +9,6 @@ public interface GenreService {
 
 
   void delete(Genre genre);
+
+  Set<Genre> getAllGenres();
 }

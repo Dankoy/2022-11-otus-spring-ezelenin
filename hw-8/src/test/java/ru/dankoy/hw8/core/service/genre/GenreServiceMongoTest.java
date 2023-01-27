@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
-import ru.dankoy.hw8.core.repository.genre.GenreRepository;
 
 
 @Transactional(propagation = Propagation.NEVER)

@@ -15,7 +15,6 @@ import ru.dankoy.hw8.core.commands.GenreCommand;
 import ru.dankoy.hw8.core.dto.mapper.BookMapper;
 import ru.dankoy.hw8.core.repository.author.AuthorRepository;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
-import ru.dankoy.hw8.core.repository.genre.GenreRepository;
 import ru.dankoy.hw8.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw8.core.service.book.BookServiceMongo;
 import ru.dankoy.hw8.core.service.genre.GenreServiceMongo;
