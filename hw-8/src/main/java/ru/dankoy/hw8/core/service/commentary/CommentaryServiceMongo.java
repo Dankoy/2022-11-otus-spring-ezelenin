@@ -6,8 +6,10 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Commentary;
+import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw8.core.service.book.BookService;
@@ -27,9 +29,18 @@ public class CommentaryServiceMongo implements CommentaryService {
   public List<Commentary> getAllByBookId(String id) {
     var optional = bookService.getById(id);
     var book = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %d", Book.class.getName(), id)));
+        String.format("Entity %s has not been found with id - %s", Book.class.getName(), id)));
 
     return new ArrayList<>(book.getCommentaries());
+  }
+
+
+  @Transactional
+  @Override
+  public void deleteAllByBookId(String bookId) {
+
+    commentaryRepository.deleteCommentariesByBookId(bookId);
+
   }
 
   @Override
@@ -38,23 +49,27 @@ public class CommentaryServiceMongo implements CommentaryService {
   }
 
 
-//  @Override
-//  public Commentary insertOrUpdate(Commentary commentary) {
-//
-//    var commentary = bookService.g
-//
-//    return commentaryRepository.save(commentary);
-//  }
-//
-//  @Override
-//  public void deleteById(String id) {
-//    var optional = commentaryRepository.getById(id);
-//    var commentary = optional.orElseThrow(() -> new EntityNotFoundException(
-//        String.format("Entity %s has not been found with id - %d", Commentary.class.getName(),
-//            id)));
-//
-//    commentaryRepository.delete(commentary);
-//
-//  }
+  @Override
+  public Commentary insertOrUpdate(Commentary commentary) {
+    return commentaryRepository.save(commentary);
+  }
+
+  @Override
+  public void deleteById(String id) {
+    var optional = commentaryRepository.findById(id);
+    var commentary = optional.orElseThrow(() -> new EntityNotFoundException(
+        String.format("Entity %s has not been found with id - %s", Commentary.class.getName(),
+            id)));
+
+    var book = bookService.getById(commentary.getBook().getId());
+    book.ifPresent(b -> {
+      b.getCommentaries().remove(commentary);
+    });
+
+    bookService
+
+    commentaryRepository.delete(commentary);
+
+  }
 
 }

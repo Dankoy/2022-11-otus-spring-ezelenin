@@ -6,4 +6,6 @@ import ru.dankoy.hw8.core.domain.Commentary;
 
 public interface CommentaryRepository extends MongoRepository<Commentary, String> {
 
+  void deleteCommentariesByBookId(String bookId);
+
 }
