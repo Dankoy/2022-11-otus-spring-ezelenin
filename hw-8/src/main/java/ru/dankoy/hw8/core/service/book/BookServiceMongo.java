@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Genre;
+import ru.dankoy.hw8.core.exceptions.BookServiceException;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
 import ru.dankoy.hw8.core.service.author.AuthorService;
-import ru.dankoy.hw8.core.service.commentary.CommentaryService;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +21,6 @@ public class BookServiceMongo implements BookService {
 
   private final BookRepository bookRepository;
   private final AuthorService authorService;
-  private final CommentaryService commentaryService;
 
 
   @Override
@@ -52,7 +51,10 @@ public class BookServiceMongo implements BookService {
     var book = optional.orElseThrow(() -> new EntityNotFoundException(
         String.format("Entity %s has not been found with id - %s", Book.class.getName(), id)));
 
-    commentaryService.deleteAll(book.getCommentaries());
+    if (!book.getCommentaries().isEmpty()) {
+      throw new BookServiceException(
+          "Book contains commentaries. First delete all of them, then retry.");
+    }
 
     bookRepository.delete(book);
   }
