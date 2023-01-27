@@ -1,5 +1,7 @@
 package ru.dankoy.hw8.core.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @EqualsAndHashCode
 @Getter
 @Document("authors")
+@JsonInclude(Include.NON_EMPTY)
 public class Author {
 
   @Id
