@@ -4,7 +4,6 @@ import static com.mongodb.client.model.Filters.eq;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
-import com.mongodb.DBRef;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
@@ -30,24 +29,21 @@ public class InitBooksChangeLog {
                 new Document().append("name", "genre1"),
                 new Document().append("name", "genre2")
             ))
-            .append("authors", List.of(
-                new DBRef("authors", author1.get("_id")),
-                new DBRef("authors", author2.get("_id"))
-            ))
+            .append("authors", List.of(author1.get("_id"), author2.get("_id")))
             .append("commentaries", new HashSet<>()),
         new Document().append("name", "book2")
             .append("genres", List.of(
                 new Document().append("name", "genre2"),
                 new Document().append("name", "genre3")
             ))
-            .append("authors", List.of(author2, author3))
+            .append("authors", List.of(author2.get("_id"), author3.get("_id")))
             .append("commentaries", new HashSet<>()),
         new Document().append("name", "book3")
             .append("genres", List.of(
                 new Document().append("name", "genre1"),
                 new Document().append("name", "genre3")
             ))
-            .append("authors", List.of(author1, author3))
+            .append("authors", List.of(author1.get("_id"), author3.get("_id")))
             .append("commentaries", new HashSet<>())
     );
 

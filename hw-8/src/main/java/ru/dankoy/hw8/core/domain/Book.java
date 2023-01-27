@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 
@@ -29,7 +30,7 @@ public class Book {
   private String name;
 
 
-  @DBRef(lazy = true)
+  @DocumentReference( lookup = "{ '_id' : ?#{#target} }")
   @Field("authors")
   private Set<Author> authors = new HashSet<>();
 
