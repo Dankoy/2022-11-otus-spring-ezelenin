@@ -10,10 +10,10 @@ import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Commentary;
 import ru.dankoy.hw8.core.domain.Genre;
-import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.service.book.BookService;
 import ru.dankoy.hw8.core.service.commentary.CommentaryService;
 import ru.dankoy.hw8.core.service.objectmapper.ObjectMapperService;
+import ru.dankoy.hw8.core.service.utils.OptionalChecker;
 
 
 @RequiredArgsConstructor
@@ -25,16 +25,14 @@ public class CommentaryCommand {
 
   private final ObjectMapperService objectMapperService;
 
+  private final OptionalChecker optionalChecker;
+
 
   @ShellMethod(key = {"commentary-get-by-id", "cgbi"}, value = "Get commentary by id")
   public String getById(@ShellOption String id) {
     var optional = commentaryService.getById(id);
 
-    // не уверен, нужно ли в контроллере обрабатывать null или делегировать логику в сервис
-    var author = optional.orElseThrow(
-        () -> new EntityNotFoundException(
-            String.format("No commentary has been found with id - %d", id))
-    );
+    var author = optionalChecker.getFromOptionalOrThrowException(Commentary.class, optional, id);
 
     return objectMapperService.convertToString(author);
   }
@@ -51,10 +49,9 @@ public class CommentaryCommand {
       "cdabb"}, value = "Delete all commentaries for book")
   public String deleteAllByBookId(@ShellOption String bookId) {
 
-    var book = bookService.getById(bookId).orElseThrow(
-        () -> new EntityNotFoundException(
-            String.format("No commentary has been found with id - %s", bookId))
-    );
+    var optional = bookService.getById(bookId);
+
+    var book = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, bookId);
 
     // удаляем все комментарии книги из коллекции комментариев
     commentaryService.deleteAllByBookId(bookId);
@@ -82,17 +79,16 @@ public class CommentaryCommand {
     commentaryService.deleteById(id);
     return String.format("Deleted commentary with id - %s", id);
   }
-//
-//
-//  @ShellMethod(key = {"commentary-update", "cu"}, value = "Update commentary")
-//  public String update(@ShellOption long bookId, @ShellOption long commentaryId,
-//      @ShellOption String commentaryText) {
-//    var book = new Book(bookId, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
-//    var commentary = new Commentary(commentaryId, commentaryText, book);
-//    commentaryService.insertOrUpdate(commentary);
-//    return String.format("Updated commentary - %s",
-//        objectMapperService.convertToString(commentary));
-//  }
+
+  @ShellMethod(key = {"commentary-update", "cu"}, value = "Update commentary")
+  public String update(@ShellOption String bookId, @ShellOption String commentaryId,
+      @ShellOption String commentaryText) {
+    var book = new Book(bookId, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var commentary = new Commentary(commentaryId, commentaryText, book);
+    commentaryService.insertOrUpdate(commentary);
+    return String.format("Updated commentary - %s",
+        objectMapperService.convertToString(commentary));
+  }
 
 
 }

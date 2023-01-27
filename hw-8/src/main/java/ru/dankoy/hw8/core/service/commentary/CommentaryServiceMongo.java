@@ -10,9 +10,9 @@ import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Commentary;
 import ru.dankoy.hw8.core.domain.Genre;
-import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw8.core.service.book.BookService;
+import ru.dankoy.hw8.core.service.utils.OptionalChecker;
 
 
 @RequiredArgsConstructor
@@ -23,13 +23,14 @@ public class CommentaryServiceMongo implements CommentaryService {
 
   private final BookService bookService;
 
+  private final OptionalChecker optionalChecker;
+
 
   @Transactional(readOnly = true) // нужен для получения комментариев
   @Override
   public List<Commentary> getAllByBookId(String id) {
     var optional = bookService.getById(id);
-    var book = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %s", Book.class.getName(), id)));
+    var book = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, id);
 
     return new ArrayList<>(book.getCommentaries());
   }
@@ -49,24 +50,45 @@ public class CommentaryServiceMongo implements CommentaryService {
   }
 
 
+  @Transactional(readOnly = true)
   @Override
   public Commentary insertOrUpdate(Commentary commentary) {
-    return commentaryRepository.save(commentary);
+
+    var bookOptional = bookService.getById(commentary.getBook().getId());
+    var book = optionalChecker.getFromOptionalOrThrowException(Book.class, bookOptional,
+        commentary.getBook().getId());
+
+    var inserted = commentaryRepository.save(commentary);
+
+    // если такого комментария нет, то добавляем в массив
+    if (book.getCommentaries().isEmpty()) {
+      book.getCommentaries().add(commentary);
+    }
+
+    var authorIds = book.getAuthors().stream().map(Author::getId).toArray(String[]::new);
+    var genreNames = book.getGenres().stream().map(Genre::getName).toArray(String[]::new);
+
+    bookService.update(book, authorIds, genreNames);
+
+    return inserted;
   }
 
   @Override
   public void deleteById(String id) {
     var optional = commentaryRepository.findById(id);
-    var commentary = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %s", Commentary.class.getName(),
-            id)));
+    var commentary = optionalChecker.getFromOptionalOrThrowException(Commentary.class, optional,
+        id);
 
-    var book = bookService.getById(commentary.getBook().getId());
-    book.ifPresent(b -> {
-      b.getCommentaries().remove(commentary);
-    });
+    var bookOptional = bookService.getById(commentary.getBook().getId());
+    var book = optionalChecker.getFromOptionalOrThrowException(Book.class, bookOptional,
+        commentary.getBook().getId());
 
-    bookService
+    book.getCommentaries().remove(commentary);
+
+    var authorIds = book.getAuthors().stream().map(Author::getId).toArray(String[]::new);
+    var genreNames = book.getGenres().stream().map(Genre::getName).toArray(String[]::new);
+
+    bookService.update(book, authorIds, genreNames);
 
     commentaryRepository.delete(commentary);
 
