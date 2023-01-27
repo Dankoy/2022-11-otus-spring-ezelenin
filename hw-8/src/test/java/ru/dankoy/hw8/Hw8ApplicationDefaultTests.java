@@ -34,7 +34,6 @@ class Hw8ApplicationDefaultTests {
 
     var bookRepository = context.getBean(BookRepository.class);
     var authorRepository = context.getBean(AuthorRepository.class);
-    var genreRepository = context.getBean(GenreRepository.class);
     var bookServiceJpa = context.getBean(BookServiceMongo.class);
     var authorServiceJpa = context.getBean(AuthorServiceMongo.class);
     var genreServiceJpa = context.getBean(GenreServiceMongo.class);
@@ -46,7 +45,6 @@ class Hw8ApplicationDefaultTests {
     var bookMapper = context.getBean(BookMapper.class);
 
     assertNotNull(bookRepository);
-    assertNotNull(genreRepository);
     assertNotNull(authorRepository);
     assertNotNull(bookServiceJpa);
     assertNotNull(authorServiceJpa);

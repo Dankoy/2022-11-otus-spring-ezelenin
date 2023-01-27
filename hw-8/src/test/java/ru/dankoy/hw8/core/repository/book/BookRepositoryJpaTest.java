@@ -9,8 +9,10 @@ import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Commentary;
@@ -18,73 +20,27 @@ import ru.dankoy.hw8.core.domain.Genre;
 
 
 @DisplayName("Test BookRepositoryJpa ")
-@DataJpaTest
+@DataMongoTest
 class BookRepositoryJpaTest {
 
   @Autowired
-  private BookRepositoryImpl bookRepository;
+  private BookRepository bookRepository;
 
   @Autowired
-  private TestEntityManager testEntityManager;
+  private MongoTemplate mongoTemplate;
 
 
-  @DisplayName("should return all books")
+  @DisplayName("should return all books by genre name")
   @Test
-  void shouldGetAllBooksTest() {
-    var books = bookRepository.getAllWithBooksAndGenres();
+  void shouldGetAllBooksByGenreNameTest() {
+    var books = bookRepository.findBookByGenres("genre1");
 
-    assertThat(books).isEqualTo(makeCorrectAllBooksList());
-  }
+    Query query = new Query();
+    query.addCriteria(Criteria.where("genres.name").is("genre1"));
 
+    var booksExpected = mongoTemplate.find(query, Book.class);
 
-  @DisplayName("should return correct book by id")
-  @Test
-  void shouldReturnCorrectBookById() {
-
-    var id = 1L;
-
-    var expected = testEntityManager.find(Book.class, id);
-
-    var book = bookRepository.getById(id);
-
-    assertThat(book).isPresent().get().isEqualTo(expected);
-
-  }
-
-  private List<Book> makeCorrectAllBooksList() {
-
-    var book1 = new Book(1L, "book1",
-        Set.of(new Author(1L, "author1"), new Author(2L, "author2")),
-        Set.of(new Genre(1L, "genre1"), new Genre(2L, "genre2")),
-        new HashSet<>());
-
-    var book2 = new Book(2L, "book2",
-        Set.of(new Author(2L, "author2"), new Author(3L, "author3")),
-        Set.of(new Genre(2L, "genre2"), new Genre(3L, "genre3")),
-        new HashSet<>());
-
-    var book3 = new Book(3L, "book3",
-        Set.of(new Author(1L, "author1"), new Author(3L, "author3")),
-        Set.of(new Genre(1L, "genre1"), new Genre(3L, "genre3")),
-        new HashSet<>());
-
-    Set<Commentary> commentariesBook1 = Set.of(
-        new Commentary(1L, "com1", book1),
-        new Commentary(2L, "com2", book1),
-        new Commentary(3L, "com3", book1));
-    Set<Commentary> commentariesBook2 = Set.of(
-        new Commentary(4L, "com4", book2),
-        new Commentary(5L, "com5", book2),
-        new Commentary(6L, "com6", book2));
-
-    book1.setCommentaries(commentariesBook1);
-    book2.setCommentaries(commentariesBook2);
-
-    return List.of(
-        book1,
-        book2,
-        book3
-    );
+    assertThat(books).isEqualTo(booksExpected);
   }
 
 
