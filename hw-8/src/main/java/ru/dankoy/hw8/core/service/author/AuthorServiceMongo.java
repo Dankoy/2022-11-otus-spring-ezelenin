@@ -13,10 +13,9 @@ import ru.dankoy.hw8.core.repository.author.AuthorRepository;
 public class AuthorServiceMongo implements AuthorService {
 
   private final AuthorRepository authorRepository;
-
   @Override
   public List<Author> getAll() {
-    return (List<Author>) authorRepository.findAll();
+    return authorRepository.findAll();
   }
 
   @Override
@@ -33,7 +32,7 @@ public class AuthorServiceMongo implements AuthorService {
   public void deleteById(String id) {
     var optional = authorRepository.findById(id);
     var author = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %d", Author.class.getName(), id)));
+        String.format("Entity %s has not been found with id - %s", Author.class.getName(), id)));
     authorRepository.delete(author);
   }
 
