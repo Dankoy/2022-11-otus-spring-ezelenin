@@ -43,24 +43,24 @@ public class BookCommand {
   }
 
 
-//  @ShellMethod(key = {"book-get-all", "bga"}, value = "Get all book")
-//  public String getAll() {
-//    var books = bookService.getAllWithAuthorsAndGenres();
-//
-//    var booksDto = books.stream().map(bookMapper::toDTOWithoutCommentaries)
-//        .collect(Collectors.toList());
-//
-//    return objectMapperService.convertToString(booksDto);
-//  }
+  @ShellMethod(key = {"book-get-all", "bga"}, value = "Get all book")
+  public String getAll() {
+    var books = bookService.findAll();
+
+    var booksDto = books.stream().map(bookMapper::toDTOWithoutCommentaries)
+        .collect(Collectors.toList());
+
+    return objectMapperService.convertToString(booksDto);
+  }
 
 
   @ShellMethod(key = {"book-insert", "bi"}, value = "Insert new book")
   public String insert(@ShellOption String bookName, @ShellOption String[] authorIds,
-      @ShellOption String[] genreIds) {
+      @ShellOption String[] genreNames) {
 
     var book = new Book(null, bookName, new HashSet<>(), new HashSet<>(), new HashSet<>());
 
-    var created = bookService.insertOrUpdate(book, authorIds, genreIds);
+    var created = bookService.insertOrUpdate(book, authorIds, genreNames);
 
     return String.format("Created new book with id - %s", created.getId());
   }
@@ -68,16 +68,16 @@ public class BookCommand {
   @ShellMethod(key = {"book-delete", "bd"}, value = "Delete book by id")
   public String deleteById(@ShellOption String id) {
     bookService.deleteById(id);
-    return String.format("Deleted book with id - %d", id);
+    return String.format("Deleted book with id - %s", id);
   }
 
 
   @ShellMethod(key = {"book-update", "bu"}, value = "Update book")
   public String update(@ShellOption String id, @ShellOption String bookName,
-      @ShellOption String[] authorIds, @ShellOption String[] genreIds) {
+      @ShellOption String[] authorIds, @ShellOption String[] genreNames) {
 
     var book = new Book(id, bookName, new HashSet<>(), new HashSet<>(), new HashSet<>());
-    var updated = bookService.update(book, authorIds, genreIds);
+    var updated = bookService.update(book, authorIds, genreNames);
     var booksDto = bookMapper.toDTOWithoutCommentaries(updated);
 
     return String.format("Updated book - %s", objectMapperService.convertToString(booksDto));
