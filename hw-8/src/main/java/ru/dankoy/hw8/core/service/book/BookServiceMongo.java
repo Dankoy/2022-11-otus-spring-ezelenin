@@ -63,21 +63,13 @@ public class BookServiceMongo implements BookService {
   @Override
   public Book update(Book book, String[] authorIds, String[] genreNames) {
 
-    var optional = bookRepository.findById(book.getId());
-    var found = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %s", Book.class.getName(),
-            book.getId())));
-
     List<Author> authors = getRealAuthors(authorIds);
     List<Genre> genres = convertGenreNamesToObjects(genreNames);
 
+    book.getAuthors().clear();
+    book.getGenres().clear();
     book.getAuthors().addAll(authors);
     book.getGenres().addAll(genres);
-
-    // Добавляем комментарии к обновляемой книги, иначе они будут удалены, а это нам не нужно
-    if (book.getCommentaries().isEmpty()) {
-      book.getCommentaries().addAll(found.getCommentaries());
-    }
 
     return bookRepository.save(book);
   }

@@ -76,7 +76,13 @@ public class BookCommand {
   public String update(@ShellOption String id, @ShellOption String bookName,
       @ShellOption String[] authorIds, @ShellOption String[] genreNames) {
 
-    var book = new Book(id, bookName, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var optional = bookService.getById(id);
+    var found = optional.orElseThrow(() -> new EntityNotFoundException(
+        String.format("Entity %s has not been found with id - %s", Book.class.getName(),
+            id)));
+
+    var book = new Book(found.getId(), bookName, found.getAuthors(), found.getGenres(),
+        found.getCommentaries());
     var updated = bookService.update(book, authorIds, genreNames);
     var booksDto = bookMapper.toDTOWithoutCommentaries(updated);
 
