@@ -7,8 +7,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,18 +24,25 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw8.core.domain.Author;
+import ru.dankoy.hw8.core.domain.Book;
+import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.repository.author.AuthorRepository;
+import ru.dankoy.hw8.core.service.book.BookService;
+import ru.dankoy.hw8.core.service.book.BookServiceMongo;
 
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test AuthorServiceMongo ")
 @DataMongoTest
-@Import({AuthorServiceMongo.class})
+@Import({AuthorServiceMongo.class, BookServiceMongo.class})
 class AuthorServiceMongoTest {
 
   @MockBean
   private AuthorRepository authorRepository;
+
+  @MockBean
+  private BookService bookService;
 
   @Autowired
   private AuthorServiceMongo authorServiceMongo;
@@ -112,11 +121,19 @@ class AuthorServiceMongoTest {
     var id = "1L";
 
     var toDelete = new Author(id, "name");
+    List<Book> booksBeforeRemove = makeCorrectAllBooksList();
+    List<Book> booksToDeleteAuthor = makeCorrectAllBooksList();
+
+    deleteAuthorFromBooks(booksToDeleteAuthor, toDelete);
+
     given(authorRepository.findById(id)).willReturn(Optional.of(toDelete));
+    given(bookService.findAllByAuthorId(toDelete)).willReturn(booksBeforeRemove);
 
     authorServiceMongo.deleteById(id);
 
     Mockito.verify(authorRepository, times(1)).delete(toDelete);
+    Mockito.verify(bookService, times(1)).findAllByAuthorId(toDelete);
+    Mockito.verify(bookService, times(1)).updateMultiple(booksToDeleteAuthor);
 
   }
 
@@ -137,6 +154,45 @@ class AuthorServiceMongoTest {
 
   private List<Author> makeCorrectAllAuthorsList() {
     return mongoTemplate.findAll(Author.class);
+  }
+
+  private List<Book> makeCorrectAllBooksList() {
+
+    Set<Author> authorBook1 = new HashSet<>();
+    authorBook1.add(new Author("1L", "author1"));
+    authorBook1.add(new Author("2L", "author2"));
+
+    Set<Author> authorBook2 = new HashSet<>();
+    authorBook2.add(new Author("2L", "author2"));
+    authorBook2.add(new Author("3L", "author3"));
+
+    Set<Author> authorBook3 = new HashSet<>();
+    authorBook3.add(new Author("1L", "author1"));
+    authorBook3.add(new Author("3L", "author3"));
+
+    var book1 = new Book("1L", "book1",
+        authorBook1,
+        Set.of(new Genre("genre1"), new Genre("genre2")));
+
+    var book2 = new Book("2L", "book2",
+        authorBook2,
+        Set.of(new Genre("genre2"), new Genre("genre3")));
+
+    var book3 = new Book("3L", "book3",
+        authorBook3,
+        Set.of(new Genre("genre1"), new Genre("genre3")));
+
+    return List.of(
+        book1,
+        book2,
+        book3
+    );
+  }
+
+  private void deleteAuthorFromBooks(List<Book> books, Author toDelete) {
+
+    books.forEach(b -> b.getAuthors().remove(toDelete));
+
   }
 
 
