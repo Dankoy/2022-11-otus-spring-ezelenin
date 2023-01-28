@@ -6,12 +6,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import ru.dankoy.hw8.core.domain.Commentary;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import ru.dankoy.hw8.core.domain.Book;
 
 @DisplayName("Test CommentaryRepository ")
-//@DataJpaTest
+@DataMongoTest
 class CommentaryRepositoryTest {
 
 
@@ -19,36 +21,28 @@ class CommentaryRepositoryTest {
   private CommentaryRepository commentaryRepository;
 
   @Autowired
-  private TestEntityManager testEntityManager;
+  private MongoTemplate mongoTemplate;
 
 
-//  @DisplayName(" should return correct comment by id")
-//  @Test
-//  void shouldReturnCorrectCommentaryById() {
-//
-//    var comId = 1L;
-//
-//    var expected = testEntityManager.find(Commentary.class, comId);
-//    testEntityManager.detach(expected);
-//
-//    var actual = commentaryRepository.getById(comId);
-//
-//    assertThat(actual).isPresent().get().isEqualTo(expected);
-//
-//  }
-//
-//
-//  @DisplayName(" should return empty comment for non existent comment")
-//  @Test
-//  void shouldReturnEmptyCommentaryById() {
-//
-//    var comId = 999L;
-//
-//    var actual = commentaryRepository.getById(comId);
-//
-//    assertThat(actual).isEmpty();
-//
-//  }
+  @DisplayName(" should delete all commentaries by book id")
+  @Test
+  void deleteDeleteAllCommentariesByBookId() {
+
+    var book1 = mongoTemplate.find(
+            new Query().addCriteria(Criteria.where("name").is("book1")),
+            Book.class)
+        .get(0);
+
+    var commentariesBeforeDelete = commentaryRepository.findAllByBookId(book1.getId());
+    assertThat(commentariesBeforeDelete).hasSize(3);
+
+    commentaryRepository.deleteCommentariesByBookId(book1.getId());
+
+    var commentariesAfterDelete = commentaryRepository.findAllByBookId(book1.getId());
+    assertThat(commentariesAfterDelete).isEmpty();
+
+
+  }
 
 
 }
