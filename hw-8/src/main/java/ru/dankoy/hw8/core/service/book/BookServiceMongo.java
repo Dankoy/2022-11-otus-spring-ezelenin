@@ -60,7 +60,7 @@ public class BookServiceMongo implements BookService {
     book.getAuthors().addAll(authors);
     book.getGenres().addAll(genres);
 
-    return bookRepository.save(book);
+    return bookRepository.saveAndCheckAuthors(book);
   }
 
   @Transactional
@@ -91,7 +91,7 @@ public class BookServiceMongo implements BookService {
     book.getAuthors().addAll(authors);
     book.getGenres().addAll(genres);
 
-    return bookRepository.save(book);
+    return bookRepository.saveAndCheckAuthors(book);
   }
 
   @Override
