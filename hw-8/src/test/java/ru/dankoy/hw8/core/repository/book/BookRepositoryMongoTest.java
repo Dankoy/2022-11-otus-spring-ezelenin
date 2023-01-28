@@ -56,8 +56,8 @@ class BookRepositoryMongoTest {
   void shouldGetAllGenresByBookIdTest() {
 
     var book1 = mongoTemplate.find(
-        new Query().addCriteria(Criteria.where("name").is("book1")),
-        Book.class)
+            new Query().addCriteria(Criteria.where("name").is("book1")),
+            Book.class)
         .get(0);
 
     var genres = bookRepository.getAllGenresByBookId(book1.getId());

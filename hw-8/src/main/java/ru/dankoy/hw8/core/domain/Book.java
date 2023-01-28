@@ -32,7 +32,7 @@ public class Book {
   private String name;
 
 
-  @DocumentReference( lookup = "{ '_id' : ?#{#target} }")
+  @DocumentReference(lookup = "{ '_id' : ?#{#target} }")
   @Field("authors")
   private Set<Author> authors = new HashSet<>();
 

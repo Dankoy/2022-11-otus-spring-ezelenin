@@ -14,6 +14,7 @@ import ru.dankoy.hw8.core.repository.author.AuthorRepository;
 public class AuthorServiceMongo implements AuthorService {
 
   private final AuthorRepository authorRepository;
+
   @Override
   public List<Author> getAll() {
     return authorRepository.findAll();
