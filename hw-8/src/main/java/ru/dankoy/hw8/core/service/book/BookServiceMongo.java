@@ -40,6 +40,7 @@ public class BookServiceMongo implements BookService {
     return bookRepository.findById(id);
   }
 
+  @Transactional
   @Override
   public Book insertOrUpdate(Book book, String[] authorIds, String[] genreName) {
 
@@ -52,6 +53,7 @@ public class BookServiceMongo implements BookService {
     return bookRepository.save(book);
   }
 
+  @Transactional
   @Override
   public void deleteById(String id) {
     var optional = bookRepository.findById(id);

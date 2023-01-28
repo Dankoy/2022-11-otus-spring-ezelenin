@@ -25,7 +25,6 @@ public class CommentaryServiceMongo implements CommentaryService {
   private final OptionalChecker optionalChecker;
 
 
-  @Transactional(readOnly = true) // нужен для получения комментариев
   @Override
   public List<Commentary> getAllByBookId(String id) {
     return commentaryRepository.findAllByBookId(id);
@@ -69,6 +68,7 @@ public class CommentaryServiceMongo implements CommentaryService {
     return inserted;
   }
 
+  @Transactional
   @Override
   public void deleteById(String id) {
     var optional = commentaryRepository.findById(id);
