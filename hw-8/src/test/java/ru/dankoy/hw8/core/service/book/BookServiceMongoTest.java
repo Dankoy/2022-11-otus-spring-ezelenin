@@ -135,13 +135,13 @@ class BookServiceMongoTest {
     var bookToInsert = new Book(null, bookName, authors, genres);
     var insertedBook = new Book(correctInsertedId, bookName, authors, genres);
 
-    given(bookRepository.save(bookToInsert)).willReturn(insertedBook);
+    given(bookRepository.saveAndCheckAuthors(bookToInsert)).willReturn(insertedBook);
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
     var actual = bookServiceMongo.insertOrUpdate(bookToInsert, listOfIds, listOfIds);
 
     assertThat(actual).isEqualTo(insertedBook);
-    Mockito.verify(bookRepository, times(1)).save(bookToInsert);
+    Mockito.verify(bookRepository, times(1)).saveAndCheckAuthors(bookToInsert);
 
   }
 
@@ -215,7 +215,7 @@ class BookServiceMongoTest {
 
     bookServiceMongo.update(bookToUpdate, listOfIds, listOfIds);
 
-    Mockito.verify(bookRepository, times(1)).save(bookToUpdate);
+    Mockito.verify(bookRepository, times(1)).saveAndCheckAuthors(bookToUpdate);
 
   }
 
