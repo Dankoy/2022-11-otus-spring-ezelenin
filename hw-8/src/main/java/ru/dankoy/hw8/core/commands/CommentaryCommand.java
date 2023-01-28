@@ -6,10 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Commentary;
-import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.service.book.BookService;
 import ru.dankoy.hw8.core.service.commentary.CommentaryService;
 import ru.dankoy.hw8.core.service.objectmapper.ObjectMapperService;
@@ -49,26 +47,15 @@ public class CommentaryCommand {
       "cdabb"}, value = "Delete all commentaries for book")
   public String deleteAllByBookId(@ShellOption String bookId) {
 
-    var optional = bookService.getById(bookId);
-
-    var book = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, bookId);
-
     // удаляем все комментарии книги из коллекции комментариев
     commentaryService.deleteAllByBookId(bookId);
-
-    // удалям ссылки на удаленные комментарии из объекта книги
-    book.getCommentaries().clear();
-    var authorIds = book.getAuthors().stream().map(Author::getId).toArray(String[]::new);
-    var genreNames = book.getGenres().stream().map(Genre::getName).toArray(String[]::new);
-
-    bookService.update(book, authorIds, genreNames);
 
     return String.format("Deleted all commentaries for book - %s", bookId);
   }
 
   @ShellMethod(key = {"commentary-insert", "ci"}, value = "Insert new commentary")
   public String insert(@ShellOption String bookId, @ShellOption String comment) {
-    var book = new Book(bookId, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new Book(bookId, null, new HashSet<>(), new HashSet<>());
     var commentary = new Commentary(null, comment, book);
     var createdCommentary = commentaryService.insertOrUpdate(commentary);
     return objectMapperService.convertToString(createdCommentary);
@@ -83,7 +70,7 @@ public class CommentaryCommand {
   @ShellMethod(key = {"commentary-update", "cu"}, value = "Update commentary")
   public String update(@ShellOption String bookId, @ShellOption String commentaryId,
       @ShellOption String commentaryText) {
-    var book = new Book(bookId, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new Book(bookId, null, new HashSet<>(), new HashSet<>());
     var commentary = new Commentary(commentaryId, commentaryText, book);
     commentaryService.insertOrUpdate(commentary);
     return String.format("Updated commentary - %s",

@@ -55,7 +55,7 @@ public class BookCommand {
   public String insert(@ShellOption String bookName, @ShellOption String[] authorIds,
       @ShellOption String[] genreNames) {
 
-    var book = new Book(null, bookName, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new Book(null, bookName, new HashSet<>(), new HashSet<>());
 
     var created = bookService.insertOrUpdate(book, authorIds, genreNames);
 
@@ -76,8 +76,7 @@ public class BookCommand {
     var optional = bookService.getById(id);
     var found = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, id);
 
-    var book = new Book(found.getId(), bookName, found.getAuthors(), found.getGenres(),
-        found.getCommentaries());
+    var book = new Book(found.getId(), bookName, found.getAuthors(), found.getGenres());
     var updated = bookService.update(book, authorIds, genreNames);
     var booksDto = bookMapper.toDTOWithoutCommentaries(updated);
 

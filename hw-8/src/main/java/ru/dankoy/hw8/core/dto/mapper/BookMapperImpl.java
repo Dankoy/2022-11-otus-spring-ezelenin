@@ -43,8 +43,7 @@ public class BookMapperImpl implements BookMapper {
         dto.getId(),
         dto.getName(),
         dto.getAuthors(),
-        dto.getGenres(),
-        dto.getCommentaries()
+        dto.getGenres()
     );
 
   }

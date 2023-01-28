@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
+import ru.dankoy.hw8.core.domain.Commentary;
 import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.exceptions.BookServiceException;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
 import ru.dankoy.hw8.core.service.author.AuthorService;
+import ru.dankoy.hw8.core.service.commentary.CommentaryService;
 import ru.dankoy.hw8.core.service.utils.OptionalChecker;
 
 @Service
@@ -21,6 +23,7 @@ public class BookServiceMongo implements BookService {
 
   private final BookRepository bookRepository;
   private final AuthorService authorService;
+  private final CommentaryService commentaryService;
 
   private final OptionalChecker optionalChecker;
 
@@ -61,7 +64,9 @@ public class BookServiceMongo implements BookService {
     var optional = bookRepository.findById(id);
     var book = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, id);
 
-    if (!book.getCommentaries().isEmpty()) {
+    List<Commentary> commentaries = commentaryService.getAllByBookId(id);
+
+    if (!commentaries.isEmpty()) {
       throw new BookServiceException(
           "Book contains commentaries. First delete all of them, then retry.");
     }

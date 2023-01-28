@@ -7,7 +7,6 @@ import com.github.cloudyrock.mongock.ChangeSet;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
-import java.util.HashSet;
 import java.util.List;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -29,22 +28,19 @@ public class InitBooksChangeLog {
                 new Document().append("name", "genre1"),
                 new Document().append("name", "genre2")
             ))
-            .append("authors", List.of(author1.get("_id"), author2.get("_id")))
-            .append("commentaries", new HashSet<>()),
+            .append("authors", List.of(author1.get("_id"), author2.get("_id"))),
         new Document().append("name", "book2")
             .append("genres", List.of(
                 new Document().append("name", "genre2"),
                 new Document().append("name", "genre3")
             ))
-            .append("authors", List.of(author2.get("_id"), author3.get("_id")))
-            .append("commentaries", new HashSet<>()),
+            .append("authors", List.of(author2.get("_id"), author3.get("_id"))),
         new Document().append("name", "book3")
             .append("genres", List.of(
                 new Document().append("name", "genre1"),
                 new Document().append("name", "genre3")
             ))
             .append("authors", List.of(author1.get("_id"), author3.get("_id")))
-            .append("commentaries", new HashSet<>())
     );
 
     books.insertMany(docs);
