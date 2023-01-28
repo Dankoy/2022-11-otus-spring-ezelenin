@@ -24,7 +24,7 @@ import ru.dankoy.hw8.core.service.book.BookService;
 
 
 @Transactional(propagation = Propagation.NEVER)
-@DisplayName("Test GenreServiceJpa ")
+@DisplayName("Test GenreServiceMongo ")
 @DataMongoTest
 @Import({GenreServiceMongo.class})
 class GenreServiceMongoTest {
