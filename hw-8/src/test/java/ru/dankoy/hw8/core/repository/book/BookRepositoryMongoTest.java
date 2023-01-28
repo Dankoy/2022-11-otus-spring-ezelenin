@@ -50,4 +50,19 @@ class BookRepositoryMongoTest {
     assertThat(books).isEqualTo(booksExpected);
   }
 
+
+  @DisplayName("should return no books by genre name")
+  @Test
+  void shouldGetAllGenresByBookIdTest() {
+
+    var book1 = mongoTemplate.find(
+        new Query().addCriteria(Criteria.where("name").is("book1")),
+        Book.class)
+        .get(0);
+
+    var genres = bookRepository.getAllGenresByBookId(book1.getId());
+
+    assertThat(genres).containsExactlyInAnyOrderElementsOf(book1.getGenres());
+  }
+
 }
