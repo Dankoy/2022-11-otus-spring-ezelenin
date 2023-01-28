@@ -133,18 +133,15 @@ class GenreServiceMongoTest {
 
     var book1 = new Book("1L", "book1",
         Set.of(new Author("1L", "author1"), new Author("2L", "author2")),
-        genreBook1,
-        new HashSet<>());
+        genreBook1);
 
     var book2 = new Book("2L", "book2",
         Set.of(new Author("2L", "author2"), new Author("3L", "author3")),
-        genreBook2,
-        new HashSet<>());
+        genreBook2);
 
     var book3 = new Book("3L", "book3",
         Set.of(new Author("1L", "author1"), new Author("3L", "author3")),
-        genreBook3,
-        new HashSet<>());
+        genreBook3);
 
     return List.of(
         book1,

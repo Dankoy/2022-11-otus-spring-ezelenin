@@ -22,18 +22,23 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
+import ru.dankoy.hw8.core.domain.Commentary;
 import ru.dankoy.hw8.core.domain.Genre;
+import ru.dankoy.hw8.core.exceptions.BookServiceException;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
 import ru.dankoy.hw8.core.service.author.AuthorService;
 import ru.dankoy.hw8.core.service.author.AuthorServiceMongo;
+import ru.dankoy.hw8.core.service.commentary.CommentaryService;
+import ru.dankoy.hw8.core.service.commentary.CommentaryServiceMongo;
 import ru.dankoy.hw8.core.service.utils.OptionalCheckerImpl;
 
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test BookServiceMongo ")
 @DataMongoTest
-@Import({BookServiceMongo.class, AuthorServiceMongo.class, OptionalCheckerImpl.class})
+@Import({BookServiceMongo.class, AuthorServiceMongo.class, OptionalCheckerImpl.class,
+    CommentaryServiceMongo.class})
 class BookServiceMongoTest {
 
   @MockBean
@@ -41,6 +46,9 @@ class BookServiceMongoTest {
 
   @MockBean
   private AuthorService authorService;
+
+  @MockBean
+  private CommentaryService commentaryService;
 
   @Autowired
   private BookServiceMongo bookServiceMongo;
@@ -124,8 +132,8 @@ class BookServiceMongoTest {
     authors.add(author);
     genres.add(genre);
 
-    var bookToInsert = new Book(null, bookName, authors, genres, new HashSet<>());
-    var insertedBook = new Book(correctInsertedId, bookName, authors, genres, new HashSet<>());
+    var bookToInsert = new Book(null, bookName, authors, genres);
+    var insertedBook = new Book(correctInsertedId, bookName, authors, genres);
 
     given(bookRepository.save(bookToInsert)).willReturn(insertedBook);
     given(authorService.getById(id)).willReturn(Optional.of(author));
@@ -142,13 +150,32 @@ class BookServiceMongoTest {
   void shouldCorrectlyDeleteBookById() {
 
     var id = "1L";
-    var toDelete = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var toDelete = new Book(id, "name", new HashSet<>(), new HashSet<>());
 
     given(bookRepository.findById(id)).willReturn(Optional.of(toDelete));
 
     bookServiceMongo.deleteById(id);
 
     Mockito.verify(bookRepository, times(1)).delete(toDelete);
+
+  }
+
+  @DisplayName("should throw exception when delete book by id with commentaries")
+  @Test
+  void shouldThrowExceptionWhenDeleteBookByIWithCommentaries() {
+
+    var id = "1L";
+    var toDelete = new Book(id, "name", new HashSet<>(), new HashSet<>());
+
+    given(bookRepository.findById(id)).willReturn(Optional.of(toDelete));
+    given(commentaryService.getAllByBookId(id)).willReturn(
+        List.of(new Commentary("id", "text", toDelete)));
+
+    assertThatThrownBy(() -> bookServiceMongo.deleteById(id))
+        .isInstanceOf(BookServiceException.class);
+
+    Mockito.verify(bookRepository, times(0)).delete(toDelete);
+    Mockito.verify(commentaryService, times(1)).getAllByBookId(id);
 
   }
 
@@ -181,7 +208,7 @@ class BookServiceMongoTest {
     authors.add(author);
     genres.add(genre);
 
-    var bookToUpdate = new Book(id, "newName", authors, genres, new HashSet<>());
+    var bookToUpdate = new Book(id, "newName", authors, genres);
 
     given(bookRepository.findById(id)).willReturn(Optional.of(bookToUpdate));
     given(authorService.getById(id)).willReturn(Optional.of(author));
@@ -201,7 +228,6 @@ class BookServiceMongoTest {
     return bookOptional.orElse(
         new Book(nonExistingId, "nonexisting",
             new HashSet<>(),
-            new HashSet<>(),
             new HashSet<>()));
 
   }
@@ -210,18 +236,15 @@ class BookServiceMongoTest {
 
     var book1 = new Book("1L", "book1",
         Set.of(new Author("1L", "author1"), new Author("2L", "author2")),
-        Set.of(new Genre("genre1"), new Genre("genre2")),
-        new HashSet<>());
+        Set.of(new Genre("genre1"), new Genre("genre2")));
 
     var book2 = new Book("2L", "book2",
         Set.of(new Author("2L", "author2"), new Author("3L", "author3")),
-        Set.of(new Genre("genre2"), new Genre("genre3")),
-        new HashSet<>());
+        Set.of(new Genre("genre2"), new Genre("genre3")));
 
     var book3 = new Book("3L", "book3",
         Set.of(new Author("1L", "author1"), new Author("3L", "author3")),
-        Set.of(new Genre("genre1"), new Genre("genre3")),
-        new HashSet<>());
+        Set.of(new Genre("genre1"), new Genre("genre3")));
 
     return List.of(
         book1,

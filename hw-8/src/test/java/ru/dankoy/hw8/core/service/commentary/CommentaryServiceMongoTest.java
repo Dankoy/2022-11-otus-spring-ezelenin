@@ -55,7 +55,7 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new Book(id, "name", new HashSet<>(), new HashSet<>());
     var found = new Commentary(id, "com", book);
     given(commentaryRepository.findById(id)).willReturn(Optional.of(found));
 
@@ -106,7 +106,7 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new Book(id, "name", new HashSet<>(), new HashSet<>());
     var commentary = new Commentary(id, "com", book);
     given(bookService.getById(id)).willReturn(Optional.of(book));
     given(commentaryRepository.findById(id)).willReturn(Optional.of(commentary));
@@ -125,7 +125,7 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new Book(id, "name", new HashSet<>(), new HashSet<>());
     given(bookService.getById(id)).willReturn(Optional.of(book));
     given(commentaryRepository.findById(id)).willReturn(Optional.empty());
 
@@ -144,41 +144,20 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new Book(id, "name", new HashSet<>(), new HashSet<>());
     var commentary = new Commentary(id, "com", book);
-    given(bookService.getById(id)).willReturn(Optional.of(book));
 
     commentaryService.insertOrUpdate(commentary);
 
     Mockito.verify(commentaryRepository, times(1)).save(commentary);
-    Mockito.verify(bookService, times(1)).getById(id);
 
-
-  }
-
-
-  @DisplayName("should throw exception when update commentary")
-  @Test
-  void shouldThrowExceptionWhenUpdateCommentary() {
-
-    var id = "1L";
-
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
-    var commentary = new Commentary(id, "com", book);
-    given(bookService.getById(id)).willReturn(Optional.empty());
-
-    assertThatThrownBy(() -> commentaryService.insertOrUpdate(commentary))
-        .isInstanceOf(EntityNotFoundException.class);
-
-    Mockito.verify(commentaryRepository, times(0)).save(commentary);
-    Mockito.verify(bookService, times(1)).getById(id);
 
   }
 
 
   private Set<Commentary> makeCorrectCommentaryList() {
 
-    var book = new Book("1L", "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new Book("1L", "name", new HashSet<>(), new HashSet<>());
     return Set.of(new Commentary("1L", "com1", book),
         new Commentary("2L", "com2", book),
         new Commentary("3L", "com3", book));
