@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import ru.dankoy.hw8.core.domain.Book;
 
 
-public interface BookRepository extends MongoRepository<Book, String> {
+public interface BookRepository extends MongoRepository<Book, String>, BookRepositoryCustom {
 
   @Query("{'genres.name' : :#{#genreName}}")
   List<Book> findBookByGenres(@Param("genreName") String genreName);
