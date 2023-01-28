@@ -12,4 +12,7 @@ public interface BookRepository extends MongoRepository<Book, String>, BookRepos
   @Query("{'genres.name' : :#{#genreName}}")
   List<Book> findBookByGenres(@Param("genreName") String genreName);
 
+
+  List<Book> findBookByAuthorsId(String authorId);
+
 }
