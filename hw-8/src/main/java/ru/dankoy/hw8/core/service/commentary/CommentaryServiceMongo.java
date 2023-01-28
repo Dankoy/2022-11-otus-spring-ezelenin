@@ -1,6 +1,5 @@
 package ru.dankoy.hw8.core.service.commentary;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +28,7 @@ public class CommentaryServiceMongo implements CommentaryService {
   @Transactional(readOnly = true) // нужен для получения комментариев
   @Override
   public List<Commentary> getAllByBookId(String id) {
-    var optional = bookService.getById(id);
-    var book = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, id);
-
-    return new ArrayList<>(book.getCommentaries());
+    return commentaryRepository.findAllByBookId(id);
   }
 
 
