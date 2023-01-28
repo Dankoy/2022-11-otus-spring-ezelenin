@@ -1,4 +1,11 @@
 spring:
+  mongodb:
+    embedded:
+      version: 3.5.5
+  data:
+    mongodb:
+      port: 0
+      database: test
 
   shell:
     interactive:
@@ -11,9 +18,8 @@ mongock:
   runner-type: "InitializingBean"
   change-logs-scan-package:
     - ru.dankoy.hw8.core.mongock.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
 
-de:
-  flapdoodle:
-    mongodb:
-      embedded:
-        version: 3.6.5
