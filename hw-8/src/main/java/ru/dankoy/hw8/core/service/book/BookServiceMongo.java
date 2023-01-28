@@ -13,7 +13,6 @@ import ru.dankoy.hw8.core.domain.Commentary;
 import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.exceptions.BookServiceException;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
-import ru.dankoy.hw8.core.service.author.AuthorService;
 import ru.dankoy.hw8.core.service.commentary.CommentaryService;
 import ru.dankoy.hw8.core.service.utils.OptionalChecker;
 
@@ -22,7 +21,6 @@ import ru.dankoy.hw8.core.service.utils.OptionalChecker;
 public class BookServiceMongo implements BookService {
 
   private final BookRepository bookRepository;
-  private final AuthorService authorService;
   private final CommentaryService commentaryService;
 
   private final OptionalChecker optionalChecker;
@@ -32,6 +30,13 @@ public class BookServiceMongo implements BookService {
   public List<Book> findAllByGenreName(Genre genre) {
 
     return bookRepository.findBookByGenres(genre.getName());
+
+  }
+
+  @Override
+  public List<Book> findAllByAuthorId(Author author) {
+
+    return bookRepository.findBookByAuthorsId(author.getId());
 
   }
 
@@ -49,7 +54,7 @@ public class BookServiceMongo implements BookService {
   @Override
   public Book insertOrUpdate(Book book, String[] authorIds, String[] genreName) {
 
-    List<Author> authors = getRealAuthors(authorIds);
+    List<Author> authors = convertAuthorIdsToObjects(authorIds);
     List<Genre> genres = convertGenreNamesToObjects(genreName);
 
     book.getAuthors().addAll(authors);
@@ -78,7 +83,7 @@ public class BookServiceMongo implements BookService {
   @Override
   public Book update(Book book, String[] authorIds, String[] genreNames) {
 
-    List<Author> authors = getRealAuthors(authorIds);
+    List<Author> authors = convertAuthorIdsToObjects(authorIds);
     List<Genre> genres = convertGenreNamesToObjects(genreNames);
 
     book.getAuthors().clear();
@@ -107,13 +112,9 @@ public class BookServiceMongo implements BookService {
 
   }
 
-  private List<Author> getRealAuthors(String[] ids) {
+  private List<Author> convertAuthorIdsToObjects(String[] names) {
 
-    // получает реальные объекты авторов из бд + выбрасывает исключение, если автор не был найден
-    return Arrays.stream(ids).map(id -> {
-      var optional = authorService.getById(id);
-      return optionalChecker.getFromOptionalOrThrowException(Author.class, optional, id);
-    }).collect(Collectors.toList());
+    return Arrays.stream(names).map(Author::new).collect(Collectors.toList());
 
   }
 }
