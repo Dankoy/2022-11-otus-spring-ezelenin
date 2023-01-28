@@ -11,9 +11,9 @@ import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.exceptions.BookServiceException;
-import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw8.core.repository.book.BookRepository;
 import ru.dankoy.hw8.core.service.author.AuthorService;
+import ru.dankoy.hw8.core.service.utils.OptionalChecker;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +21,8 @@ public class BookServiceMongo implements BookService {
 
   private final BookRepository bookRepository;
   private final AuthorService authorService;
+
+  private final OptionalChecker optionalChecker;
 
 
   @Override
@@ -57,8 +59,7 @@ public class BookServiceMongo implements BookService {
   @Override
   public void deleteById(String id) {
     var optional = bookRepository.findById(id);
-    var book = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %s", Book.class.getName(), id)));
+    var book = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, id);
 
     if (!book.getCommentaries().isEmpty()) {
       throw new BookServiceException(
@@ -106,8 +107,7 @@ public class BookServiceMongo implements BookService {
     // получает реальные объекты авторов из бд + выбрасывает исключение, если автор не был найден
     return Arrays.stream(ids).map(id -> {
       var optional = authorService.getById(id);
-      return optional.orElseThrow(() -> new EntityNotFoundException(
-          String.format("Entity %s has not been found with id - %s", Author.class.getName(), id)));
+      return optionalChecker.getFromOptionalOrThrowException(Author.class, optional, id);
     }).collect(Collectors.toList());
 
   }
