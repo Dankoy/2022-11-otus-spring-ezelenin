@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Genre;
 import ru.dankoy.hw8.core.service.book.BookService;
@@ -16,7 +15,6 @@ public class GenreServiceMongo implements GenreService {
 
   private final BookService bookService;
 
-  @Transactional
   @Override
   public void update(Genre oldGenre, Genre newGenre) {
 
@@ -31,7 +29,6 @@ public class GenreServiceMongo implements GenreService {
 
   }
 
-  @Transactional
   @Override
   public void delete(Genre genre) {
 

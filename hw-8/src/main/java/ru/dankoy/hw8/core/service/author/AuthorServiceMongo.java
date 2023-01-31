@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.exceptions.EntityNotFoundException;
@@ -29,13 +28,11 @@ public class AuthorServiceMongo implements AuthorService {
     return authorRepository.findById(id);
   }
 
-  @Transactional
   @Override
   public Author insertOrUpdate(Author author) {
     return authorRepository.save(author);
   }
 
-  @Transactional
   @Override
   public void deleteById(String id) {
     var optional = authorRepository.findById(id);

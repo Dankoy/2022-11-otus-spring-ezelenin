@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw8.core.domain.Author;
 import ru.dankoy.hw8.core.domain.Book;
 import ru.dankoy.hw8.core.domain.Commentary;
@@ -50,7 +49,6 @@ public class BookServiceMongo implements BookService {
     return bookRepository.findById(id);
   }
 
-  @Transactional
   @Override
   public Book insertOrUpdate(Book book, String[] authorIds, String[] genreName) {
 
@@ -63,7 +61,6 @@ public class BookServiceMongo implements BookService {
     return bookRepository.saveAndCheckAuthors(book);
   }
 
-  @Transactional
   @Override
   public void deleteById(String id) {
     var optional = bookRepository.findById(id);
@@ -79,7 +76,6 @@ public class BookServiceMongo implements BookService {
     bookRepository.delete(book);
   }
 
-  @Transactional
   @Override
   public Book update(Book book, String[] authorIds, String[] genreNames) {
 

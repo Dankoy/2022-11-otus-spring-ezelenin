@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw8.core.domain.Commentary;
 import ru.dankoy.hw8.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw8.core.service.utils.OptionalChecker;
@@ -25,7 +24,6 @@ public class CommentaryServiceMongo implements CommentaryService {
   }
 
 
-  @Transactional
   @Override
   public void deleteAllByBookId(String bookId) {
 
@@ -39,14 +37,12 @@ public class CommentaryServiceMongo implements CommentaryService {
   }
 
 
-  @Transactional
   @Override
   public Commentary insertOrUpdate(Commentary commentary) {
 
     return commentaryRepository.save(commentary);
   }
 
-  @Transactional
   @Override
   public void deleteById(String id) {
     var optional = commentaryRepository.findById(id);
