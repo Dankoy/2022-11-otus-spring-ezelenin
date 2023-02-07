@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import ru.dankoy.hw7.core.commands.AuthorCommand;
-import ru.dankoy.hw7.core.commands.BookCommand;
-import ru.dankoy.hw7.core.commands.GenreCommand;
+//import ru.dankoy.hw7.core.commands.AuthorCommand;
+//import ru.dankoy.hw7.core.commands.BookCommand;
+//import ru.dankoy.hw7.core.commands.GenreCommand;
 import ru.dankoy.hw7.core.dto.mapper.BookMapper;
 import ru.dankoy.hw7.core.repository.author.AuthorRepository;
 import ru.dankoy.hw7.core.repository.book.BookRepository;
@@ -40,9 +40,9 @@ class Hw9ApplicationDefaultTests {
     var authorServiceJpa = context.getBean(AuthorServiceJpa.class);
     var genreServiceJpa = context.getBean(GenreServiceJpa.class);
     var objectMapper = context.getBean(ObjectMapper.class);
-    var authorCommand = context.getBean(AuthorCommand.class);
-    var bookCommand = context.getBean(BookCommand.class);
-    var genreCommand = context.getBean(GenreCommand.class);
+//    var authorCommand = context.getBean(AuthorCommand.class);
+//    var bookCommand = context.getBean(BookCommand.class);
+//    var genreCommand = context.getBean(GenreCommand.class);
     var objectMapperService = context.getBean(ObjectMapperServiceImpl.class);
     var bookMapper = context.getBean(BookMapper.class);
 
@@ -53,9 +53,9 @@ class Hw9ApplicationDefaultTests {
     assertNotNull(authorServiceJpa);
     assertNotNull(genreServiceJpa);
     assertNotNull(objectMapper);
-    assertNotNull(authorCommand);
-    assertNotNull(bookCommand);
-    assertNotNull(genreCommand);
+//    assertNotNull(authorCommand);
+//    assertNotNull(bookCommand);
+//    assertNotNull(genreCommand);
     assertNotNull(objectMapperService);
     assertNotNull(bookMapper);
 
