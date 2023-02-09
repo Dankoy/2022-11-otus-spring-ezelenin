@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 // https://www.jpa-buddy.com/blog/lombok-and-jpa-what-may-go-wrong/
 // https://thorben-janssen.com/ultimate-guide-to-implementing-equals-and-hashcode-with-hibernate/#Using_a_Generated_Primary_Key
@@ -33,7 +32,6 @@ import lombok.Setter;
 //    If you tell Hibernate to generate your primary key values, you need to use a fixed hash code, and your equals() method requires explicit handling of null values.
 
 
-@NamedEntityGraph(name = "authors-entity-graph", attributeNodes = {@NamedAttributeNode("authors")})
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -51,6 +49,7 @@ public class Book {
   private String name;
 
 
+  @BatchSize(size = 10)
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "books_authors",
       joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
@@ -58,6 +57,7 @@ public class Book {
   private Set<Author> authors = new HashSet<>();
 
 
+  @BatchSize(size = 10)
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "books_genres",
       joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
