@@ -8,6 +8,8 @@ public interface BookMapper {
 
   BookDTO toDTOWithoutCommentaries(Book book);
 
+  BookDTO toDTOWithCommentaries(Book book);
+
   BookDTO toSimpleDTO(Book book);
 
   Book toBook(BookDTO dto);

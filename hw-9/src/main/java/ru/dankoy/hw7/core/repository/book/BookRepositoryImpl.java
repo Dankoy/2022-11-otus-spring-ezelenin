@@ -1,6 +1,5 @@
 package ru.dankoy.hw7.core.repository.book;
 
-import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -27,18 +26,5 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
     } catch (NoResultException e) {
       return Optional.empty();
     }
-  }
-
-  @Override
-  public List<Book> getAllWithBooksAndGenres() {
-    // используется для того, что бы сохранить пример с использованием графов и join fetch.
-    // EAGER для many-to-many использовать не хочется.
-
-    // для решения проблемы n+1 используются решение с графом и join fetch
-    // часть списков обновляются в сервисе через метод size
-    var authorEntityGraph = entityManager.getEntityGraph("authors-entity-graph");
-    var query = entityManager.createQuery("select b from Book b join fetch b.genres", Book.class);
-    query.setHint("javax.persistence.fetchgraph", authorEntityGraph);
-    return query.getResultList();
   }
 }

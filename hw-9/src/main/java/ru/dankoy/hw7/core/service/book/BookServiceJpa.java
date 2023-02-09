@@ -19,7 +19,7 @@ public class BookServiceJpa implements BookService {
 
   @Override
   public List<Book> getAllWithAuthorsAndGenres() {
-    return bookRepository.getAllWithBooksAndGenres();
+    return bookRepository.findAll();
   }
 
   @Override

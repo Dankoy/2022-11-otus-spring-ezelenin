@@ -14,11 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.dankoy.hw7.core.domain.Author;
 import ru.dankoy.hw7.core.domain.Genre;
 import ru.dankoy.hw7.core.dto.BookFormDTO;
-import ru.dankoy.hw7.core.dto.mapper.BookMapper;
 import ru.dankoy.hw7.core.exceptions.Entity;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.service.author.AuthorService;
-import ru.dankoy.hw7.core.service.book.BookService;
+import ru.dankoy.hw7.core.service.book.BookDtoService;
 import ru.dankoy.hw7.core.service.genre.GenreService;
 
 
@@ -26,11 +25,9 @@ import ru.dankoy.hw7.core.service.genre.GenreService;
 @Controller
 public class BookController {
 
-  private final BookService bookService;
+  private final BookDtoService bookService;
   private final AuthorService authorService;
   private final GenreService genreService;
-
-  private final BookMapper bookMapper;
 
 
   @GetMapping("/books")
@@ -70,7 +67,7 @@ public class BookController {
   @PostMapping("/book/create")
   public ModelAndView createForm(@ModelAttribute BookFormDTO bookFormDTO) {
 
-    bookService.insertOrUpdate(bookMapper.toBook(bookFormDTO));
+    bookService.insertOrUpdate(bookFormDTO);
 
     return new ModelAndView("redirect:/books");
 
@@ -94,7 +91,7 @@ public class BookController {
   @PostMapping("/book/edit")
   public String update(@ModelAttribute BookFormDTO book, Model model) {
 
-    var updated = bookService.update(bookMapper.toBook(book));
+    var updated = bookService.update(book);
     model.addAttribute("book", updated);
     return "book";
   }
