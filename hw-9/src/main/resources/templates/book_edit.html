@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form action="book_edit.html" th:method="post" th:action="@{/book}" th:object="${book}">
+<form action="book_edit.html" th:method="post" th:action="@{/book/edit}" th:object="${book}">
   <div class="row">
     <label for="id-input" th:field="*{id}">ID:</label>
     <input id="id-input" type="text" readonly="readonly" value="1" th:field="*{id}" th:value="*{id}"/>

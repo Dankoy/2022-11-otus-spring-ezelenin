@@ -56,14 +56,16 @@
       </th:block>
     </td>
     <td>
-      <a th:href="@{/book(id=${book.id})}" href="book_edit.html">Edit</a>
+      <a th:href="@{/book/edit(id=${book.id})}" href="book_edit.html">Edit</a>
     </td>
   </tr>
   </tbody>
 </table>
 
 <div>
-  <a href="books.html" th:href="@{/books}"><button type="button">To list</button></a>
+  <a href="books.html" th:href="@{/books}">
+    <button type="button">To list</button>
+  </a>
 </div>
 
 </body>

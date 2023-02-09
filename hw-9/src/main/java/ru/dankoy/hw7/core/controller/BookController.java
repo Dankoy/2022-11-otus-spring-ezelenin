@@ -19,7 +19,6 @@ import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.service.author.AuthorService;
 import ru.dankoy.hw7.core.service.book.BookService;
 import ru.dankoy.hw7.core.service.genre.GenreService;
-import ru.dankoy.hw7.core.service.objectmapper.ObjectMapperService;
 
 
 @RequiredArgsConstructor
@@ -29,9 +28,7 @@ public class BookController {
   private final BookService bookService;
   private final AuthorService authorService;
   private final GenreService genreService;
-
-  private final ObjectMapperService objectMapperService;
-
+  
   private final BookMapper bookMapper;
 
 
@@ -51,6 +48,17 @@ public class BookController {
     var optional = bookService.getById(id);
     var book = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
+    model.addAttribute("book", book);
+    return "book";
+
+  }
+
+  @GetMapping("/book/edit")
+  public String updateForm(@RequestParam("id") long id, Model model) {
+
+    var optional = bookService.getById(id);
+    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
+
     List<Author> authors = authorService.getAll();
     List<Genre> genres = genreService.getAll();
 
@@ -58,10 +66,9 @@ public class BookController {
     model.addAttribute("authors", authors);
     model.addAttribute("genres", genres);
     return "book_edit";
-
   }
 
-  @PostMapping("/book")
+  @PostMapping("/book/edit")
   public String update(@ModelAttribute BookFormDTO book, Model model) {
 
     var updated = bookService.update(bookMapper.toBook(book));
