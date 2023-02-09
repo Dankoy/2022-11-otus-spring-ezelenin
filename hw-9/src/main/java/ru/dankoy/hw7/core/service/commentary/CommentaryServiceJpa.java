@@ -53,12 +53,7 @@ public class CommentaryServiceJpa implements CommentaryService {
   @Override
   public void deleteById(long id) {
     var optional = commentaryRepository.getById(id);
-    var commentary = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %d", Commentary.class.getName(),
-            id)));
-
-    commentaryRepository.delete(commentary);
-
+    optional.ifPresent(commentaryRepository::delete);
   }
 
 }

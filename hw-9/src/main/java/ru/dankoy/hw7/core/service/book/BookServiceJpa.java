@@ -48,9 +48,7 @@ public class BookServiceJpa implements BookService {
   @Override
   public void deleteById(long id) {
     var optional = bookRepository.getById(id);
-    var book = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %d", Book.class.getName(), id)));
-    bookRepository.delete(book);
+    optional.ifPresent(bookRepository::delete);
   }
 
   @Transactional

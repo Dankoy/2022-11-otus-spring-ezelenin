@@ -5,7 +5,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw7.core.domain.Author;
-import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.repository.author.AuthorRepository;
 
 @Service
@@ -32,9 +31,7 @@ public class AuthorServiceJpa implements AuthorService {
   @Override
   public void deleteById(long id) {
     var optional = authorRepository.getById(id);
-    var author = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %d", Author.class.getName(), id)));
-    authorRepository.delete(author);
+    optional.ifPresent(authorRepository::delete);
   }
 
   @Override
