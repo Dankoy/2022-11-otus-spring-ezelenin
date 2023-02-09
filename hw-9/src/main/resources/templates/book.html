@@ -8,18 +8,18 @@
       padding: 50px;
     }
 
-    .books {
+    .books, .commentaries {
       border: 1px solid steelblue;
       width: 300px;
       border-collapse: collapse;
     }
 
-    .books tr td, th {
+    .books tr td, th, .commentaries tr td, th {
       padding: 5px;
       border: 1px solid steelblue;
     }
 
-    .books td:last-child, td:first-child {
+    .books td:last-child, td:first-child, .commentaries td:last-child, td:first-child {
       width: 50px;
     }
 
@@ -28,7 +28,7 @@
 <body>
 
 <h3>
-  Books
+  Book
 </h3>
 
 <table class="books">
@@ -59,6 +59,24 @@
       <a th:href="@{/book/edit(id=${book.id})}" href="book_edit.html">Edit</a>
     </td>
   </tr>
+  </tbody>
+</table>
+
+<h4>
+  Commentaries
+</h4>
+<table class="commentaries">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>text</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr th:each="commentary : ${book.commentaries}">
+      <td th:text="${commentary.id}">id</td>
+      <td th:text="${commentary.text}">text</td>
+    </tr>
   </tbody>
 </table>
 
