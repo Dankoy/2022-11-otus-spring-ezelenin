@@ -31,6 +31,7 @@ import org.hibernate.annotations.BatchSize;
 //    If you set your primary key values programmatically, you can use its value in your equals check and when you calculate the hash code.
 //    If you tell Hibernate to generate your primary key values, you need to use a fixed hash code, and your equals() method requires explicit handling of null values.
 
+// Если использовать графы, при этом удалить из книги жанры и авторы, то книга будет возвращаться фрэймворком как null
 
 @AllArgsConstructor
 @NoArgsConstructor
