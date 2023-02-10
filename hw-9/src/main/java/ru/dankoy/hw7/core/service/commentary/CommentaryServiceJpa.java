@@ -6,8 +6,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw7.core.domain.Book;
 import ru.dankoy.hw7.core.domain.Commentary;
+import ru.dankoy.hw7.core.exceptions.Entity;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw7.core.service.book.BookService;
@@ -26,8 +26,7 @@ public class CommentaryServiceJpa implements CommentaryService {
   @Override
   public List<Commentary> getAllByBookId(long id) {
     var optional = bookService.getById(id);
-    var book = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %d", Book.class.getName(), id)));
+    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
     return new ArrayList<>(book.getCommentaries());
   }
@@ -41,11 +40,10 @@ public class CommentaryServiceJpa implements CommentaryService {
   @Override
   public Commentary insertOrUpdate(Commentary commentary) {
 
-    bookService.getById(commentary.getBook().getId()).orElseThrow(
-        () -> new EntityNotFoundException(
-            String.format("Entity %s has not been found with id - %d", Book.class.getName(),
-                commentary.getBook().getId()))
-    );
+    var book = bookService.getById(commentary.getBook().getId())
+        .orElseThrow(() -> new EntityNotFoundException(commentary.getBook().getId(), Entity.BOOK));
+
+    commentary.setBook(book);
 
     return commentaryRepository.save(commentary);
   }
