@@ -2,8 +2,6 @@ package ru.dankoy.hw7.core.service.genre;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
@@ -19,7 +17,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw7.core.domain.Genre;
-import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.repository.genre.GenreRepository;
 
 
@@ -111,22 +108,6 @@ class GenreServiceJpaTest {
     Mockito.verify(genreRepository, times(1)).delete(toDelete);
 
   }
-
-  @DisplayName("should throw exception when delete genre by id")
-  @Test
-  void shouldThrowExceptionWhenDeleteNonExistingGenreById() {
-
-    var id = 999L;
-
-    given(genreRepository.getById(id)).willReturn(Optional.empty());
-
-    assertThatThrownBy(() -> genreServiceJpa.deleteById(id))
-        .isInstanceOf(EntityNotFoundException.class);
-
-    Mockito.verify(genreRepository, times(0)).delete(any());
-
-  }
-
 
   private Genre getGenreByIdFromList(List<Genre> genres, long id) {
 

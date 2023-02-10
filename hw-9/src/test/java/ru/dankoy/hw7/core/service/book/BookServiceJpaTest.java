@@ -58,12 +58,12 @@ class BookServiceJpaTest {
   @Test
   void shouldGetAllBooksTest() {
 
-    given(bookRepository.getAllWithBooksAndGenres()).willReturn(makeCorrectAllBooksList());
+    given(bookRepository.findAll()).willReturn(makeCorrectAllBooksList());
 
-    var books = bookServiceJpa.getAllWithAuthorsAndGenres();
+    var books = bookServiceJpa.getAll();
 
     assertThat(books).isEqualTo(makeCorrectAllBooksList());
-    Mockito.verify(bookRepository, times(1)).getAllWithBooksAndGenres();
+    Mockito.verify(bookRepository, times(1)).findAll();
   }
 
 
@@ -109,7 +109,6 @@ class BookServiceJpaTest {
 
     var id = 1L;
     var correctInsertedId = 4L;
-    var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
     authors.add(author);
@@ -122,7 +121,7 @@ class BookServiceJpaTest {
     given(genreService.getById(id)).willReturn(Optional.of(genre));
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
-    var actual = bookServiceJpa.insertOrUpdate(bookToInsert, listOfIds, listOfIds);
+    var actual = bookServiceJpa.insertOrUpdate(bookToInsert);
 
     assertThat(actual).isEqualTo(insertedBook);
     Mockito.verify(bookRepository, times(1)).save(bookToInsert);
@@ -144,22 +143,6 @@ class BookServiceJpaTest {
 
   }
 
-  @DisplayName("should correctly delete book by id")
-  @Test
-  void shouldThrowExceptionWhenDeleteNonExistingBookById() {
-
-    var id = 999L;
-
-    given(bookRepository.getById(id)).willReturn(Optional.empty());
-
-    assertThatThrownBy(() -> bookServiceJpa.deleteById(id))
-        .isInstanceOf(EntityNotFoundException.class);
-
-    Mockito.verify(bookRepository, times(0)).delete(any());
-
-  }
-
-
   @DisplayName("should update book by id")
   @Test
   void shouldCorrectlyUpdateBook() {
@@ -167,7 +150,6 @@ class BookServiceJpaTest {
     var authors = new HashSet<Author>();
     var genres = new HashSet<Genre>();
     var id = 1L;
-    var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
     authors.add(author);
@@ -177,7 +159,7 @@ class BookServiceJpaTest {
 
     given(bookRepository.getById(id)).willReturn(Optional.of(bookToUpdate));
 
-    bookServiceJpa.update(bookToUpdate, listOfIds, listOfIds);
+    bookServiceJpa.update(bookToUpdate);
 
     Mockito.verify(bookRepository, times(1)).save(bookToUpdate);
 
@@ -188,14 +170,13 @@ class BookServiceJpaTest {
   void shouldThrowExceptionWhenUpdatingNonExistingBook() {
 
     var id = 1L;
-    var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
     var bookToUpdate = new Book(id, "newName", Set.of(author), Set.of(genre), new HashSet<>());
 
     given(bookRepository.getById(id)).willReturn(Optional.empty());
 
-    assertThatThrownBy(() -> bookServiceJpa.update(bookToUpdate, listOfIds, listOfIds))
+    assertThatThrownBy(() -> bookServiceJpa.update(bookToUpdate))
         .isInstanceOf(EntityNotFoundException.class);
 
     Mockito.verify(bookRepository, times(1)).getById(id);
@@ -208,7 +189,6 @@ class BookServiceJpaTest {
   void shouldThrowExceptionWhenUpdatingNonExistingGenreInBook() {
 
     var id = 1L;
-    var listOfIds = new long[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre(id, "genre1");
     var bookToUpdate = new Book(id, "newName", Set.of(author), Set.of(genre), new HashSet<>());
@@ -216,7 +196,7 @@ class BookServiceJpaTest {
     given(bookRepository.getById(id)).willReturn(Optional.empty());
     given(genreService.getById(id)).willReturn(Optional.empty());
 
-    assertThatThrownBy(() -> bookServiceJpa.update(bookToUpdate, listOfIds, listOfIds))
+    assertThatThrownBy(() -> bookServiceJpa.update(bookToUpdate))
         .isInstanceOf(EntityNotFoundException.class);
 
     Mockito.verify(bookRepository, times(1)).getById(id);

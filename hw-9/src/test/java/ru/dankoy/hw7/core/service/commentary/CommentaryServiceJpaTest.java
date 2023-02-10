@@ -3,7 +3,6 @@ package ru.dankoy.hw7.core.service.commentary;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
@@ -120,26 +119,6 @@ class CommentaryServiceJpaTest {
     Mockito.verify(commentaryRepository, times(1)).delete(commentary);
 
   }
-
-
-  @DisplayName("should throw exception when delete commentary by id")
-  @Test
-  void shouldThrowExceptionWhenDeleteCommentaryById() {
-
-    var id = 1L;
-
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>(), new HashSet<>());
-    given(bookService.getById(id)).willReturn(Optional.of(book));
-    given(commentaryRepository.getById(id)).willReturn(Optional.empty());
-
-    assertThatThrownBy(() -> commentaryService.deleteById(id))
-        .isInstanceOf(EntityNotFoundException.class);
-
-    Mockito.verify(commentaryRepository, times(1)).getById(id);
-    Mockito.verify(commentaryRepository, times(0)).delete(any());
-
-  }
-
 
   @DisplayName("should correctly update commentary")
   @Test

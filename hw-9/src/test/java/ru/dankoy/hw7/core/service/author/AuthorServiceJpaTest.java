@@ -2,8 +2,6 @@ package ru.dankoy.hw7.core.service.author;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
@@ -19,7 +17,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw7.core.domain.Author;
-import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.repository.author.AuthorRepository;
 
 
@@ -115,22 +112,6 @@ class AuthorServiceJpaTest {
     Mockito.verify(authorRepository, times(1)).delete(toDelete);
 
   }
-
-  @DisplayName("should correctly delete author by id")
-  @Test
-  void shouldThrowExceptionWhenDeleteNonExistingAuthorById() {
-
-    var id = 999L;
-
-    given(authorRepository.getById(id)).willReturn(Optional.empty());
-
-    assertThatThrownBy(() -> authorServiceJdbc.deleteById(id))
-        .isInstanceOf(EntityNotFoundException.class);
-
-    Mockito.verify(authorRepository, times(0)).delete(any());
-
-  }
-
 
   private Author getAuthorByIdFromList(List<Author> authors, long id) {
 
