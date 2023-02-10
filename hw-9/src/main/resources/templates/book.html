@@ -70,15 +70,25 @@
   <tr>
     <th>ID</th>
     <th>text</th>
+    <th>action</th>
   </tr>
   </thead>
   <tbody>
-    <tr th:each="commentary : ${book.commentaries}">
-      <td th:text="${commentary.id}">id</td>
-      <td th:text="${commentary.text}">text</td>
-    </tr>
+  <tr th:each="commentary : ${book.commentaries}">
+    <td th:text="${commentary.id}">id</td>
+    <td th:text="${commentary.text}">text</td>
+    <td>
+      <a th:href="@{/commentary/delete(id=${commentary.id})}" href="book.html">Delete</a>
+    </td>
+  </tr>
   </tbody>
 </table>
+
+<div>
+  <a href="commentary_create.html" th:href="@{/commentary/create(bookId=${book.id})}">
+    <button type="button">Create commentary</button>
+  </a>
+</div>
 
 <div>
   <a href="books.html" th:href="@{/books}">
