@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw7.core.dto.BookDTO;
-import ru.dankoy.hw7.core.dto.mapper.BookMapper;
+import ru.dankoy.hw7.core.dto.book.BookDTO;
+import ru.dankoy.hw7.core.dto.book.mapper.BookMapper;
 import ru.dankoy.hw7.core.exceptions.Entity;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 

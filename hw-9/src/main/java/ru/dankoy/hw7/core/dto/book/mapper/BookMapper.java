@@ -1,7 +1,7 @@
-package ru.dankoy.hw7.core.dto.mapper;
+package ru.dankoy.hw7.core.dto.book.mapper;
 
 import ru.dankoy.hw7.core.domain.Book;
-import ru.dankoy.hw7.core.dto.BookDTO;
+import ru.dankoy.hw7.core.dto.book.BookDTO;
 
 public interface BookMapper {
 

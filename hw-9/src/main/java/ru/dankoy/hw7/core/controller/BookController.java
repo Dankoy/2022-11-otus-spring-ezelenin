@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.dankoy.hw7.core.domain.Author;
 import ru.dankoy.hw7.core.domain.Genre;
-import ru.dankoy.hw7.core.dto.BookDTO;
+import ru.dankoy.hw7.core.dto.book.BookDTO;
 import ru.dankoy.hw7.core.exceptions.Entity;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.service.author.AuthorService;

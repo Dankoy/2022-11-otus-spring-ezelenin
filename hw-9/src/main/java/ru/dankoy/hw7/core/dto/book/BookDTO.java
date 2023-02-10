@@ -1,4 +1,4 @@
-package ru.dankoy.hw7.core.dto;
+package ru.dankoy.hw7.core.dto.book;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

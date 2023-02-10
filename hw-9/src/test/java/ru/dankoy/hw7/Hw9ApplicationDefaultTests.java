@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContext;
 //import ru.dankoy.hw7.core.commands.AuthorCommand;
 //import ru.dankoy.hw7.core.commands.BookCommand;
 //import ru.dankoy.hw7.core.commands.GenreCommand;
-import ru.dankoy.hw7.core.dto.mapper.BookMapper;
+import ru.dankoy.hw7.core.dto.book.mapper.BookMapper;
 import ru.dankoy.hw7.core.repository.author.AuthorRepository;
 import ru.dankoy.hw7.core.repository.book.BookRepository;
 import ru.dankoy.hw7.core.repository.genre.GenreRepository;
