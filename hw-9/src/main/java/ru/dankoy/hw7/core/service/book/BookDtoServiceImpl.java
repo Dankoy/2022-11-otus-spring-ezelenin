@@ -22,7 +22,7 @@ public class BookDtoServiceImpl implements BookDtoService {
 
   @Override
   public List<BookDTO> getAllWithAuthorsAndGenres() {
-    return bookService.getAllWithAuthorsAndGenres().stream()
+    return bookService.getAll().stream()
         .map(bookMapper::toDTOWithoutCommentaries)
         .collect(Collectors.toList());
   }

@@ -6,7 +6,7 @@ import ru.dankoy.hw7.core.domain.Book;
 
 public interface BookService {
 
-  List<Book> getAllWithAuthorsAndGenres();
+  List<Book> getAll();
 
   Optional<Book> getById(long id);
 
