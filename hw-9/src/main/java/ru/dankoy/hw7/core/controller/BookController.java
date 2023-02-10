@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.dankoy.hw7.core.domain.Author;
 import ru.dankoy.hw7.core.domain.Genre;
-import ru.dankoy.hw7.core.dto.BookFormDTO;
+import ru.dankoy.hw7.core.dto.BookDTO;
 import ru.dankoy.hw7.core.exceptions.Entity;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw7.core.service.author.AuthorService;
@@ -54,18 +54,20 @@ public class BookController {
   @GetMapping("/book/create")
   public String createForm(Model model) {
 
+    var bookDto = new BookDTO(0, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+
     List<Author> authors = authorService.getAll();
     List<Genre> genres = genreService.getAll();
 
     model.addAttribute("authors", authors);
     model.addAttribute("genres", genres);
-    model.addAttribute("book", new BookFormDTO(0, null, new HashSet<>(), new HashSet<>()));
+    model.addAttribute("book", bookDto);
     return "book_create";
 
   }
 
   @PostMapping("/book/create")
-  public ModelAndView createForm(@ModelAttribute BookFormDTO bookFormDTO) {
+  public ModelAndView createForm(@ModelAttribute BookDTO bookFormDTO) {
 
     bookService.insertOrUpdate(bookFormDTO);
 
@@ -89,7 +91,7 @@ public class BookController {
   }
 
   @PostMapping("/book/edit")
-  public String update(@ModelAttribute BookFormDTO book, Model model) {
+  public String update(@ModelAttribute BookDTO book, Model model) {
 
     var updated = bookService.update(book);
     model.addAttribute("book", updated);

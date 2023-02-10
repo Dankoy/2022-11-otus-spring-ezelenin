@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw7.core.dto.BookDTO;
-import ru.dankoy.hw7.core.dto.BookFormDTO;
 import ru.dankoy.hw7.core.dto.mapper.BookMapper;
 import ru.dankoy.hw7.core.exceptions.Entity;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
@@ -38,9 +37,9 @@ public class BookDtoServiceImpl implements BookDtoService {
   }
 
   @Override
-  public BookDTO insertOrUpdate(BookFormDTO bookDTO) {
+  public BookDTO insertOrUpdate(BookDTO bookDTO) {
 
-    var book = bookService.insertOrUpdate(bookMapper.toBook(bookDTO));
+    var book = bookService.insertOrUpdate(bookMapper.toBookWithoutCommentaries(bookDTO));
     return bookMapper.toDTOWithoutCommentaries(book);
 
   }
@@ -51,8 +50,8 @@ public class BookDtoServiceImpl implements BookDtoService {
   }
 
   @Override
-  public BookDTO update(BookFormDTO bookDTO) {
-    var book = bookService.update(bookMapper.toBook(bookDTO));
-    return bookMapper.toDTOWithoutCommentaries(book);
+  public BookDTO update(BookDTO bookDTO) {
+    var book = bookService.update(bookMapper.toBookWithoutCommentaries(bookDTO));
+    return bookMapper.toDTOWithCommentaries(book);
   }
 }
