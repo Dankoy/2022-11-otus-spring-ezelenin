@@ -9,15 +9,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-//import ru.dankoy.hw7.core.commands.AuthorCommand;
-//import ru.dankoy.hw7.core.commands.BookCommand;
-//import ru.dankoy.hw7.core.commands.GenreCommand;
+import ru.dankoy.hw7.core.controller.BookController;
+import ru.dankoy.hw7.core.controller.CommentaryController;
 import ru.dankoy.hw7.core.dto.book.mapper.BookMapper;
+import ru.dankoy.hw7.core.dto.commentary.mapper.CommentaryMapper;
 import ru.dankoy.hw7.core.repository.author.AuthorRepository;
 import ru.dankoy.hw7.core.repository.book.BookRepository;
 import ru.dankoy.hw7.core.repository.genre.GenreRepository;
 import ru.dankoy.hw7.core.service.author.AuthorServiceJpa;
+import ru.dankoy.hw7.core.service.book.BookDtoServiceImpl;
 import ru.dankoy.hw7.core.service.book.BookServiceJpa;
+import ru.dankoy.hw7.core.service.commentary.CommentaryDtoServiceImpl;
 import ru.dankoy.hw7.core.service.genre.GenreServiceJpa;
 import ru.dankoy.hw7.core.service.objectmapper.ObjectMapperServiceImpl;
 
@@ -39,12 +41,14 @@ class Hw9ApplicationDefaultTests {
     var bookServiceJpa = context.getBean(BookServiceJpa.class);
     var authorServiceJpa = context.getBean(AuthorServiceJpa.class);
     var genreServiceJpa = context.getBean(GenreServiceJpa.class);
+    var bookDtoService = context.getBean(BookDtoServiceImpl.class);
+    var commentaryDtoService = context.getBean(CommentaryDtoServiceImpl.class);
     var objectMapper = context.getBean(ObjectMapper.class);
-//    var authorCommand = context.getBean(AuthorCommand.class);
-//    var bookCommand = context.getBean(BookCommand.class);
-//    var genreCommand = context.getBean(GenreCommand.class);
+    var bookController = context.getBean(BookController.class);
+    var commentaryController = context.getBean(CommentaryController.class);
     var objectMapperService = context.getBean(ObjectMapperServiceImpl.class);
     var bookMapper = context.getBean(BookMapper.class);
+    var commentaryMapper = context.getBean(CommentaryMapper.class);
 
     assertNotNull(bookRepository);
     assertNotNull(genreRepository);
@@ -52,10 +56,12 @@ class Hw9ApplicationDefaultTests {
     assertNotNull(bookServiceJpa);
     assertNotNull(authorServiceJpa);
     assertNotNull(genreServiceJpa);
+    assertNotNull(bookDtoService);
+    assertNotNull(commentaryDtoService);
     assertNotNull(objectMapper);
-//    assertNotNull(authorCommand);
-//    assertNotNull(bookCommand);
-//    assertNotNull(genreCommand);
+    assertNotNull(bookController);
+    assertNotNull(commentaryController);
+    assertNotNull(commentaryMapper);
     assertNotNull(objectMapperService);
     assertNotNull(bookMapper);
 
