@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.dankoy.hw7.core.exceptions.EntityNotFoundException;
 
 @ControllerAdvice
-public class ErrorAdvice extends ResponseEntityExceptionHandler {
+public class ErrorAdvice {
 
   @ExceptionHandler(value = {EntityNotFoundException.class})
   @ResponseStatus(value = HttpStatus.NOT_FOUND)
@@ -25,5 +24,6 @@ public class ErrorAdvice extends ResponseEntityExceptionHandler {
 
 
   }
+
 
 }
