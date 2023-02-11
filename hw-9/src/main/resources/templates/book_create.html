@@ -6,7 +6,8 @@
 </head>
 <body>
 
-<form action="book_create.html" th:method="post" th:action="@{/book/create}" th:object="${book}">
+<form action="book_create.html" th:method="post" th:action="@{/book/create}" th:object="${book}"
+      th:modelAttribute="book">
 
   <label for="fid">ID:</label>
   <input id="fid" name="fid" th:field="${book.id}" th:value="0"><br>
@@ -17,18 +18,22 @@
     <option th:each="author : ${authors}"
             th:field="*{authors}"
             th:value="${author.id}"
-            th:text="${author.name}">author</option>
+            th:text="${author.name}">author
+    </option>
   </select><br>
   <label for="genres">Genres:</label><br>
   <select th:field="*{genres}" name="genres" id="genres" multiple="multiple">
     <option th:each="genre : ${genres}"
             th:field="*{genres}"
             th:value="${genre.id}"
-            th:text="${genre.name}">genre</option>
+            th:text="${genre.name}">genre
+    </option>
   </select><br>
   <div class="row">
     <button type="submit">Save</button>
-    <a href="book.html" th:href="@{/book}"><button type="button">Cancel</button></a>
+    <a href="book.html" th:href="@{/book}">
+      <button type="button">Cancel</button>
+    </a>
   </div>
 </form>
 

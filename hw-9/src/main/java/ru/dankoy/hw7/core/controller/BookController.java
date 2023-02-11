@@ -3,6 +3,7 @@ package ru.dankoy.hw7.core.controller;
 
 import java.util.HashSet;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,7 +55,7 @@ public class BookController {
   @GetMapping("/book/create")
   public String createForm(Model model) {
 
-    var bookDto = new BookDTO(0, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var bookDto = new BookDTO(0, "", new HashSet<>(), new HashSet<>(), new HashSet<>());
 
     List<Author> authors = authorService.getAll();
     List<Genre> genres = genreService.getAll();
@@ -67,7 +68,7 @@ public class BookController {
   }
 
   @PostMapping("/book/create")
-  public ModelAndView createForm(@ModelAttribute BookDTO bookFormDTO) {
+  public ModelAndView createForm(@Valid @ModelAttribute("book") BookDTO bookFormDTO) {
 
     bookService.insertOrUpdate(bookFormDTO);
 
@@ -91,7 +92,7 @@ public class BookController {
   }
 
   @PostMapping("/book/edit")
-  public String update(@ModelAttribute BookDTO book, Model model) {
+  public String update(@Valid @ModelAttribute("book") BookDTO book, Model model) {
 
     var updated = bookService.update(book);
     model.addAttribute("book", updated);
