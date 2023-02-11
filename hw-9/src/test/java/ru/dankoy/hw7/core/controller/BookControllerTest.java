@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -44,8 +43,7 @@ class BookControllerTest {
   private MockMvc mvc;
   @Autowired
   private BookMapper bookMapper;
-  @Autowired
-  private ObjectMapper mapper;
+
   @MockBean
   private BookDtoService bookDtoService;
 
@@ -132,7 +130,16 @@ class BookControllerTest {
         .findFirst().get();
     var dto = Optional.of(bookMapper.toDTOWithCommentaries(book));
 
-    mvc.perform(post("/book/create", dto.get()))
+    mvc.perform(post("/book/create")
+            .param("id", String.valueOf(book.getId()))
+            .param("name", book.getName())
+            .param("_authors", "1")
+            .param("authors.id", "1")
+            .param("authors.id", "2")
+            .param("_genres", "1")
+            .param("genres.id", "1")
+            .param("genres.id", "2")
+        )
         .andExpect(status().is3xxRedirection())
         .andExpect(view().name("redirect:/books"));
 
@@ -179,9 +186,16 @@ class BookControllerTest {
 
     given(bookDtoService.update(any())).willReturn(dto.get());
 
-    System.out.println(mapper.writeValueAsString(dto.get()));
-
-    mvc.perform(post("/book/edit", dto.get()))
+    mvc.perform(post("/book/edit")
+            .param("id", String.valueOf(book.getId()))
+            .param("name", book.getName())
+            .param("_authors", "1")
+            .param("authors.id", "1")
+            .param("authors.id", "2")
+            .param("_genres", "1")
+            .param("genres.id", "1")
+            .param("genres.id", "2")
+        )
         .andExpect(status().isOk())
         .andExpect(view().name("book"))
         .andExpect(model().attribute("book", dto.get()));
