@@ -25,7 +25,7 @@ public class CommentaryController {
   @GetMapping("/commentary/create")
   public String createCommentary(@RequestParam("bookId") long bookId, Model model) {
 
-    var book = new BookDTO(bookId, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new BookDTO(bookId, "", new HashSet<>(), new HashSet<>(), new HashSet<>());
     var dto = CommentaryDTO.builder()
         .book(book)
         .build();
@@ -39,7 +39,7 @@ public class CommentaryController {
   public ModelAndView createCommentary(@ModelAttribute CommentaryDTO commentaryDTO,
       @RequestParam("bookId") long bookId) {
 
-    var book = new BookDTO(bookId, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    var book = new BookDTO(bookId, "", new HashSet<>(), new HashSet<>(), new HashSet<>());
 
     commentaryDTO.setBook(book);
 
@@ -51,7 +51,7 @@ public class CommentaryController {
 
 
   @GetMapping("/commentary/delete")
-  public ModelAndView delete(@RequestParam("id") long id, @RequestParam("id") long bookId) {
+  public ModelAndView delete(@RequestParam("id") long id, @RequestParam("bookId") long bookId) {
 
     commentaryDtoService.deleteById(id);
 
