@@ -9,8 +9,8 @@
 <form action="book_edit.html" th:method="post" th:action="@{/book/edit}" th:object="${book}"
       th:modelAttribute="book">
   <div class="row">
-    <label for="id-input" th:field="*{id}">ID:</label>
-    <input id="id-input" type="text" readonly="readonly" value="1" th:field="*{id}"
+    <label hidden="hidden" for="id-input" th:field="*{id}">ID:</label>
+    <input hidden="hidden" id="id-input" type="text" readonly="readonly" value="1" th:field="*{id}"
            th:value="*{id}"/>
   </div>
   <label for="fname">Book name:</label><br>
