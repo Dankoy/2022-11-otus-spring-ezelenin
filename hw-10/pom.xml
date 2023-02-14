@@ -10,14 +10,13 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>ru.dankoy</groupId>
-  <artifactId>hw-8</artifactId>
+  <artifactId>hw-10</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>hw-8</name>
-  <description>hw-8</description>
+  <name>hw-10</name>
+  <description>hw-10</description>
 
   <properties>
     <java.version>11</java.version>
-    <spring-shell.version>2.1.4</spring-shell.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
@@ -28,16 +27,6 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>org.springframework.shell</groupId>
-      <artifactId>spring-shell-starter</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>net.java.dev.jna</groupId>
-          <artifactId>jna</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -88,19 +77,20 @@
       <version>${mongock.version}</version>
     </dependency>
 
-  </dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.shell</groupId>
-        <artifactId>spring-shell-dependencies</artifactId>
-        <version>${spring-shell.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  </dependencies>
 
   <build>
     <plugins>
