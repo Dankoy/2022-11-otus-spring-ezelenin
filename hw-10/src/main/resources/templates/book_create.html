@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create book</title>
+</head>
+<body>
+
+<form action="book_create.html" th:method="post" th:action="@{/book/create}" th:object="${book}"
+      th:modelAttribute="book">
+
+  <label for="fid">ID:</label>
+  <input id="fid" name="fid" th:field="${book.id}" th:value="0"><br>
+  <label for="fname">Book name:</label><br>
+  <input type="text" id="fname" name="fname" th:field="${book.name}" th:value="*{name}"><br>
+  <label for="authors">Authors:</label><br>
+  <select th:field="*{authors}" name="authors" id="authors" multiple="multiple">
+    <option th:each="author : ${authors}"
+            th:field="*{authors}"
+            th:value="${author.id}"
+            th:text="${author.name}">author
+    </option>
+  </select><br>
+  <label for="genres">Genres:</label><br>
+  <select th:field="*{genres}" name="genres" id="genres" multiple="multiple">
+    <option th:each="genre : ${genres}"
+            th:field="*{genres}"
+            th:value="${genre.id}"
+            th:text="${genre.name}">genre
+    </option>
+  </select><br>
+  <div class="row">
+    <button type="submit">Save</button>
+    <a href="book.html" th:href="@{/book}">
+      <button type="button">Cancel</button>
+    </a>
+  </div>
+</form>
+
+</body>
+</html>
