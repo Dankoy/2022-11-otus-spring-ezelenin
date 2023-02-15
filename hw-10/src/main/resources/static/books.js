@@ -1,5 +1,3 @@
-const bookApi = 'book';
-
 function deleteBook(id) {
   fetch(`${pathToApi}${bookApi}/${id}`, {
     method: 'DELETE'
@@ -10,12 +8,6 @@ function deleteBook(id) {
     return Promise.reject(reject)
   })
   .then(() => window.location.reload());
-}
-
-function goToBook(id) {
-  fetch(`${pathToApi}${bookApi}/${id}`, {
-    method: 'GET'
-  });
 }
 
 function getAllBooks() {
@@ -38,13 +30,8 @@ function printHtmlTable(json, tableContainer) {
 
   json.forEach(function (book) {
 
-    let listOfGenres = book.genres.map(genre => {
-      return genre.name;
-    });
-
-    let listOfAuthors = book.genres.map(author => {
-      return author.name;
-    });
+    let listOfGenres = getGenresFromBook(book);
+    let listOfAuthors = getAuthorsFromBook(book);
 
     let tr = document.createElement("tr");
     let tdId = document.createElement("td");
@@ -53,7 +40,6 @@ function printHtmlTable(json, tableContainer) {
     let tdAuthors = document.createElement("td");
     let buttonContainer = document.createElement("div");
     let buttonDelete = document.createElement("button");
-    let buttonGoTo = document.createElement("button");
 
     tdId.textContent = book.id;
     tdName.textContent = book.name;
@@ -63,12 +49,8 @@ function printHtmlTable(json, tableContainer) {
     buttonDelete.onclick = function () {
       deleteBook(book.id)
     };
-    buttonGoTo.textContent = "Go to book";
-    buttonGoTo.onclick = function () {
-    };
 
     buttonContainer.appendChild(buttonDelete);
-    buttonContainer.appendChild(buttonGoTo);
 
     tr.appendChild(tdId);
     tr.appendChild(tdName);

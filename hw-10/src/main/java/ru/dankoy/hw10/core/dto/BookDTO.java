@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import ru.dankoy.hw10.core.domain.Author;
 import ru.dankoy.hw10.core.domain.Commentary;
 import ru.dankoy.hw10.core.domain.Genre;
@@ -22,6 +23,7 @@ public class BookDTO {
 
   private Set<Genre> genres;
 
+  @Setter
   private Set<Commentary> commentaries;
 
 

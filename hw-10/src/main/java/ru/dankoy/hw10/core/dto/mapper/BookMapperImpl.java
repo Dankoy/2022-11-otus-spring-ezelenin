@@ -35,6 +35,18 @@ public class BookMapperImpl implements BookMapper {
 
   }
 
+  @Override
+  public BookDTO toDTOWithCommentaries(Book book) {
+
+    return BookDTO.builder()
+        .id(book.getId())
+        .name(book.getName())
+        .genres(book.getGenres())
+        .authors(book.getAuthors())
+        .build();
+
+  }
+
 
   @Override
   public Book toBook(BookDTO dto) {
