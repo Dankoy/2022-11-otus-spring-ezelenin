@@ -1,12 +1,11 @@
 package ru.dankoy.hw10.core.controller;
 
 
-import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.dankoy.hw10.core.dto.BookDTO;
 import ru.dankoy.hw10.core.dto.mapper.BookMapper;
 import ru.dankoy.hw10.core.service.author.AuthorService;
 import ru.dankoy.hw10.core.service.book.BookService;
@@ -14,7 +13,7 @@ import ru.dankoy.hw10.core.service.genre.GenreService;
 
 
 @RequiredArgsConstructor
-@RestController
+@Controller
 public class BookController {
 
   private final BookService bookService;
@@ -23,17 +22,21 @@ public class BookController {
 
   private final BookMapper bookMapper;
 
-  @GetMapping("/api/v1/book")
-  public List<BookDTO> getAll() {
+  @GetMapping("/books")
+  public String getAll(Model model) {
 
     var books = bookService.findAll();
 
-    return books.stream()
+    var dto = books.stream()
         .map(bookMapper::toDTOWithoutCommentaries)
         .collect(Collectors.toList());
 
+    model.addAttribute("books", dto);
+
+    return "books";
+
   }
-//
+
 //  @GetMapping("/book")
 //  public String getById(@RequestParam("id") long id, Model model) {
 //

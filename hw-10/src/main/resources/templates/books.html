@@ -3,35 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <title>Books</title>
-  <style th:src="@{/static/style.css}"></style>
-  <script th:src="@{/static/context.js}"></script>
-  <script th:src="@{/static/books.js}"></script>
-
+  <link rel="stylesheet" th:href="@{/common.css}">
+  <script th:src="@{/context.js}"></script>
+  <script th:src="@{/books.js}"></script>
 
   <script>
 
-    // function getAllBooks() {
-    //   fetch('https://rickandmortyapi.com/api/character/4')
-    //   .then(response => response.json())
-    //   .then(json => outputCharacter(json))
-    // }
-
     function getAllBooks() {
       const bookApi = 'book'
-
-      return fetch(pathToApi + bookApi)
-      .then(response => response.json())
-      .then(cluster => JSON.stringify(cluster))
-      .then(cluster => JSON.parse(cluster));
+      return fetch(`${pathToApi}${bookApi}`)
+      .then(response => response.json());
     }
 
     function printBooks(json) {
-      const bookContainer = document.getElementById('js_table');
-      bookContainer.appendChild(buildHtmlTable(json));
+      const bookContainer = document.getElementById('books');
+      printHtmlTable(json, bookContainer);
     }
 
-    function init() {
-      let json = getAllBooks();
+    async function init() {
+      let json = await getAllBooks();
       printBooks(json);
     }
 
@@ -45,45 +35,20 @@
   Books
 </h3>
 
-<div class="books" id="js_table">
-
+<div>
+  <table class="books" id="books">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Authors</th>
+      <th>Genres</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 </div>
-
-<!--<table class="books" id="books">-->
-<!--  <thead>-->
-<!--  <tr>-->
-<!--    <th>ID</th>-->
-<!--    <th>Name</th>-->
-<!--    <th>Authors</th>-->
-<!--    <th>Genres</th>-->
-<!--    <th>Action</th>-->
-<!--  </tr>-->
-<!--  </thead>-->
-<!--  <tbody>-->
-<!--  <tr th:each="book : ${books}">-->
-<!--    <td th:text="${book.id}">1</td>-->
-<!--    <td th:text="${book.name}">John Doe</td>-->
-<!--    <td>-->
-<!--      <th:block th:each="author : ${book.authors}">-->
-<!--        <p th:text="${author.name}">author</p>-->
-<!--      </th:block>-->
-<!--    </td>-->
-<!--    <td>-->
-<!--      <th:block th:each="genre : ${book.genres}">-->
-<!--        <p th:text="${genre.name}">author</p>-->
-<!--      </th:block>-->
-<!--    </td>-->
-<!--    <td>-->
-<!--      <div>-->
-<!--        <a th:href="@{/book/delete(id=${book.id})}" href="books.html">Delete</a>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <a th:href="@{/book(id=${book.id})}" href="book.html">Go to book</a>-->
-<!--      </div>-->
-<!--    </td>-->
-<!--  </tr>-->
-<!--  </tbody>-->
-<!--</table>-->
 
 <div>
   <a th:href="@{/book/create}" href="book_create.html">Create new book</a>
