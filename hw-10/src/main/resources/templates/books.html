@@ -6,50 +6,8 @@
   <link rel="stylesheet" th:href="@{/common.css}">
   <script th:src="@{/context.js}"></script>
   <script th:src="@{/books.js}"></script>
-
-  <script>
-
-    const bookApi = 'book';
-
-    function deleteBook(id) {
-      fetch(`${pathToApi}${bookApi}/${id}`, {
-        method: 'DELETE'
-      }).then((response, reject) => {
-        if (response.ok) {
-          return response;
-        }
-        return Promise.reject(reject)
-      })
-      .then(() => window.location.reload());
-    }
-
-    function goToBook(id) {
-      fetch(`${pathToApi}${bookApi}/${id}`, {
-        method: 'GET'
-      });
-    }
-
-    function getAllBooks() {
-
-      return fetch(`${pathToApi}${bookApi}`)
-      .then(response => response.json());
-    }
-
-    function printBooks(json) {
-      const bookContainer = document.getElementById('books');
-      printHtmlTable(json, bookContainer);
-    }
-
-    async function init() {
-      let json = await getAllBooks();
-      printBooks(json);
-    }
-
-
-  </script>
-
 </head>
-<body onload="init()">
+<body onload="initBooks()">
 
 <h3>
   Books

@@ -1,3 +1,39 @@
+const bookApi = 'book';
+
+function deleteBook(id) {
+  fetch(`${pathToApi}${bookApi}/${id}`, {
+    method: 'DELETE'
+  }).then((response, reject) => {
+    if (response.ok) {
+      return response;
+    }
+    return Promise.reject(reject)
+  })
+  .then(() => window.location.reload());
+}
+
+function goToBook(id) {
+  fetch(`${pathToApi}${bookApi}/${id}`, {
+    method: 'GET'
+  });
+}
+
+function getAllBooks() {
+
+  return fetch(`${pathToApi}${bookApi}`)
+  .then(response => response.json());
+}
+
+function printBooks(json) {
+  const bookContainer = document.getElementById('books');
+  printHtmlTable(json, bookContainer);
+}
+
+async function initBooks() {
+  let json = await getAllBooks();
+  printBooks(json);
+}
+
 function printHtmlTable(json, tableContainer) {
 
   json.forEach(function (book) {
