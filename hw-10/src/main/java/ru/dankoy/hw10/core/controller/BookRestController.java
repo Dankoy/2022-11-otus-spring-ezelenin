@@ -4,7 +4,9 @@ package ru.dankoy.hw10.core.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dankoy.hw10.core.dto.BookDTO;
 import ru.dankoy.hw10.core.dto.mapper.BookMapper;
@@ -31,6 +33,14 @@ public class BookRestController {
     return books.stream()
         .map(bookMapper::toDTOWithoutCommentaries)
         .collect(Collectors.toList());
+
+  }
+
+
+  @DeleteMapping("/api/v1/book/{id}")
+  public void delete(@PathVariable String id) {
+
+    bookService.deleteById(id);
 
   }
 
