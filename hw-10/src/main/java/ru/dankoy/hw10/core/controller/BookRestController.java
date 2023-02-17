@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dankoy.hw10.core.dto.BookDTO;
 import ru.dankoy.hw10.core.dto.mapper.BookMapper;
@@ -41,6 +43,7 @@ public class BookRestController {
 
 
   @DeleteMapping("/api/v1/book/{id}")
+  @ResponseStatus(value = HttpStatus.ACCEPTED)
   public void delete(@PathVariable String id) {
 
     bookService.deleteById(id);
@@ -81,9 +84,9 @@ public class BookRestController {
 
     var book = bookMapper.toBook(bookDTO);
 
-    var updated = bookService.insertOrUpdate(book);
+    var created = bookService.insertOrUpdate(book);
 
-    return bookMapper.toDTOWithoutCommentaries(updated);
+    return bookMapper.toDTOWithoutCommentaries(created);
 
   }
 

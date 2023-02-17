@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw10.core.domain.Author;
 import ru.dankoy.hw10.core.domain.Book;
+import ru.dankoy.hw10.core.exceptions.Entity;
 import ru.dankoy.hw10.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw10.core.repository.author.AuthorRepository;
 import ru.dankoy.hw10.core.service.book.BookService;
@@ -36,8 +37,7 @@ public class AuthorServiceMongo implements AuthorService {
   @Override
   public void deleteById(String id) {
     var optional = authorRepository.findById(id);
-    var author = optional.orElseThrow(() -> new EntityNotFoundException(
-        String.format("Entity %s has not been found with id - %s", Author.class.getName(), id)));
+    var author = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.AUTHOR));
 
     List<Book> books = bookService.findAllByAuthorId(author);
 

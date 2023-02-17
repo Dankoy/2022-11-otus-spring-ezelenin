@@ -5,8 +5,9 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw10.core.domain.Commentary;
+import ru.dankoy.hw10.core.exceptions.Entity;
+import ru.dankoy.hw10.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw10.core.repository.commentary.CommentaryRepository;
-import ru.dankoy.hw10.core.service.utils.OptionalChecker;
 
 
 @RequiredArgsConstructor
@@ -14,8 +15,6 @@ import ru.dankoy.hw10.core.service.utils.OptionalChecker;
 public class CommentaryServiceMongo implements CommentaryService {
 
   private final CommentaryRepository commentaryRepository;
-
-  private final OptionalChecker optionalChecker;
 
 
   @Override
@@ -46,8 +45,7 @@ public class CommentaryServiceMongo implements CommentaryService {
   @Override
   public void deleteById(String id) {
     var optional = commentaryRepository.findById(id);
-    var commentary = optionalChecker.getFromOptionalOrThrowException(Commentary.class, optional,
-        id);
+    var commentary = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.COMMENTARY));
 
     commentaryRepository.delete(commentary);
 

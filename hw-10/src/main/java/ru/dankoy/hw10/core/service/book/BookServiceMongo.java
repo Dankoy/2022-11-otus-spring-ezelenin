@@ -9,9 +9,10 @@ import ru.dankoy.hw10.core.domain.Book;
 import ru.dankoy.hw10.core.domain.Commentary;
 import ru.dankoy.hw10.core.domain.Genre;
 import ru.dankoy.hw10.core.exceptions.BookServiceException;
+import ru.dankoy.hw10.core.exceptions.Entity;
+import ru.dankoy.hw10.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw10.core.repository.book.BookRepository;
 import ru.dankoy.hw10.core.service.commentary.CommentaryService;
-import ru.dankoy.hw10.core.service.utils.OptionalChecker;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +20,6 @@ public class BookServiceMongo implements BookService {
 
   private final BookRepository bookRepository;
   private final CommentaryService commentaryService;
-
-  private final OptionalChecker optionalChecker;
 
 
   @Override
@@ -56,7 +55,7 @@ public class BookServiceMongo implements BookService {
   @Override
   public void deleteById(String id) {
     var optional = bookRepository.findById(id);
-    var book = optionalChecker.getFromOptionalOrThrowException(Book.class, optional, id);
+    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
     List<Commentary> commentaries = commentaryService.getAllByBookId(id);
 
