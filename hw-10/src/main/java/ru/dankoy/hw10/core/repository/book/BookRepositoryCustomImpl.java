@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import ru.dankoy.hw10.core.domain.Author;
 import ru.dankoy.hw10.core.domain.Book;
 import ru.dankoy.hw10.core.domain.Genre;
+import ru.dankoy.hw10.core.exceptions.Entity;
 import ru.dankoy.hw10.core.exceptions.EntityNotFoundException;
 
 
@@ -47,7 +48,7 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
           Author.class);
 
       if (found.isEmpty()) {
-        throw new EntityNotFoundException(author.getId());
+        throw new EntityNotFoundException(author.getId(), Entity.AUTHOR);
       }
     });
 
