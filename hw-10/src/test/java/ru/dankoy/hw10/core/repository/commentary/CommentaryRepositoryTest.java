@@ -24,7 +24,7 @@ class CommentaryRepositoryTest {
   private MongoTemplate mongoTemplate;
 
 
-  @DisplayName(" should delete all commentaries by book id")
+  @DisplayName(" should deleteByBookId all commentaries by book id")
   @Test
   void deleteDeleteAllCommentariesByBookId() {
 

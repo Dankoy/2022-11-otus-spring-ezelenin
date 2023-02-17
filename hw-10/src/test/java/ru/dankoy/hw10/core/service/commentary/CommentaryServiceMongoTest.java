@@ -100,7 +100,7 @@ class CommentaryServiceMongoTest {
   }
 
 
-  @DisplayName("should correctly delete commentary by id")
+  @DisplayName("should correctly deleteByBookId commentary by id")
   @Test
   void shouldCorrectlyDeleteCommentaryById() {
 
@@ -119,7 +119,7 @@ class CommentaryServiceMongoTest {
   }
 
 
-  @DisplayName("should throw exception when delete commentary by id")
+  @DisplayName("should throw exception when deleteByBookId commentary by id")
   @Test
   void shouldThrowExceptionWhenDeleteCommentaryById() {
 

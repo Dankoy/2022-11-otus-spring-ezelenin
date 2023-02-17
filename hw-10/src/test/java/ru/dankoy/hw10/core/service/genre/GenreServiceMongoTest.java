@@ -72,7 +72,7 @@ class GenreServiceMongoTest {
 
   }
 
-  @DisplayName("should correctly delete genres from books")
+  @DisplayName("should correctly deleteByBookId genres from books")
   @Test
   void shouldDeleteGenre() {
 

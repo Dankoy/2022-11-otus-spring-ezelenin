@@ -145,7 +145,7 @@ class BookServiceMongoTest {
 
   }
 
-  @DisplayName("should correctly delete book by id")
+  @DisplayName("should correctly deleteByBookId book by id")
   @Test
   void shouldCorrectlyDeleteBookById() {
 
@@ -160,7 +160,7 @@ class BookServiceMongoTest {
 
   }
 
-  @DisplayName("should throw exception when delete book by id with commentaries")
+  @DisplayName("should throw exception when deleteByBookId book by id with commentaries")
   @Test
   void shouldThrowExceptionWhenDeleteBookByIWithCommentaries() {
 
@@ -179,7 +179,7 @@ class BookServiceMongoTest {
 
   }
 
-  @DisplayName("should correctly delete book by id")
+  @DisplayName("should correctly deleteByBookId book by id")
   @Test
   void shouldThrowExceptionWhenDeleteNonExistingBookById() {
 

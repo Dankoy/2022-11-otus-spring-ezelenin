@@ -114,7 +114,7 @@ class AuthorServiceMongoTest {
 
   }
 
-  @DisplayName("should correctly delete author by id")
+  @DisplayName("should correctly deleteByBookId author by id")
   @Test
   void shouldCorrectlyDeleteAuthorById() {
 
