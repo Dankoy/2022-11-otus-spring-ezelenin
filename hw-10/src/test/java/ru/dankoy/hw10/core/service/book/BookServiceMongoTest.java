@@ -213,7 +213,7 @@ class BookServiceMongoTest {
     given(bookRepository.findById(id)).willReturn(Optional.of(bookToUpdate));
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
-    bookServiceMongo.update(bookToUpdate, listOfIds, listOfIds);
+    bookServiceMongo.update(bookToUpdate);
 
     Mockito.verify(bookRepository, times(1)).saveAndCheckAuthors(bookToUpdate);
 

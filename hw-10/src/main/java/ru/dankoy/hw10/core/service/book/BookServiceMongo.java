@@ -1,9 +1,7 @@
 package ru.dankoy.hw10.core.service.book;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw10.core.domain.Author;
@@ -50,13 +48,7 @@ public class BookServiceMongo implements BookService {
   }
 
   @Override
-  public Book insertOrUpdate(Book book, String[] authorIds, String[] genreName) {
-
-    List<Author> authors = convertAuthorIdsToObjects(authorIds);
-    List<Genre> genres = convertGenreNamesToObjects(genreName);
-
-    book.getAuthors().addAll(authors);
-    book.getGenres().addAll(genres);
+  public Book insertOrUpdate(Book book) {
 
     return bookRepository.saveAndCheckAuthors(book);
   }
@@ -77,15 +69,7 @@ public class BookServiceMongo implements BookService {
   }
 
   @Override
-  public Book update(Book book, String[] authorIds, String[] genreNames) {
-
-    List<Author> authors = convertAuthorIdsToObjects(authorIds);
-    List<Genre> genres = convertGenreNamesToObjects(genreNames);
-
-    book.getAuthors().clear();
-    book.getGenres().clear();
-    book.getAuthors().addAll(authors);
-    book.getGenres().addAll(genres);
+  public Book update(Book book) {
 
     return bookRepository.saveAndCheckAuthors(book);
   }
@@ -101,16 +85,4 @@ public class BookServiceMongo implements BookService {
     bookRepository.saveAll(books);
   }
 
-
-  private List<Genre> convertGenreNamesToObjects(String[] names) {
-
-    return Arrays.stream(names).map(Genre::new).collect(Collectors.toList());
-
-  }
-
-  private List<Author> convertAuthorIdsToObjects(String[] names) {
-
-    return Arrays.stream(names).map(Author::new).collect(Collectors.toList());
-
-  }
 }

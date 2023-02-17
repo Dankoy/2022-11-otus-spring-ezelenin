@@ -16,11 +16,11 @@ public interface BookService {
 
   Optional<Book> getById(String id);
 
-  Book insertOrUpdate(Book book, String[] authorIds, String[] genreIds);
+  Book insertOrUpdate(Book book);
 
   void deleteById(String id);
 
-  Book update(Book book, String[] authorIds, String[] genreIds);
+  Book update(Book book);
 
   long count();
 
