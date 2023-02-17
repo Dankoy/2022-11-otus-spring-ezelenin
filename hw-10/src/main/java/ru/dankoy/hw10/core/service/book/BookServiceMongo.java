@@ -69,12 +69,6 @@ public class BookServiceMongo implements BookService {
   }
 
   @Override
-  public Book update(Book book) {
-
-    return bookRepository.saveAndCheckAuthors(book);
-  }
-
-  @Override
   public long count() {
     return bookRepository.count();
   }

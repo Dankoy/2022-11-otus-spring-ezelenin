@@ -20,8 +20,6 @@ public interface BookService {
 
   void deleteById(String id);
 
-  Book update(Book book);
-
   long count();
 
   void updateMultiple(List<Book> books);
