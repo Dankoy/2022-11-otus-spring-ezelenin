@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dankoy.hw10.core.dto.BookDTO;
 import ru.dankoy.hw10.core.dto.mapper.BookMapper;
@@ -55,6 +58,32 @@ public class BookRestController {
     dto.setCommentaries(new HashSet<>(commentaries));
 
     return dto;
+
+  }
+
+
+  @PutMapping("/api/v1/book/{id}")
+  public BookDTO update(@PathVariable String id, @RequestBody BookDTO bookDTO) {
+
+    var book = bookMapper.toBook(bookDTO);
+
+    bookService.getById(id)
+        .orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
+
+    var updated = bookService.insertOrUpdate(book);
+
+    return bookMapper.toDTOWithoutCommentaries(updated);
+
+  }
+
+  @PostMapping("/api/v1/book")
+  public BookDTO create(@RequestBody BookDTO bookDTO) {
+
+    var book = bookMapper.toBook(bookDTO);
+
+    var updated = bookService.insertOrUpdate(book);
+
+    return bookMapper.toDTOWithoutCommentaries(updated);
 
   }
 
