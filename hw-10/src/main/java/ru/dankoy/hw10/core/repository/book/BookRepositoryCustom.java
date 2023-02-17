@@ -9,4 +9,6 @@ public interface BookRepositoryCustom {
   List<Genre> getAllGenresByBookId(String bookId);
 
   Book saveAndCheckAuthors(Book book);
+
+  void deleteByBookId(String bookId);
 }

@@ -16,12 +16,15 @@ import ru.dankoy.hw10.core.domain.Book;
 import ru.dankoy.hw10.core.domain.Genre;
 import ru.dankoy.hw10.core.exceptions.Entity;
 import ru.dankoy.hw10.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw10.core.repository.commentary.CommentaryRepository;
 
 
 @RequiredArgsConstructor
 public class BookRepositoryCustomImpl implements BookRepositoryCustom {
 
   private final MongoTemplate mongoTemplate;
+
+  private final CommentaryRepository commentaryRepository;
 
   @Override
   public List<Genre> getAllGenresByBookId(String bookId) {
@@ -55,5 +58,14 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
     return mongoTemplate.save(book, "books");
   }
 
+
+  @Override
+  public void deleteByBookId(String bookId) {
+
+    var query = Query.query(Criteria.where("_id").is(bookId));
+    commentaryRepository.deleteCommentariesByBookId(bookId);
+    mongoTemplate.remove(query, Book.class);
+
+  }
 
 }

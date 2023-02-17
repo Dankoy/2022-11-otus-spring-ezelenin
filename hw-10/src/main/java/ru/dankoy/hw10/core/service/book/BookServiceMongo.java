@@ -6,20 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw10.core.domain.Author;
 import ru.dankoy.hw10.core.domain.Book;
-import ru.dankoy.hw10.core.domain.Commentary;
 import ru.dankoy.hw10.core.domain.Genre;
-import ru.dankoy.hw10.core.exceptions.BookServiceException;
-import ru.dankoy.hw10.core.exceptions.Entity;
-import ru.dankoy.hw10.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw10.core.repository.book.BookRepository;
-import ru.dankoy.hw10.core.service.commentary.CommentaryService;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceMongo implements BookService {
 
   private final BookRepository bookRepository;
-  private final CommentaryService commentaryService;
 
 
   @Override
@@ -54,17 +48,7 @@ public class BookServiceMongo implements BookService {
 
   @Override
   public void deleteById(String id) {
-    var optional = bookRepository.findById(id);
-    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
-
-    List<Commentary> commentaries = commentaryService.getAllByBookId(id);
-
-    if (!commentaries.isEmpty()) {
-      throw new BookServiceException(
-          "Book contains commentaries. First delete all of them, then retry.");
-    }
-
-    bookRepository.delete(book);
+    bookRepository.deleteByBookId(id);
   }
 
   @Override
