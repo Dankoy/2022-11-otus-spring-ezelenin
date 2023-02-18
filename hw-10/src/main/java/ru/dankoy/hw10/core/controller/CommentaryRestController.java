@@ -17,7 +17,7 @@ import ru.dankoy.hw10.core.service.commentary.CommentaryService;
 
 @RequiredArgsConstructor
 @RestController
-public class CommentaryController {
+public class CommentaryRestController {
 
   private final CommentaryService commentaryService;
 
