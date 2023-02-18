@@ -1,7 +1,6 @@
 package ru.dankoy.hw10.core.controller;
 
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import ru.dankoy.hw10.core.dto.mapper.BookMapper;
 import ru.dankoy.hw10.core.exceptions.Entity;
 import ru.dankoy.hw10.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw10.core.service.book.BookService;
-import ru.dankoy.hw10.core.service.commentary.CommentaryService;
 
 
 @RequiredArgsConstructor
@@ -27,7 +25,6 @@ import ru.dankoy.hw10.core.service.commentary.CommentaryService;
 public class BookRestController {
 
   private final BookService bookService;
-  private final CommentaryService commentaryService;
   private final BookMapper bookMapper;
 
   @GetMapping("/api/v1/book")
@@ -55,12 +52,8 @@ public class BookRestController {
 
     var book = bookService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
-    var commentaries = commentaryService.getAllByBookId(id);
 
-    var dto = bookMapper.toDTOWithoutCommentaries(book);
-    dto.setCommentaries(new HashSet<>(commentaries));
-
-    return dto;
+    return bookMapper.toDTOWithoutCommentaries(book);
 
   }
 
