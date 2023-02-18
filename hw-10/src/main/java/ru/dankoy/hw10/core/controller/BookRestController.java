@@ -27,7 +27,9 @@ public class BookRestController {
   private final BookService bookService;
   private final BookMapper bookMapper;
 
-  @GetMapping("/api/v1/book")
+  @GetMapping(value = "/api/v1/book",
+      consumes = {"application/json"},
+      produces = {"application/json"})
   public List<BookDTO> getAll() {
 
     var books = bookService.findAll();
@@ -39,7 +41,9 @@ public class BookRestController {
   }
 
 
-  @DeleteMapping("/api/v1/book/{id}")
+  @DeleteMapping(value = "/api/v1/book/{id}",
+      consumes = {"application/json"},
+      produces = {"application/json"})
   @ResponseStatus(value = HttpStatus.ACCEPTED)
   public void delete(@PathVariable String id) {
 
@@ -47,7 +51,9 @@ public class BookRestController {
 
   }
 
-  @GetMapping("/api/v1/book/{id}")
+  @GetMapping(value = "/api/v1/book/{id}",
+      consumes = {"application/json"},
+      produces = {"application/json"})
   public BookDTO getById(@PathVariable String id) {
 
     var book = bookService.getById(id)
@@ -58,7 +64,9 @@ public class BookRestController {
   }
 
 
-  @PutMapping("/api/v1/book/{id}")
+  @PutMapping(value = "/api/v1/book/{id}",
+      consumes = {"application/json"},
+      produces = {"application/json"})
   public BookDTO update(@PathVariable String id, @RequestBody BookDTO bookDTO) {
 
     var book = bookMapper.toBook(bookDTO);
@@ -72,7 +80,9 @@ public class BookRestController {
 
   }
 
-  @PostMapping("/api/v1/book")
+  @PostMapping(value = "/api/v1/book",
+      consumes = {"application/json"},
+      produces = {"application/json"})
   public BookDTO create(@RequestBody BookDTO bookDTO) {
 
     var book = bookMapper.toBook(bookDTO);
