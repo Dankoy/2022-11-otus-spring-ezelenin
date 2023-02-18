@@ -7,9 +7,6 @@ spring:
       port: 0
       database: test
 
-  shell:
-    interactive:
-      enabled: false
   main:
     allow-circular-references: true
 
@@ -17,7 +14,7 @@ spring:
 mongock:
   runner-type: "InitializingBean"
   change-logs-scan-package:
-    - ru.dankoy.hw8.core.mongock.changelogs
+    - ru.dankoy.hw10.core.mongock.changelogs
   mongo-db:
     write-concern:
       journal: false

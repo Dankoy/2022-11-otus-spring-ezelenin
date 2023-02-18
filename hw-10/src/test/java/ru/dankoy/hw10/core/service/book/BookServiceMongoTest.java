@@ -2,8 +2,6 @@ package ru.dankoy.hw10.core.service.book;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 
@@ -22,14 +20,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw10.core.domain.Author;
 import ru.dankoy.hw10.core.domain.Book;
-import ru.dankoy.hw10.core.domain.Commentary;
 import ru.dankoy.hw10.core.domain.Genre;
-import ru.dankoy.hw10.core.exceptions.BookServiceException;
-import ru.dankoy.hw10.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw10.core.repository.book.BookRepository;
 import ru.dankoy.hw10.core.service.author.AuthorService;
 import ru.dankoy.hw10.core.service.author.AuthorServiceMongo;
-import ru.dankoy.hw10.core.service.commentary.CommentaryService;
 import ru.dankoy.hw10.core.service.commentary.CommentaryServiceMongo;
 
 
@@ -45,9 +39,6 @@ class BookServiceMongoTest {
 
   @MockBean
   private AuthorService authorService;
-
-  @MockBean
-  private CommentaryService commentaryService;
 
   @Autowired
   private BookServiceMongo bookServiceMongo;
@@ -125,7 +116,6 @@ class BookServiceMongoTest {
 
     var id = "1L";
     var correctInsertedId = "4L";
-    var listOfIds = new String[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre("genre1");
     authors.add(author);
@@ -155,41 +145,7 @@ class BookServiceMongoTest {
 
     bookServiceMongo.deleteById(id);
 
-    Mockito.verify(bookRepository, times(1)).delete(toDelete);
-
-  }
-
-  @DisplayName("should throw exception when deleteByBookId book by id with commentaries")
-  @Test
-  void shouldThrowExceptionWhenDeleteBookByIWithCommentaries() {
-
-    var id = "1L";
-    var toDelete = new Book(id, "name", new HashSet<>(), new HashSet<>());
-
-    given(bookRepository.findById(id)).willReturn(Optional.of(toDelete));
-    given(commentaryService.getAllByBookId(id)).willReturn(
-        List.of(new Commentary("id", "text", toDelete)));
-
-    assertThatThrownBy(() -> bookServiceMongo.deleteById(id))
-        .isInstanceOf(BookServiceException.class);
-
-    Mockito.verify(bookRepository, times(0)).delete(toDelete);
-    Mockito.verify(commentaryService, times(1)).getAllByBookId(id);
-
-  }
-
-  @DisplayName("should correctly deleteByBookId book by id")
-  @Test
-  void shouldThrowExceptionWhenDeleteNonExistingBookById() {
-
-    var id = "999L";
-
-    given(bookRepository.findById(id)).willReturn(Optional.empty());
-
-    assertThatThrownBy(() -> bookServiceMongo.deleteById(id))
-        .isInstanceOf(EntityNotFoundException.class);
-
-    Mockito.verify(bookRepository, times(0)).delete(any());
+    Mockito.verify(bookRepository, times(1)).deleteByBookId(id);
 
   }
 
@@ -201,7 +157,6 @@ class BookServiceMongoTest {
     var authors = new HashSet<Author>();
     var genres = new HashSet<Genre>();
     var id = "1L";
-    var listOfIds = new String[]{id};
     var author = new Author(id, "author1");
     var genre = new Genre("genre1");
     authors.add(author);
@@ -212,7 +167,7 @@ class BookServiceMongoTest {
     given(bookRepository.findById(id)).willReturn(Optional.of(bookToUpdate));
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
-//    bookServiceMongo.update(bookToUpdate);
+    bookServiceMongo.insertOrUpdate(bookToUpdate);
 
     Mockito.verify(bookRepository, times(1)).saveAndCheckAuthors(bookToUpdate);
 
