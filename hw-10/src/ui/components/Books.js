@@ -7,7 +7,7 @@ export const Header = (props) => (
     <h1>{props.title}</h1>
 );
 
-export const  Books = (props) =>  {
+export const Books = (props) => {
 
   const {title} = props;
   const [books, setBooks] = useState([]);
