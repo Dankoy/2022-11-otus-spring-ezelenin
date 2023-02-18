@@ -15,7 +15,12 @@ export const Book = (props) => {
   const [book, setBook] = useState({});
 
   useEffect(() => {
-    fetch(`${apiPath}/${bookPath}/${bookId}`)
+    fetch(`${apiPath}/${bookPath}/${bookId}`,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
     .then(response => response.json())
     .then(book => {
       setLoading(false);

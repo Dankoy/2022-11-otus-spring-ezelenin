@@ -16,7 +16,12 @@ export const Commentaries = (props) => {
   }, [])
 
   function fetchCommentaries() {
-    fetch(`${apiPath}/${bookPath}/${bookId}/${commentaryPath}`)
+    fetch(`${apiPath}/${bookPath}/${bookId}/${commentaryPath}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
     .then(response => response.json())
     .then(coms => {
       setCommentaries(coms);

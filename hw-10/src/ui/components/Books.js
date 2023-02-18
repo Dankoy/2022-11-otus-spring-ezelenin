@@ -19,7 +19,12 @@ export const Books = (props) => {
   }, [])
 
   function fetchBooks() {
-    fetch(`${apiPath}/${bookPath}`)
+    fetch(`${apiPath}/${bookPath}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
     .then(response => response.json())
     .then(books => {
       setBooks(books);
@@ -38,7 +43,11 @@ export const Books = (props) => {
 
   const deleteBookById = (bookId) => {
     fetch(`${apiPath}/${bookPath}/${bookId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
     }).then((response, reject) => {
       if (response.ok) {
         return response;
