@@ -1,6 +1,6 @@
 import React from "react";
 
-export function LoadingSpinner() {
+export const LoadingSpinner = () => {
   return (
       <div className="spinner-container">
         <h1>Loading...</h1>

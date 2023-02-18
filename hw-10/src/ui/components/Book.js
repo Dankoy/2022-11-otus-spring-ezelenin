@@ -8,7 +8,7 @@ const Header = (props) => (
     <h1>{props.title}</h1>
 );
 
-export function Book(props) {
+export const Book = (props) => {
 
   const {bookId} = props;
   const [loading, setLoading] = useState(true);
@@ -77,5 +77,3 @@ export function Book(props) {
   }
 
 }
-
-export default Book;

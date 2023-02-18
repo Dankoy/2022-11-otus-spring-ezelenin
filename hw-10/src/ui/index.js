@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {Books} from './components/Books';
+import {BrowserRouter} from "react-router-dom";
 
 let container = document.getElementById('root');
 
@@ -11,4 +12,8 @@ function App() {
 }
 
 // Initial render
-root.render(<App/>);
+root.render(
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
+);

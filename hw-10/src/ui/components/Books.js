@@ -3,11 +3,11 @@ import {apiPath, bookPath} from "../context";
 import {styles} from "../styles/styles";
 import {Book} from "./Book";
 
-const Header = (props) => (
+export const Header = (props) => (
     <h1>{props.title}</h1>
 );
 
-export function Books(props) {
+export const  Books = (props) =>  {
 
   const {title} = props;
   const [books, setBooks] = useState([]);
