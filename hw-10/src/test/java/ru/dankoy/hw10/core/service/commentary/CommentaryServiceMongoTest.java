@@ -28,14 +28,13 @@ import ru.dankoy.hw10.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw10.core.service.book.BookService;
 import ru.dankoy.hw10.core.service.book.BookServiceMongo;
 import ru.dankoy.hw10.core.service.genre.GenreServiceMongo;
-import ru.dankoy.hw10.core.service.utils.OptionalCheckerImpl;
 
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Tests for CommentaryServiceMongo ")
 @DataMongoTest
 @Import({CommentaryServiceMongo.class, BookServiceMongo.class, GenreServiceMongo.class,
-    AuthorServiceMongo.class, OptionalCheckerImpl.class})
+    AuthorServiceMongo.class})
 class CommentaryServiceMongoTest {
 
 

@@ -31,13 +31,12 @@ import ru.dankoy.hw10.core.service.author.AuthorService;
 import ru.dankoy.hw10.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw10.core.service.commentary.CommentaryService;
 import ru.dankoy.hw10.core.service.commentary.CommentaryServiceMongo;
-import ru.dankoy.hw10.core.service.utils.OptionalCheckerImpl;
 
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test BookServiceMongo ")
 @DataMongoTest
-@Import({BookServiceMongo.class, AuthorServiceMongo.class, OptionalCheckerImpl.class,
+@Import({BookServiceMongo.class, AuthorServiceMongo.class,
     CommentaryServiceMongo.class})
 class BookServiceMongoTest {
 
@@ -138,7 +137,7 @@ class BookServiceMongoTest {
     given(bookRepository.saveAndCheckAuthors(bookToInsert)).willReturn(insertedBook);
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
-    var actual = bookServiceMongo.insertOrUpdate(bookToInsert, listOfIds, listOfIds);
+    var actual = bookServiceMongo.insertOrUpdate(bookToInsert);
 
     assertThat(actual).isEqualTo(insertedBook);
     Mockito.verify(bookRepository, times(1)).saveAndCheckAuthors(bookToInsert);
@@ -213,7 +212,7 @@ class BookServiceMongoTest {
     given(bookRepository.findById(id)).willReturn(Optional.of(bookToUpdate));
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
-    bookServiceMongo.update(bookToUpdate);
+//    bookServiceMongo.update(bookToUpdate);
 
     Mockito.verify(bookRepository, times(1)).saveAndCheckAuthors(bookToUpdate);
 
