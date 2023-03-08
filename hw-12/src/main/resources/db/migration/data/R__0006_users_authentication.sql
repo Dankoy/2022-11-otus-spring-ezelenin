@@ -10,8 +10,3 @@ values ('user',
         true,
         true,
         true);
-
-insert into authorities(authority,
-                        user_id)
-values ('ROLE_ADMIN',
-        1);
