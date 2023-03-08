@@ -5,23 +5,40 @@ import static com.mongodb.client.model.Filters.eq;
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.mongodb.DBRef;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.reactivestreams.client.MongoCollection;
+import com.mongodb.reactivestreams.client.MongoDatabase;
 import com.mongodb.client.model.Projections;
+import com.sun.net.httpserver.Authenticator.Success;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.reactivestreams.Publisher;
+import ru.dankoy.hw11.core.mongock.changelogs.SubscriberHelpers.ObservableSubscriber;
+import ru.dankoy.hw11.core.mongock.changelogs.SubscriberHelpers.PrintDocumentSubscriber;
+import ru.dankoy.hw11.core.repository.book.BookRepository;
 
+
+@RequiredArgsConstructor
 @ChangeLog(order = "003")
 public class InitCommentariesChangeLog {
 
+  private final BookRepository bookRepository;
+
   @ChangeSet(order = "001", id = "insertCommentaries", author = "dankoy")
-  public void insertCommentaries(MongoDatabase db) {
+  public void insertCommentaries(MongoDatabase db) throws Throwable {
 
     MongoCollection<Document> commentaries = db.getCollection("commentaries");
 
+    var subscriber = new PrintDocumentSubscriber();
+
     var book1 = getDocumentByName(db, "book1", "books");
     var book2 = getDocumentByName(db, "book2", "books");
+
+    book1.subscribe(subscriber);
+    book2.subscribe(subscriber);
+
+    subscriber.await();
 
     var com1 = new Document()
         .append("text", "com1")
@@ -47,7 +64,7 @@ public class InitCommentariesChangeLog {
   }
 
 
-  private Document getDocumentByName(MongoDatabase db, String nameValue, String collectionName) {
+  private Publisher<Document> getDocumentByName(MongoDatabase db, String nameValue, String collectionName) {
 
     MongoCollection<Document> collection = db.getCollection(collectionName);
 

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import ru.dankoy.hw11.core.controller.BookRestController;
-import ru.dankoy.hw11.core.controller.CommentaryRestController;
 import ru.dankoy.hw11.core.dto.mapper.BookMapper;
 import ru.dankoy.hw11.core.dto.mapper.CommentaryMapper;
 import ru.dankoy.hw11.core.repository.author.AuthorRepository;

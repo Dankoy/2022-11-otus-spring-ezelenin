@@ -11,7 +11,7 @@ spring:
 mongock:
   runner-type: "InitializingBean"
   change-logs-scan-package:
-    - ru.dankoy.hw10.core.mongock.changelogs
+    - ru.dankoy.hw11.core.mongock.changelogs
   mongo-db:
     write-concern:
       journal: false

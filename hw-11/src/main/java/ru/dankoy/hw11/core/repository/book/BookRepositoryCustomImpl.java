@@ -67,7 +67,7 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
 
 
   @Override
-  public Mono<DeleteResult> deleteByBookId(String bookId) {
+  public Mono<DeleteResult> deleteByBookId(Mono<String> bookId) {
 
     var query = Query.query(Criteria.where("_id").is(bookId));
 

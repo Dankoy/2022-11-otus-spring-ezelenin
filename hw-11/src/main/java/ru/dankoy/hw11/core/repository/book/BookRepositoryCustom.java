@@ -13,5 +13,5 @@ public interface BookRepositoryCustom {
 
   Mono<Book> saveAndCheckAuthors(Book book);
 
-  Mono<DeleteResult> deleteByBookId(String bookId);
+  Mono<DeleteResult> deleteByBookId(Mono<String> bookId);
 }
