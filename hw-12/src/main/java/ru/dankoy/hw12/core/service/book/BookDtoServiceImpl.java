@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw12.core.dto.book.BookDTO;
 import ru.dankoy.hw12.core.dto.book.mapper.BookMapper;
-import ru.dankoy.hw12.core.exceptions.Entity;
+import ru.dankoy.hw12.core.exceptions.LibraryElement;
 import ru.dankoy.hw12.core.exceptions.EntityNotFoundException;
 
 
@@ -32,7 +32,7 @@ public class BookDtoServiceImpl implements BookDtoService {
   @Override
   public Optional<BookDTO> getById(long id) {
     var optional = bookService.getById(id);
-    var found = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
+    var found = optional.orElseThrow(() -> new EntityNotFoundException(id, LibraryElement.BOOK));
     return Optional.of(bookMapper.toDTOWithCommentaries(found));
   }
 

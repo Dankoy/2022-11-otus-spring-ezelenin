@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.dankoy.hw12.core.domain.Author;
 import ru.dankoy.hw12.core.domain.Genre;
 import ru.dankoy.hw12.core.dto.book.BookDTO;
-import ru.dankoy.hw12.core.exceptions.Entity;
+import ru.dankoy.hw12.core.exceptions.LibraryElement;
 import ru.dankoy.hw12.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw12.core.service.author.AuthorService;
 import ru.dankoy.hw12.core.service.book.BookDtoService;
@@ -45,7 +45,7 @@ public class BookController {
   public String getById(@RequestParam("id") long id, Model model) {
 
     var optional = bookService.getById(id);
-    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
+    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, LibraryElement.BOOK));
 
     model.addAttribute("book", book);
     return "book";
@@ -80,7 +80,7 @@ public class BookController {
   public String updateForm(@RequestParam("id") long id, Model model) {
 
     var optional = bookService.getById(id);
-    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
+    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, LibraryElement.BOOK));
 
     List<Author> authors = authorService.getAll();
     List<Genre> genres = genreService.getAll();

@@ -8,8 +8,8 @@ public class EntityNotFoundException extends Hw5RootException {
     super(message);
   }
 
-  public EntityNotFoundException(long id, Entity entity) {
-    super(String.format(MESSAGE, entity.getName(), id));
+  public EntityNotFoundException(long id, LibraryElement libraryElement) {
+    super(String.format(MESSAGE, libraryElement.getName(), id));
   }
 
 }

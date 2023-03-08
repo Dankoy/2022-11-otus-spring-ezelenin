@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum Entity {
+public enum LibraryElement {
   BOOK("Book"),
   AUTHOR("Author"),
   GENRE("Genre"),

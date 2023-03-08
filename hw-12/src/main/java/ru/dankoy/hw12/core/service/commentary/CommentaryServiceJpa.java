@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw12.core.domain.Commentary;
-import ru.dankoy.hw12.core.exceptions.Entity;
+import ru.dankoy.hw12.core.exceptions.LibraryElement;
 import ru.dankoy.hw12.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw12.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw12.core.service.book.BookService;
@@ -26,7 +26,7 @@ public class CommentaryServiceJpa implements CommentaryService {
   @Override
   public List<Commentary> getAllByBookId(long id) {
     var optional = bookService.getById(id);
-    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
+    var book = optional.orElseThrow(() -> new EntityNotFoundException(id, LibraryElement.BOOK));
 
     return new ArrayList<>(book.getCommentaries());
   }
@@ -41,7 +41,7 @@ public class CommentaryServiceJpa implements CommentaryService {
   public Commentary insertOrUpdate(Commentary commentary) {
 
     var book = bookService.getById(commentary.getBook().getId())
-        .orElseThrow(() -> new EntityNotFoundException(commentary.getBook().getId(), Entity.BOOK));
+        .orElseThrow(() -> new EntityNotFoundException(commentary.getBook().getId(), LibraryElement.BOOK));
 
     commentary.setBook(book);
 

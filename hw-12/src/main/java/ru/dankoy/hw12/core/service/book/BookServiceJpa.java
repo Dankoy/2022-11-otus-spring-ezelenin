@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw12.core.domain.Book;
-import ru.dankoy.hw12.core.exceptions.Entity;
+import ru.dankoy.hw12.core.exceptions.LibraryElement;
 import ru.dankoy.hw12.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw12.core.repository.book.BookRepository;
 
@@ -43,7 +43,7 @@ public class BookServiceJpa implements BookService {
   public Book update(Book book) {
 
     var optional = bookRepository.getById(book.getId());
-    var found = optional.orElseThrow(() -> new EntityNotFoundException(book.getId(), Entity.BOOK));
+    var found = optional.orElseThrow(() -> new EntityNotFoundException(book.getId(), LibraryElement.BOOK));
 
     // Добавляем комментарии к обновляемой книги, иначе они будут удалены, а это нам не нужно
     if (book.getCommentaries().isEmpty()) {
