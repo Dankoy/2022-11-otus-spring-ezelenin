@@ -19,8 +19,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.dankoy.hw12.core.domain.Author;
 import ru.dankoy.hw12.core.domain.Book;
@@ -37,6 +39,7 @@ import ru.dankoy.hw12.core.service.genre.GenreService;
 
 @DisplayName("BookController test ")
 @WebMvcTest({BookController.class, BookDtoServiceImpl.class, BookMapperImpl.class})
+@AutoConfigureMockMvc(addFilters = false) // позволяет не получать ошибку 403 forbidden в post методах с параметрами
 class BookControllerTest {
 
   @Autowired
@@ -55,6 +58,9 @@ class BookControllerTest {
 
 
   @DisplayName("should correctly print all books")
+  @WithMockUser(
+      username = "user"
+  )
   @Test
   void shouldReturnCorrectBooksList() throws Exception {
     List<Book> books = makeCorrectAllBooksList();
@@ -73,6 +79,9 @@ class BookControllerTest {
   }
 
   @DisplayName("should correctly return book view")
+  @WithMockUser(
+      username = "user"
+  )
   @Test
   void shouldGetBookById() throws Exception {
 
@@ -96,6 +105,9 @@ class BookControllerTest {
 
 
   @DisplayName("should correctly return create book view")
+  @WithMockUser(
+      username = "user"
+  )
   @Test
   void shouldCreateBook() throws Exception {
 
@@ -119,6 +131,10 @@ class BookControllerTest {
   }
 
   @DisplayName("should correctly redirect to book list after book creation")
+  @WithMockUser(
+      username = "user",
+      authorities = {"ROLE_ADMIN"}
+  )
   @Test
   void shouldReturnToBookListAfterCreation() throws Exception {
 
@@ -149,6 +165,9 @@ class BookControllerTest {
 
 
   @DisplayName("should correctly open update book view")
+  @WithMockUser(
+      username = "user"
+  )
   @Test
   void shouldCorrectlyOpenUpdateBookView() throws Exception {
 
@@ -173,6 +192,10 @@ class BookControllerTest {
   }
 
   @DisplayName("should correctly update book and redirect to book list view")
+  @WithMockUser(
+      username = "user",
+      authorities = {"ROLE_ADMIN"}
+  )
   @Test
   void shouldCorrectlyUpdateBookAndRedirectToBookListView() throws Exception {
 
@@ -204,7 +227,10 @@ class BookControllerTest {
 
   }
 
-  @DisplayName("should correctly update book and redirect to book list view")
+  @DisplayName("should correctly delete book and redirect to book list view")
+  @WithMockUser(
+      username = "user"
+  )
   @Test
   void shouldCorrectlyDeleteBookAndRedirectToBookListView() throws Exception {
 
