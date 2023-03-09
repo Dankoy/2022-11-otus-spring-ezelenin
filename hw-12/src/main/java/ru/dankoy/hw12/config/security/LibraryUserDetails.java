@@ -12,7 +12,7 @@ import ru.dankoy.hw12.core.domain.User;
   что бы доменный класс юзера был никак не связан со спрингом.
  */
 @RequiredArgsConstructor
-public class UserDetailsDecorator implements UserDetails {
+public class LibraryUserDetails implements UserDetails {
 
   private final transient User user;
 

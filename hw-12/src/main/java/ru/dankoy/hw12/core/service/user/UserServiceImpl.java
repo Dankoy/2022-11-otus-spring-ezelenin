@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.dankoy.hw12.config.security.UserDetailsDecorator;
+import ru.dankoy.hw12.config.security.LibraryUserDetails;
 import ru.dankoy.hw12.core.repository.user.UserRepository;
 
 
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserDetailsService {
     var user = userRepository.findByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException(username));
 
-    return new UserDetailsDecorator(user);
+    return new LibraryUserDetails(user);
 
   }
 }
