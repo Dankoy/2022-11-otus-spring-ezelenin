@@ -1,6 +1,8 @@
 package ru.dankoy.hw13.core.service.commentary;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw13.core.dto.commentary.CommentaryDTO;
 import ru.dankoy.hw13.core.dto.commentary.mapper.CommentaryMapper;
@@ -13,6 +15,8 @@ public class CommentaryDtoServiceImpl implements CommentaryDtoService {
   private final CommentaryMapper commentaryMapper;
   private final CommentaryService commentaryService;
 
+
+  @Secured({"ADMIN", "OPERATOR"})
   @Override
   public CommentaryDTO insertOrUpdate(CommentaryDTO commentaryDto) {
 
@@ -21,6 +25,9 @@ public class CommentaryDtoServiceImpl implements CommentaryDtoService {
 
   }
 
+  @PreAuthorize("hasAnyRole({ T(ru.dankoy.hw13.config.security.Authority).ADMIN.name(),"
+      + " T(ru.dankoy.hw13.config.security.Authority).OPERATOR.name(),"
+      + " T(ru.dankoy.hw13.config.security.Authority).ADMIN.name()})")
   @Override
   public void deleteById(long id) {
     commentaryService.deleteById(id);
