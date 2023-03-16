@@ -4,8 +4,20 @@ insert into users(username,
                   account_non_locked,
                   account_non_expired,
                   credentials_non_expired)
-values ('user',
-        '$2a$10$Jj7yBaQGAt4IKHmRfVyGiOoB6qEZeRcFQ2GV4cZugQkJmFBBMRllO', -- mysuperpassword
+values ('admin',
+        '$2a$10$TWU4IJ6sZhHeKKNtznMqe.7AqaCRESc68LhExRCs.frwpv.i8uvsW', -- pass
+        true,
+        true,
+        true,
+        true),
+       ('reader',
+        '$2a$10$TWU4IJ6sZhHeKKNtznMqe.7AqaCRESc68LhExRCs.frwpv.i8uvsW', -- pass
+        true,
+        true,
+        true,
+        true),
+       ('operator',
+        '$2a$10$TWU4IJ6sZhHeKKNtznMqe.7AqaCRESc68LhExRCs.frwpv.i8uvsW', -- pass
         true,
         true,
         true,
