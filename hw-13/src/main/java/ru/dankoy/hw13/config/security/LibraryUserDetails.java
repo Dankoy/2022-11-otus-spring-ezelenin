@@ -1,9 +1,10 @@
 package ru.dankoy.hw13.config.security;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.dankoy.hw13.core.domain.User;
 
@@ -18,7 +19,11 @@ public class LibraryUserDetails implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return new HashSet<>();
+
+    var roles = user.getRoles();
+
+    return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole()))
+        .collect(Collectors.toSet());
   }
 
   @Override
