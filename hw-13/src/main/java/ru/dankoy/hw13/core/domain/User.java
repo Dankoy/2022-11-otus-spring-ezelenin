@@ -1,6 +1,8 @@
 package ru.dankoy.hw13.core.domain;
 
+import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +18,9 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 @NamedEntityGraph(name = "user-to-roles-graph",
@@ -25,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails {
 
   @Id
   @Column(name = "id")
@@ -56,4 +61,9 @@ public class User {
       inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
   private Set<UserRole> roles; // entity graph
 
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole()))
+        .collect(Collectors.toSet());
+  }
 }
