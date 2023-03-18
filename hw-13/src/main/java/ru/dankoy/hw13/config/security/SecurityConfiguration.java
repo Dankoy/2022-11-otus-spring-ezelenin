@@ -26,16 +26,15 @@ public class SecurityConfiguration {
                     .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name(),
                         Authority.READER.name()) // для любой роли доступен.
 
-                    .antMatchers(HttpMethod.GET, "/book/create")
+                    .antMatchers("/book/create")
                     .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name())
 
-                    .antMatchers(HttpMethod.POST, "/book/create?**")
-                    .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name())
+                    .antMatchers(HttpMethod.GET,
+                        "/book/edit") // для примера, что есть возможность управлять методами
+                    .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name(),
+                        Authority.READER.name())
 
-                    .antMatchers(HttpMethod.GET, "/book/edit", "/book/edit?id=**")
-                    .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name())
-
-                    .antMatchers(HttpMethod.POST, "/book/edit?id=**")
+                    .antMatchers(HttpMethod.POST, "/book/edit")
                     .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name())
 
                     .antMatchers("/book/delete")
