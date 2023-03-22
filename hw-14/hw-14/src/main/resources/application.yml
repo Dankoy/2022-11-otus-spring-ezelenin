@@ -1,0 +1,23 @@
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      database: library
+      port: 27017
+      host: localhost
+
+  datasource:
+    url: "jdbc:h2:mem:./library;DB_CLOSE_DELAY=-1"
+    username: user
+    password: password
+    driver-class-name: org.h2.Driver
+  flyway:
+    locations: classpath:db/migration
+    enabled: true
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+
+    show-sql: true
