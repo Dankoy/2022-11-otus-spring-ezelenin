@@ -28,7 +28,7 @@ public class MigrateBookCommand {
   private final CommentaryMongoRepository commentaryMongoRepository;
   private final ObjectMapper objectMapper;
 
-  @ShellMethod(value = "startMigrationJobWithJobLauncher", key = "sm-jl")
+  @ShellMethod(value = "start-migration-with-job-launcher", key = "sm-jl")
   public void startMigrationJobWithJobLauncher() throws Exception {
     JobExecution execution = jobLauncher.run(importUserJob, new JobParametersBuilder()
         .toJobParameters());
@@ -36,7 +36,7 @@ public class MigrateBookCommand {
   }
 
 
-  @ShellMethod(value = "getBooksFromMongo", key = "gb")
+  @ShellMethod(value = "get-books-from-mongo", key = "gb")
   public String getBooksFromMongo() throws Exception {
 
     var books = bookMongoRepository.findAll();
