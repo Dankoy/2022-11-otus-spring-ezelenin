@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class JobConfig {
 
   @Bean
-  public Job migrateLibraryJob(JobBuilderFactory jobBuilderFactory, Step migrateAuthors, Step migrateBooks, Step migrateCommentaries) {
+  public Job migrateLibraryJob(JobBuilderFactory jobBuilderFactory, Step migrateAuthors,
+      Step migrateBooks, Step migrateCommentaries) {
     return jobBuilderFactory.get("migrateLibraryJob")
         .incrementer(new RunIdIncrementer())
         .flow(migrateAuthors)

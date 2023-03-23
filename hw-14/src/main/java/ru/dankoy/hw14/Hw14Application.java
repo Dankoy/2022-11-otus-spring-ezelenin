@@ -11,8 +11,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 public class Hw14Application {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Hw14Application.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(Hw14Application.class, args);
+  }
 
 }
