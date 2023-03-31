@@ -2,7 +2,6 @@ package ru.dankoy.hw15.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.channel.QueueChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
@@ -20,28 +19,28 @@ import ru.dankoy.hw15.core.service.XenomorphingService;
 @Configuration
 public class IntegrationConfig {
 
+  // начальный поток в который поступают ovomorphs
   @Bean
   public QueueChannel stage1Channel() {
     return MessageChannels.queue(10).get();
   }
 
 
-  @Bean
-  public DirectChannel stage5Channel() {
-    return MessageChannels.direct().get();
-  }
-
+  // Поток в который поступают дроны с заголовком предрасположенности эволюции в warrior
   @Bean
   public QueueChannel stage6WarriorChannel() {
     return MessageChannels.queue(10).get();
   }
 
+
+  // Поток в который поступают дроны с заголовком предрасположенности эволюции в sentry
   @Bean
   public QueueChannel stage6SentryChannel() {
     return MessageChannels.queue(10).get();
   }
 
 
+  // общий выходной поток, в который поступают финальные стадии эволюции ксеноморфа
   @Bean
   public PublishSubscribeChannel xenoOutputChannel() {
     return MessageChannels.publishSubscribe().get();
