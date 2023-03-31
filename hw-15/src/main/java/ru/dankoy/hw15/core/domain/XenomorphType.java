@@ -13,7 +13,8 @@ public enum XenomorphType {
   PRAETORIAN,
   QUEEN;
 
-  private static final List<XenomorphType> VALUES = List.of(XenomorphType.SENTRY, XenomorphType.WARRIOR);
+  private static final List<XenomorphType> VALUES = List.of(XenomorphType.SENTRY,
+      XenomorphType.WARRIOR);
   private static final int SIZE = VALUES.size();
   private static final Random RANDOM = new Random();
 

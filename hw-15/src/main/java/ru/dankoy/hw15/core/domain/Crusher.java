@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @ToString
 @RequiredArgsConstructor
-public class Crusher implements Queen{
+public class Crusher implements Queen {
 
   private static final XenomorphType type = XenomorphType.QUEEN;
 

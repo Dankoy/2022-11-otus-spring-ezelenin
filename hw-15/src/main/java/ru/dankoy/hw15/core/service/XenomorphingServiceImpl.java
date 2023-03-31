@@ -3,11 +3,11 @@ package ru.dankoy.hw15.core.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw15.core.domain.Chestburster;
+import ru.dankoy.hw15.core.domain.Crusher;
 import ru.dankoy.hw15.core.domain.Drone;
 import ru.dankoy.hw15.core.domain.Facehugger;
 import ru.dankoy.hw15.core.domain.Ovomorph;
 import ru.dankoy.hw15.core.domain.Praetorian;
-import ru.dankoy.hw15.core.domain.Crusher;
 import ru.dankoy.hw15.core.domain.Sentry;
 import ru.dankoy.hw15.core.domain.Warrior;
 
@@ -31,7 +31,7 @@ public class XenomorphingServiceImpl implements XenomorphingService {
   @Override
   public Chestburster facehuggerMorphing(Facehugger facehugger) {
 
-    var chestburster =  new Chestburster(facehugger.getName(), facehugger.getAge() + 2);
+    var chestburster = new Chestburster(facehugger.getName(), facehugger.getAge() + 2);
 
     log.info(LOG_MESSAGE, facehugger, chestburster);
 
@@ -41,7 +41,7 @@ public class XenomorphingServiceImpl implements XenomorphingService {
   @Override
   public Drone chestbursterMorphing(Chestburster chestburster) {
 
-    var drone =  new Drone(chestburster.getName(), chestburster.getAge() + 1);
+    var drone = new Drone(chestburster.getName(), chestburster.getAge() + 1);
 
     log.info(LOG_MESSAGE, chestburster, drone);
 
@@ -51,7 +51,7 @@ public class XenomorphingServiceImpl implements XenomorphingService {
 
   @Override
   public Warrior droneToWarriorMorphing(Drone drone) {
-    var warrior =  new Warrior(drone.getName(), drone.getAge() + 1);
+    var warrior = new Warrior(drone.getName(), drone.getAge() + 1);
 
     log.info(LOG_MESSAGE, drone, warrior);
 
@@ -60,7 +60,7 @@ public class XenomorphingServiceImpl implements XenomorphingService {
 
   @Override
   public Sentry droneToSentryMorphing(Drone drone) {
-    var sentry =  new Sentry(drone.getName(), drone.getAge() + 1);
+    var sentry = new Sentry(drone.getName(), drone.getAge() + 1);
 
     log.info(LOG_MESSAGE, drone, sentry);
 
@@ -70,7 +70,7 @@ public class XenomorphingServiceImpl implements XenomorphingService {
   @Override
   public Praetorian warriorMorphing(Warrior warrior) {
 
-    var praetorian =  new Praetorian(warrior.getName(), warrior.getAge() + 1);
+    var praetorian = new Praetorian(warrior.getName(), warrior.getAge() + 1);
 
     log.info(LOG_MESSAGE, warrior, praetorian);
 
@@ -80,7 +80,7 @@ public class XenomorphingServiceImpl implements XenomorphingService {
 
   @Override
   public Crusher sentryMorphing(Sentry sentry) {
-    var queen =  new Crusher(sentry.getName(), sentry.getAge() + 1);
+    var queen = new Crusher(sentry.getName(), sentry.getAge() + 1);
 
     log.info(LOG_MESSAGE, sentry, queen);
 
