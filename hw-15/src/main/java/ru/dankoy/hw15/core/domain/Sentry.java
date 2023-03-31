@@ -3,15 +3,12 @@ package ru.dankoy.hw15.core.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
-// Stage 6
-@ToString
 @Getter
 @RequiredArgsConstructor
-public class Praetorian implements Queen {
+public class Sentry {
 
-  private static final XenomorphType type = XenomorphType.PRAETORIAN;
+  private static final XenomorphType type = XenomorphType.SENTRY;
 
   private final String name;
 

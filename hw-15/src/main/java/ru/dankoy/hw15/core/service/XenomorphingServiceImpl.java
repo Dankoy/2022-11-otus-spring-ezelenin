@@ -7,6 +7,8 @@ import ru.dankoy.hw15.core.domain.Drone;
 import ru.dankoy.hw15.core.domain.Facehugger;
 import ru.dankoy.hw15.core.domain.Ovomorph;
 import ru.dankoy.hw15.core.domain.Praetorian;
+import ru.dankoy.hw15.core.domain.Crusher;
+import ru.dankoy.hw15.core.domain.Sentry;
 import ru.dankoy.hw15.core.domain.Warrior;
 
 
@@ -38,6 +40,7 @@ public class XenomorphingServiceImpl implements XenomorphingService {
 
   @Override
   public Drone chestbursterMorphing(Chestburster chestburster) {
+
     var drone =  new Drone(chestburster.getName(), chestburster.getAge() + 1);
 
     log.info(LOG_MESSAGE, chestburster, drone);
@@ -47,13 +50,21 @@ public class XenomorphingServiceImpl implements XenomorphingService {
   }
 
   @Override
-  public Warrior droneMorphing(Drone drone) {
-
+  public Warrior droneToWarriorMorphing(Drone drone) {
     var warrior =  new Warrior(drone.getName(), drone.getAge() + 1);
 
     log.info(LOG_MESSAGE, drone, warrior);
 
     return warrior;
+  }
+
+  @Override
+  public Sentry droneToSentryMorphing(Drone drone) {
+    var sentry =  new Sentry(drone.getName(), drone.getAge() + 1);
+
+    log.info(LOG_MESSAGE, drone, sentry);
+
+    return sentry;
   }
 
   @Override
@@ -65,5 +76,14 @@ public class XenomorphingServiceImpl implements XenomorphingService {
 
     return praetorian;
 
+  }
+
+  @Override
+  public Crusher sentryMorphing(Sentry sentry) {
+    var queen =  new Crusher(sentry.getName(), sentry.getAge() + 1);
+
+    log.info(LOG_MESSAGE, sentry, queen);
+
+    return queen;
   }
 }
