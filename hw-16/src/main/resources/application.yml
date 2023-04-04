@@ -5,6 +5,8 @@ spring:
       database: library
       port: 27017
       host: localhost
+  jmx:
+    enabled: true
 
 
 
@@ -16,3 +18,28 @@ mongock:
     write-concern:
       journal: false
     read-concern: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+
+logging:
+  file:
+    name: hw16-%d{yyyy-MM-dd}.%i.log
+  level:
+    root: debug
+  logback:
+    rollingpolicy:
+      file-name-pattern: hw16-%d{yyyy-MM-dd}.%i.log.gz
+      max-file-size: 10KB
+      max-history: 4
+
