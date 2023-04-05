@@ -1,16 +1,20 @@
 package ru.dankoy.hw16.core.service.objectmapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw16.core.exceptions.ObjectMapperException;
 
 
 @Service
-@RequiredArgsConstructor
 public class ObjectMapperServiceImpl implements ObjectMapperService {
 
   private final ObjectMapper objectMapper;
+
+  public ObjectMapperServiceImpl(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+    this.objectMapper.registerModule(new JavaTimeModule());
+  }
 
   @Override
   public String convertToString(Object object) {
