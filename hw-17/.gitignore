@@ -28,3 +28,6 @@ node/
 /node_modules
 /output
 package-lock.json
+
+### docker
+.env
