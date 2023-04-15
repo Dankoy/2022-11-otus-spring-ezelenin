@@ -2,9 +2,13 @@ spring:
   data:
     mongodb:
       authentication-database: admin
-      database: library
-      port: 27017
-      host: localhost
+      database: ${MONGODB_DATABASE} # library
+      port: ${MONGODB_PORT} # 27017
+      host: ${MONGODB_HOST} # docker container name
+      # обязательно при шифровании пароля необходимо явно указать алгоритм и прочие параметры,
+      # что бы не напороться на несоответствие
+      password: ENC(ukzZHI9tZCXVJ0wTuHD+QykLgZwdO+Ma) # mongopass
+      username: admin
   jmx:
     enabled: true
 

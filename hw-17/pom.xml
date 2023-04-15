@@ -102,7 +102,43 @@
       <artifactId>spring-data-rest-hal-explorer</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>com.github.ulisesbocchio</groupId>
+      <artifactId>jasypt-spring-boot-starter</artifactId>
+      <version>3.0.4</version>
+    </dependency>
+
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>no-frontend</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>1.12.1</version>
+            <executions>
+              <execution>
+                <id>install node and npm</id> <!-- here there must be the same identifier as defined in <build><plugins> section -->
+                <phase>none</phase> <!-- this disables plugin -->
+              </execution>
+              <execution>
+                <id>npm install</id> <!-- here there must be the same identifier as defined in <build><plugins> section -->
+                <phase>none</phase> <!-- this disables plugin -->
+              </execution>
+              <execution>
+                <id>npm run build</id> <!-- here there must be the same identifier as defined in <build><plugins> section -->
+                <phase>none</phase> <!-- this disables plugin -->
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 
   <build>
     <plugins>
@@ -143,6 +179,12 @@
         <configuration>
           <encoding>UTF-8</encoding>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.github.ulisesbocchio</groupId>
+        <artifactId>jasypt-maven-plugin</artifactId>
+        <version>3.0.4</version>
       </plugin>
 
       <plugin>
