@@ -12,7 +12,7 @@ ENV ENV_MAVEN_PROFILE $MAVEN_PROFILE
 WORKDIR /app
 COPY ./src ./src
 COPY ./pom.xml ./
-RUN ["/bin/bash", "-c", "mvn clean install -P $ENV_MAVEN_PROFILE -DskipTests"]
+RUN ["/bin/bash", "-c", "mvn clean install -P $ENV_MAVEN_PROFILE"]
 
 # entrypoint не работает с шеллом, работает только ARG переменные
 ENTRYPOINT ["java", "-Djasypt.encryptor.password=${JASYPT_PASSWORD}", "-Djasypt.encryptor.algorithm=PBEWithMD5AndDES", "-Djasypt.encryptor.ivGeneratorClassName=org.jasypt.iv.NoIvGenerator", "-jar", "target/hw-17-0.0.1-SNAPSHOT.jar"]
