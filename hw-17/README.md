@@ -13,3 +13,11 @@ ptor.password=masterpassword -Djasypt.encryptor.algorithm=PBEWithMD5AndDES -Djas
 ### Запуск бэкенд контейнера 
 
 `docker run --rm --name library-backend -e JASYPT_PASSWORD=masterpassword -e MONGODB_DATABASE=library -e MONGODB_PORT=27017 -e MONGODB_HOST=localhost evawe/library-backend:1`
+
+### Зависимости для docker-compose
+Для сокрытия паролей и прочих интересных переменных используется файл .env из корня проекта.
+
+Пример содержимого файла:
+
+`JASYPT_MASTER_PASSWORD=пароль
+MONGO_CONTAINER_PASSWORD=пароль`
