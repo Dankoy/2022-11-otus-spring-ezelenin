@@ -1,6 +1,9 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path');
 
+console.log(process.env.BACKEND_HOST); // переменные окружения в докер контейнере
+console.log(process.env.BACKEND_PORT); // переменные окружения в докер контейнере
+
 module.exports = {
     entry: './src/ui/index.js',
     devtool: 'inline-source-map',
@@ -15,7 +18,7 @@ module.exports = {
         static: path.resolve(__dirname) + '/src/ui',
         compress: true,
         port: 9000,
-        host: 'localhost',
+        host: '0.0.0.0',
         open: true,
 
 /*
@@ -31,10 +34,15 @@ module.exports = {
         },
 */       
         proxy: {
-            '*': {
-              target: 'http://localhost:8080',
-              secure: false,
-              changeOrigin: true
+            "*": {
+                target: {
+                    host: process.env.BACKEND_HOST,
+                    protocol: 'http:',
+                    port: process.env.BACKEND_PORT
+                },
+                // ignorePath: true,
+                changeOrigin: true,
+                secure: false
             }
         }
         
