@@ -1,0 +1,40 @@
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      database: ${MONGODB_DATABASE} # library
+      port: ${MONGODB_PORT} # 27017
+      host: ${MONGODB_HOST} # docker container name
+      # обязательно при шифровании пароля необходимо явно указать алгоритм и прочие параметры,
+      # что бы не напороться на несоответствие
+      password: ENC(ukzZHI9tZCXVJ0wTuHD+QykLgZwdO+Ma) # mongopass
+      username: admin
+  jmx:
+    enabled: true
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.dankoy.hw18.core.mongock.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+
+logging:
+  level:
+    root: info
+
