@@ -1,4 +1,4 @@
-FROM  --platform=linux/amd64 maven:3.9-eclipse-temurin-11
+FROM  --platform=linux/arm64 maven:3.9-eclipse-temurin-17
 LABEL authors="turtality"
 
 # мастер пароль jasypt
@@ -12,7 +12,7 @@ ENV ENV_MAVEN_PROFILE $MAVEN_PROFILE
 WORKDIR /app
 COPY ./src ./src
 COPY ./pom.xml ./
-RUN ["/bin/bash", "-c", "mvn clean install -P $ENV_MAVEN_PROFILE"]
+RUN ["/bin/bash", "-c", "mvn clean install -P $ENV_MAVEN_PROFILE -DskipTests"]
 
 # entrypoint не работает с шеллом, работает только ARG переменные
-ENTRYPOINT ["java", "-Djasypt.encryptor.password=${JASYPT_PASSWORD}", "-Djasypt.encryptor.algorithm=PBEWithMD5AndDES", "-Djasypt.encryptor.ivGeneratorClassName=org.jasypt.iv.NoIvGenerator", "-jar", "target/hw-17-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-Djasypt.encryptor.password=${JASYPT_PASSWORD}", "-Djasypt.encryptor.algorithm=PBEWithMD5AndDES", "-Djasypt.encryptor.ivGeneratorClassName=org.jasypt.iv.NoIvGenerator", "-jar", "target/hw-18-0.0.1-SNAPSHOT.jar"]

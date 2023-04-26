@@ -10,20 +10,21 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>ru.dankoy</groupId>
-  <artifactId>hw-17</artifactId>
+  <artifactId>hw-18</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>hw-17</name>
-  <description>hw-17</description>
+  <name>hw-18</name>
+  <description>hw-18</description>
 
   <properties>
-    <java.version>11</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-		<maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
-		<minimal.maven.version>3.3.9</minimal.maven.version>
-		<spring.version>2.7.6</spring.version>
+    <java.version>17</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
+    <minimal.maven.version>3.3.9</minimal.maven.version>
+    <spring.version>2.7.6</spring.version>
     <mongock.version>4.3.8</mongock.version>
+    <resilience4j.version>2.0.2</resilience4j.version>
   </properties>
 
   <dependencies>
@@ -108,6 +109,28 @@
       <version>3.0.4</version>
     </dependency>
 
+    <!-- resilence dependencies   -->
+    <!-- https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-bom -->
+    <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-bom</artifactId>
+      <version>${resilience4j.version}</version>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-spring-boot2</artifactId>
+      <version>${resilience4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
+
+    <!-- resilence dependencies   -->
+
   </dependencies>
 
   <profiles>
@@ -121,15 +144,18 @@
             <version>1.12.1</version>
             <executions>
               <execution>
-                <id>install node and npm</id> <!-- here there must be the same identifier as defined in <build><plugins> section -->
+                <id>install node and npm
+                </id> <!-- here there must be the same identifier as defined in <build><plugins> section -->
                 <phase>none</phase> <!-- this disables plugin -->
               </execution>
               <execution>
-                <id>npm install</id> <!-- here there must be the same identifier as defined in <build><plugins> section -->
+                <id>npm install
+                </id> <!-- here there must be the same identifier as defined in <build><plugins> section -->
                 <phase>none</phase> <!-- this disables plugin -->
               </execution>
               <execution>
-                <id>npm run build</id> <!-- here there must be the same identifier as defined in <build><plugins> section -->
+                <id>npm run build
+                </id> <!-- here there must be the same identifier as defined in <build><plugins> section -->
                 <phase>none</phase> <!-- this disables plugin -->
               </execution>
             </executions>

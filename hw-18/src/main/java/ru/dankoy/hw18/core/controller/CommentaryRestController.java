@@ -2,6 +2,7 @@ package ru.dankoy.hw18.core.controller;
 
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,22 +13,23 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dankoy.hw18.core.dto.CommentaryDTO;
 import ru.dankoy.hw18.core.dto.mapper.CommentaryMapper;
-import ru.dankoy.hw18.core.service.commentary.CommentaryService;
+import ru.dankoy.hw18.core.service.commentary.ResilienceCommentaryService;
 
 
 @RequiredArgsConstructor
 @RestController
 public class CommentaryRestController {
 
-  private final CommentaryService commentaryService;
+  private final ResilienceCommentaryService commentaryService;
 
   private final CommentaryMapper commentaryMapper;
 
 
   @GetMapping("/api/v1/book/{id}/commentary")
-  public List<CommentaryDTO> getAllByBookId(@PathVariable String id) {
+  public List<CommentaryDTO> getAllByBookId(@PathVariable String id)
+      throws ExecutionException, InterruptedException {
     var commentaries = commentaryService.getAllByBookId(id);
-    return commentaries.stream().map(commentaryMapper::toDTO).collect(Collectors.toList());
+    return commentaries.get().stream().map(commentaryMapper::toDTO).collect(Collectors.toList());
   }
 
 
