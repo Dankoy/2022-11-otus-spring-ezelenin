@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean name="csvReader" class="ru.dankoy.core.csvreader.CsvReaderImpl">
+    <constructor-arg name="resource" value="/questions-eng.csv"/>
+  </bean>
+
+  <bean name="csvQuestionsDao" class="ru.dankoy.core.dao.csv.CsvQuestionsDaoImpl">
+    <constructor-arg name="csvReader" ref="csvReader"/>
+  </bean>
+
+  <bean name="csvQuestionsService" class="ru.dankoy.core.service.QuestionsServiceImpl">
+    <constructor-arg name="questionsDao" ref="csvQuestionsDao"/>
+  </bean>
+
+  <bean name="printer" class="ru.dankoy.core.utils.PrinterImpl">
+    <constructor-arg name="answerTemplate" value="  %d) %s"/>
+    <constructor-arg name="questionTemplate" value="%d) %s"/>
+  </bean>
+
+</beans>
