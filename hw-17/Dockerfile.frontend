@@ -1,0 +1,22 @@
+# FROM  arm64v8/maven:3.9-eclipse-temurin-11
+FROM arm64v8/node:19-alpine3.16
+LABEL authors="turtality"
+
+ARG BACKEND_HOST
+ENV ENV_BACKEND_HOST $BACKEND_HOST
+
+ARG BACKEND_PORT
+ENV ENV_BACKEND_PORT $BACKEND_PORT
+
+WORKDIR /app
+COPY ["./src", "./src/"]
+COPY ["package.json", "webpack.dev.config.js", "./"]
+
+# билд с помощью мавена
+# RUN ["/bin/bash", "-c", "mvn frontend:install-node-and-npm"]
+# RUN ["/bin/bash", "-c", "mvn frontend:npm"]
+
+RUN npm install
+
+# entrypoint не работает с шеллом, работает только ARG переменные
+ENTRYPOINT ["npm", "run", "dev"]
