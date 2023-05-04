@@ -9,7 +9,7 @@ spring:
       host: ${MONGODB_HOST} # docker container name
       # обязательно при шифровании пароля необходимо явно указать алгоритм и прочие параметры,
       # что бы не напороться на несоответствие
-      password: ENC(ukzZHI9tZCXVJ0wTuHD+QykLgZwdO+Ma) # mongopass
+#      password: ENC(ukzZHI9tZCXVJ0wTuHD+QykLgZwdO+Ma) # mongopass
       username: admin
   jmx:
     enabled: true
@@ -22,6 +22,12 @@ info:
   description: library backend with resilience4j
   environment: ${spring.profiles.active}
   version: 0.0.1
+
+jasypt:
+  encryptor:
+    password: masterpassword
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
 
 mongock:
   runner-type: "InitializingBean"
