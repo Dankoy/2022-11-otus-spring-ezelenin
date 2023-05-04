@@ -1,0 +1,94 @@
+spring:
+  application.name: library-backend
+
+  data:
+    mongodb:
+      authentication-database: admin
+      database: ${MONGODB_DATABASE} # library
+      port: ${MONGODB_PORT} # 27017
+      host: ${MONGODB_HOST} # docker container name
+      # обязательно при шифровании пароля необходимо явно указать алгоритм и прочие параметры,
+      # что бы не напороться на несоответствие
+      password: ENC(ukzZHI9tZCXVJ0wTuHD+QykLgZwdO+Ma) # mongopass
+      username: admin
+  jmx:
+    enabled: true
+
+server:
+  port: 8080
+
+info:
+  name: ${spring.application.name}
+  description: library backend with resilience4j
+  environment: ${spring.profiles.active}
+  version: 0.0.1
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.dankoy.hw19.core.mongock.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+    diskspace:
+      enabled: true
+    circuitbreakers:
+      enabled: true
+
+
+logging:
+  level:
+    root: info
+
+resilience4j:
+  circuitbreaker:
+    metrics:
+      enabled: true
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: TIME_BASED
+        minimumNumberOfCalls: 20
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+    instances:
+      commentaryService:
+        baseConfig: default
+        waitDurationInOpenState: 2s
+        slidingWindowSize: 1
+        permittedNumberOfCallsInHalfOpenState: 1
+
+  timelimiter:
+    metrics:
+      enabled: true
+    configs:
+      default:
+        timeout-duration: 3s
+    instances:
+      commentaryService:
+        baseConfig: default
+
+  retry:
+    instances:
+      commentaryService:
+        maxAttempts: 3
+        waitDuration: 2s
+        enableExponentialBackoff: true # увеличит время ожидания между ретраями
+        exponentialBackoffMultiplier: 2
+
