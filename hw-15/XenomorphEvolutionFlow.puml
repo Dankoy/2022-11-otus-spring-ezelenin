@@ -1,0 +1,63 @@
+@startuml
+!pragma layout smetana
+
+class ru.dankoy.hw15.core.domain.Drone {
+- {static} XenomorphType type
+- String name
+- long age
+- boolean fedEnoughForEvolution
+- XenomorphType predispositionXenoType
+}
+interface ru.dankoy.hw15.core.domain.Queen {
+}
+class ru.dankoy.hw15.core.domain.Sentry {
+- {static} XenomorphType type
+- String name
+- long age
+}
+class ru.dankoy.hw15.core.domain.Chestburster {
+- {static} XenomorphType type
+- String name
+- long age
+}
+class ru.dankoy.hw15.core.domain.Warrior {
+- {static} XenomorphType type
+- String name
+- long age
+}
+class ru.dankoy.hw15.core.domain.Praetorian {
+- {static} XenomorphType type
+- String name
+- long age
+}
+class ru.dankoy.hw15.core.domain.Ovomorph {
+- {static} XenomorphType type
+- String name
+- long age
+}
+class ru.dankoy.hw15.core.domain.Crusher {
+- {static} XenomorphType type
+- String name
+- long age
+}
+class ru.dankoy.hw15.core.domain.Facehugger {
+- {static} XenomorphType type
+- String name
+- long age
+}
+
+
+ru.dankoy.hw15.core.domain.Queen <|.. ru.dankoy.hw15.core.domain.Praetorian
+ru.dankoy.hw15.core.domain.Queen <|.. ru.dankoy.hw15.core.domain.Crusher
+
+ru.dankoy.hw15.core.domain.Facehugger <|.. ru.dankoy.hw15.core.domain.Ovomorph
+ru.dankoy.hw15.core.domain.Chestburster <|.. ru.dankoy.hw15.core.domain.Facehugger
+ru.dankoy.hw15.core.domain.Drone <|.. ru.dankoy.hw15.core.domain.Chestburster
+
+ru.dankoy.hw15.core.domain.Warrior <|.. ru.dankoy.hw15.core.domain.Drone
+ru.dankoy.hw15.core.domain.Sentry <|.. ru.dankoy.hw15.core.domain.Drone
+
+ru.dankoy.hw15.core.domain.Praetorian <|.. ru.dankoy.hw15.core.domain.Warrior
+ru.dankoy.hw15.core.domain.Crusher <|.. ru.dankoy.hw15.core.domain.Sentry
+
+@enduml
