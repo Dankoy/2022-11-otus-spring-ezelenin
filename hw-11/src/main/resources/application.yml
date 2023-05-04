@@ -1,0 +1,18 @@
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      database: library
+      port: 27017
+      host: localhost
+
+
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.dankoy.hw11.core.mongock.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
