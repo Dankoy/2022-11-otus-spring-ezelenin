@@ -1,4 +1,4 @@
-package ru.dankoy.hw19.core.service.book;
+package ru.dankoy.hw19.core.service.work;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -19,9 +19,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw19.core.domain.Author;
-import ru.dankoy.hw19.core.domain.Book;
 import ru.dankoy.hw19.core.domain.Genre;
-import ru.dankoy.hw19.core.repository.book.BookRepository;
+import ru.dankoy.hw19.core.domain.Work;
+import ru.dankoy.hw19.core.repository.work.BookRepository;
 import ru.dankoy.hw19.core.service.author.AuthorService;
 import ru.dankoy.hw19.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw19.core.service.commentary.CommentaryServiceMongo;
@@ -30,9 +30,9 @@ import ru.dankoy.hw19.core.service.commentary.CommentaryServiceMongo;
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Test BookServiceMongo ")
 @DataMongoTest
-@Import({BookServiceMongo.class, AuthorServiceMongo.class,
+@Import({WorkServiceMongo.class, AuthorServiceMongo.class,
     CommentaryServiceMongo.class})
-class BookServiceMongoTest {
+class WorkServiceMongoTest {
 
   @MockBean
   private BookRepository bookRepository;
@@ -41,7 +41,7 @@ class BookServiceMongoTest {
   private AuthorService authorService;
 
   @Autowired
-  private BookServiceMongo bookServiceMongo;
+  private WorkServiceMongo bookServiceMongo;
 
 
   @DisplayName("should return all books by genre name")
@@ -113,16 +113,18 @@ class BookServiceMongoTest {
     var genres = new HashSet<Genre>();
 
     var bookName = "book4";
+    var descr = "descr";
 
     var id = "1L";
     var correctInsertedId = "4L";
-    var author = new Author(id, "author1");
+    var author = new Author(id, "author1", null, null, null, null);
     var genre = new Genre("genre1");
     authors.add(author);
     genres.add(genre);
 
-    var bookToInsert = new Book(null, bookName, authors, genres);
-    var insertedBook = new Book(correctInsertedId, bookName, authors, genres);
+    var bookToInsert = new Work(null, bookName, descr, authors, genres, null, null, null, null);
+    var insertedBook = new Work(correctInsertedId, bookName, descr, authors, genres, null, null,
+        null, null);
 
     given(bookRepository.saveAndCheckAuthors(bookToInsert)).willReturn(insertedBook);
     given(authorService.getById(id)).willReturn(Optional.of(author));
@@ -139,7 +141,8 @@ class BookServiceMongoTest {
   void shouldCorrectlyDeleteBookById() {
 
     var id = "1L";
-    var toDelete = new Book(id, "name", new HashSet<>(), new HashSet<>());
+    var toDelete = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+        null);
 
     given(bookRepository.findById(id)).willReturn(Optional.of(toDelete));
 
@@ -157,12 +160,12 @@ class BookServiceMongoTest {
     var authors = new HashSet<Author>();
     var genres = new HashSet<Genre>();
     var id = "1L";
-    var author = new Author(id, "author1");
+    var author = new Author(id, "author1", null, null, null, null);
     var genre = new Genre("genre1");
     authors.add(author);
     genres.add(genre);
 
-    var bookToUpdate = new Book(id, "newName", authors, genres);
+    var bookToUpdate = new Work(id, "newName", "descr", authors, genres, null, null, null, null);
 
     given(bookRepository.findById(id)).willReturn(Optional.of(bookToUpdate));
     given(authorService.getById(id)).willReturn(Optional.of(author));
@@ -173,32 +176,39 @@ class BookServiceMongoTest {
 
   }
 
-  private Book getBookByIdFromList(List<Book> books, String id) {
+  private Work getBookByIdFromList(List<Work> works, String id) {
 
     var nonExistingId = "999999L";
-    var bookOptional = books.stream().filter(book -> book.getId().equals(id))
+    var bookOptional = works.stream().filter(book -> book.getId().equals(id))
         .findFirst();
 
     return bookOptional.orElse(
-        new Book(nonExistingId, "nonexisting",
+        new Work(nonExistingId, "nonexisting", "descr",
             new HashSet<>(),
-            new HashSet<>()));
+            new HashSet<>()
+            , null, null, null, null));
 
   }
 
-  private List<Book> makeCorrectAllBooksList() {
+  private List<Work> makeCorrectAllBooksList() {
 
-    var book1 = new Book("1L", "book1",
-        Set.of(new Author("1L", "author1"), new Author("2L", "author2")),
-        Set.of(new Genre("genre1"), new Genre("genre2")));
+    var book1 = new Work("1L", "book1", "descr",
+        Set.of(new Author("1L", "author1", null, null, null, null),
+            new Author("2L", "author2", null, null, null, null)),
+        Set.of(new Genre("genre1"), new Genre("genre2"))
+        , null, null, null, null);
 
-    var book2 = new Book("2L", "book2",
-        Set.of(new Author("2L", "author2"), new Author("3L", "author3")),
-        Set.of(new Genre("genre2"), new Genre("genre3")));
+    var book2 = new Work("2L", "book2", "descr",
+        Set.of(new Author("2L", "author2", null, null, null, null),
+            new Author("3L", "author3", null, null, null, null)),
+        Set.of(new Genre("genre2"), new Genre("genre3"))
+        , null, null, null, null);
 
-    var book3 = new Book("3L", "book3",
-        Set.of(new Author("1L", "author1"), new Author("3L", "author3")),
-        Set.of(new Genre("genre1"), new Genre("genre3")));
+    var book3 = new Work("3L", "book3", "descr",
+        Set.of(new Author("1L", "author1", null, null, null, null),
+            new Author("3L", "author3", null, null, null, null)),
+        Set.of(new Genre("genre1"), new Genre("genre3"))
+        , null, null, null, null);
 
     return List.of(
         book1,

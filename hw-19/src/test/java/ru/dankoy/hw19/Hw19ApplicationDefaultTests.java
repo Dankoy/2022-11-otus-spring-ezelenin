@@ -14,9 +14,9 @@ import ru.dankoy.hw19.core.controller.CommentaryRestController;
 import ru.dankoy.hw19.core.dto.mapper.BookMapper;
 import ru.dankoy.hw19.core.dto.mapper.CommentaryMapper;
 import ru.dankoy.hw19.core.repository.author.AuthorRepository;
-import ru.dankoy.hw19.core.repository.book.BookRepository;
+import ru.dankoy.hw19.core.repository.work.BookRepository;
 import ru.dankoy.hw19.core.service.author.AuthorServiceMongo;
-import ru.dankoy.hw19.core.service.book.BookServiceMongo;
+import ru.dankoy.hw19.core.service.work.WorkServiceMongo;
 import ru.dankoy.hw19.core.service.genre.GenreServiceMongo;
 import ru.dankoy.hw19.core.service.objectmapper.ObjectMapperServiceImpl;
 
@@ -34,7 +34,7 @@ class Hw19ApplicationDefaultTests {
 
     var bookRepository = context.getBean(BookRepository.class);
     var authorRepository = context.getBean(AuthorRepository.class);
-    var bookServiceJpa = context.getBean(BookServiceMongo.class);
+    var bookServiceJpa = context.getBean(WorkServiceMongo.class);
     var authorServiceJpa = context.getBean(AuthorServiceMongo.class);
     var genreServiceJpa = context.getBean(GenreServiceMongo.class);
     var objectMapper = context.getBean(ObjectMapper.class);

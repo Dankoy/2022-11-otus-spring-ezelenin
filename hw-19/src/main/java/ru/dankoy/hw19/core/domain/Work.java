@@ -1,8 +1,8 @@
 package ru.dankoy.hw19.core.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 
@@ -18,9 +19,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
-@Document("authors")
-@JsonInclude(Include.NON_EMPTY)
-public class Author {
+@Document("books")
+public class Work {
 
   @Id
   private String id;
@@ -28,20 +28,27 @@ public class Author {
   @Field("name")
   private String name;
 
-  @Field("birth_date")
-  private LocalDateTime birthDate;
+  @Field("description")
+  private String description;
 
-  @Field("death_date")
-  private LocalDateTime deathDate;
+  @DocumentReference(lookup = "{ '_id' : ?#{#target} }")
+  @Field("authors")
+  private Set<Author> authors = new HashSet<>();
+
+  @Field("genres")
+  private Set<Genre> genres = new HashSet<>();
+
+  @DocumentReference(lookup = "{ '_id' : ?#{#target} }")
+  @Field("editions")
+  private Set<Edition> editions = new HashSet<>();
+
+  @Field("date_written")
+  private LocalDateTime dateWritten;
 
   @Field("dt_created")
   private LocalDateTime dateCreated;
 
   @Field("dt_modified")
   private LocalDateTime dateModified;
-
-  public Author(String id) {
-    this.id = id;
-  }
 
 }

@@ -30,24 +30,24 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.dankoy.hw19.core.domain.Author;
-import ru.dankoy.hw19.core.domain.Book;
 import ru.dankoy.hw19.core.domain.Genre;
-import ru.dankoy.hw19.core.dto.BookDTO;
+import ru.dankoy.hw19.core.domain.Work;
+import ru.dankoy.hw19.core.dto.WorkDTO;
 import ru.dankoy.hw19.core.dto.mapper.BookMapper;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
-import ru.dankoy.hw19.core.service.book.BookService;
+import ru.dankoy.hw19.core.service.work.WorkService;
 
 @DisplayName("BookRestController test ")
 @SpringBootTest
 @AutoConfigureMockMvc
-class BookRestControllerTest {
+class WorkRestControllerTest {
 
   @Autowired
   private MockMvc mvc;
 
   @MockBean
-  private BookService bookService;
+  private WorkService workService;
 
   @Autowired
   private BookMapper bookMapper;
@@ -60,13 +60,13 @@ class BookRestControllerTest {
   @Test
   void shouldCorrectlyReturnAllBooks() throws Exception {
 
-    List<Book> correctBooks = makeCorrectAllBooksList();
+    List<Work> correctWorks = makeCorrectAllBooksList();
 
-    List<BookDTO> bookDTOS = correctBooks.stream()
+    List<WorkDTO> workDTOS = correctWorks.stream()
         .map(bookMapper::toDTOWithoutCommentaries)
         .collect(Collectors.toList());
 
-    given(bookService.findAll()).willReturn(correctBooks);
+    given(workService.findAll()).willReturn(correctWorks);
 
     mvc.perform(get("/api/v1/book")
             .contentType(MediaType.APPLICATION_JSON)
@@ -74,9 +74,9 @@ class BookRestControllerTest {
         )
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(content().json(mapper.writeValueAsString(bookDTOS)));
+        .andExpect(content().json(mapper.writeValueAsString(workDTOS)));
 
-    Mockito.verify(bookService, times(1)).findAll();
+    Mockito.verify(workService, times(1)).findAll();
 
   }
 
@@ -85,13 +85,13 @@ class BookRestControllerTest {
   @Test
   void shouldGetBookById() throws Exception {
 
-    List<Book> correctBooks = makeCorrectAllBooksList();
-    var book = correctBooks.get(0);
+    List<Work> correctWorks = makeCorrectAllBooksList();
+    var book = correctWorks.get(0);
     var bookId = book.getId();
 
     var bookDTO = bookMapper.toDTOWithoutCommentaries(book);
 
-    given(bookService.getById(bookId)).willReturn(Optional.of(book));
+    given(workService.getById(bookId)).willReturn(Optional.of(book));
 
     mvc.perform(get("/api/v1/book/" + bookId)
             .contentType(MediaType.APPLICATION_JSON)
@@ -101,7 +101,7 @@ class BookRestControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().json(mapper.writeValueAsString(bookDTO)));
 
-    Mockito.verify(bookService, times(1)).getById(bookId);
+    Mockito.verify(workService, times(1)).getById(bookId);
 
   }
 
@@ -110,11 +110,11 @@ class BookRestControllerTest {
   @Test
   void shouldThrowEntityNotFoundExceptionWhenGetBookById() {
 
-    List<Book> correctBooks = makeCorrectAllBooksList();
-    var book = correctBooks.get(0);
+    List<Work> correctWorks = makeCorrectAllBooksList();
+    var book = correctWorks.get(0);
     var bookId = book.getId();
 
-    given(bookService.getById(bookId)).willReturn(Optional.empty());
+    given(workService.getById(bookId)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> mvc.perform(get("/api/v1/book/" + bookId)
             .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +129,7 @@ class BookRestControllerTest {
             Objects.requireNonNull(result.getResolvedException()).getMessage()))).hasCause(
         new EntityNotFoundException(bookId, Entity.BOOK));
 
-    Mockito.verify(bookService, times(1)).getById(bookId);
+    Mockito.verify(workService, times(1)).getById(bookId);
 
   }
 
@@ -137,8 +137,8 @@ class BookRestControllerTest {
   @Test
   void shouldCorrectlyResponseWhenDeleteBookById() throws Exception {
 
-    List<Book> correctBooks = makeCorrectAllBooksList();
-    var book = correctBooks.get(0);
+    List<Work> correctWorks = makeCorrectAllBooksList();
+    var book = correctWorks.get(0);
     var bookId = book.getId();
 
     mvc.perform(delete("/api/v1/book/" + bookId)
@@ -148,7 +148,7 @@ class BookRestControllerTest {
         .andExpect(status().isAccepted())
         .andExpect(content().string(""));
 
-    Mockito.verify(bookService, times(1)).deleteById(bookId);
+    Mockito.verify(workService, times(1)).deleteById(bookId);
 
   }
 
@@ -156,12 +156,12 @@ class BookRestControllerTest {
   @Test
   void shouldCorrectlyUpdateBookById() throws Exception {
 
-    List<Book> correctBooks = makeCorrectAllBooksList();
-    var book = correctBooks.get(0);
+    List<Work> correctWorks = makeCorrectAllBooksList();
+    var book = correctWorks.get(0);
     var bookId = book.getId();
 
-    given(bookService.insertOrUpdate(book)).willReturn(book);
-    given(bookService.getById(bookId)).willReturn(Optional.of(book));
+    given(workService.insertOrUpdate(book)).willReturn(book);
+    given(workService.getById(bookId)).willReturn(Optional.of(book));
 
     mvc.perform(put("/api/v1/book/" + bookId)
             .contentType(MediaType.APPLICATION_JSON)
@@ -171,7 +171,7 @@ class BookRestControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().string(mapper.writeValueAsString(book)));
 
-    Mockito.verify(bookService, times(1)).insertOrUpdate(book);
+    Mockito.verify(workService, times(1)).insertOrUpdate(book);
 
   }
 
@@ -179,14 +179,14 @@ class BookRestControllerTest {
   @Test
   void shouldThrowExceptionWhenUpdatingNotExistingBook() {
 
-    List<Book> correctBooks = makeCorrectAllBooksList();
-    var book = correctBooks.get(0);
+    List<Work> correctWorks = makeCorrectAllBooksList();
+    var book = correctWorks.get(0);
     var bookId = book.getId();
 
     var dto = bookMapper.toDTOWithoutCommentaries(book);
 
-    given(bookService.insertOrUpdate(book)).willReturn(book);
-    given(bookService.getById(bookId)).willReturn(Optional.empty());
+    given(workService.insertOrUpdate(book)).willReturn(book);
+    given(workService.getById(bookId)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> mvc.perform(put("/api/v1/book/" + bookId)
             .contentType(MediaType.APPLICATION_JSON)
@@ -203,8 +203,8 @@ class BookRestControllerTest {
             Objects.requireNonNull(result.getResolvedException()).getMessage()))
     ).hasCause(new EntityNotFoundException(bookId, Entity.BOOK));
 
-    Mockito.verify(bookService, times(0)).insertOrUpdate(book);
-    Mockito.verify(bookService, times(1)).getById(bookId);
+    Mockito.verify(workService, times(0)).insertOrUpdate(book);
+    Mockito.verify(workService, times(1)).getById(bookId);
 
   }
 
@@ -212,12 +212,12 @@ class BookRestControllerTest {
   @Test
   void shouldCorrectlyCreateBook() throws Exception {
 
-    List<Book> correctBooks = makeCorrectAllBooksList();
-    var book = correctBooks.get(0);
+    List<Work> correctWorks = makeCorrectAllBooksList();
+    var book = correctWorks.get(0);
 
     var dto = bookMapper.toDTOWithoutCommentaries(book);
 
-    given(bookService.insertOrUpdate(book)).willReturn(book);
+    given(workService.insertOrUpdate(book)).willReturn(book);
 
     mvc.perform(post("/api/v1/book/")
             .contentType(MediaType.APPLICATION_JSON)
@@ -228,24 +228,39 @@ class BookRestControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().string(mapper.writeValueAsString(dto)));
 
-    Mockito.verify(bookService, times(1)).insertOrUpdate(book);
+    Mockito.verify(workService, times(1)).insertOrUpdate(book);
 
   }
 
 
-  private List<Book> makeCorrectAllBooksList() {
+  private List<Work> makeCorrectAllBooksList() {
 
-    var book1 = new Book("1L", "book1",
-        Set.of(new Author("1L", "author1"), new Author("2L", "author2")),
-        Set.of(new Genre("genre1"), new Genre("genre2")));
+    var book1 = new Work("1L", "book1", "descr",
+        Set.of(new Author("1L", "author1", null, null, null, null),
+            new Author("2L", "author2", null, null, null, null)),
+        Set.of(new Genre("genre1"), new Genre("genre2")),
+        null,
+        null,
+        null,
+        null);
 
-    var book2 = new Book("2L", "book2",
-        Set.of(new Author("2L", "author2"), new Author("3L", "author3")),
-        Set.of(new Genre("genre2"), new Genre("genre3")));
+    var book2 = new Work("2L", "book2", "descr",
+        Set.of(new Author("2L", "author2", null, null, null, null),
+            new Author("3L", "author3", null, null, null, null)),
+        Set.of(new Genre("genre2"), new Genre("genre3")),
+        null,
+        null,
+        null,
+        null);
 
-    var book3 = new Book("3L", "book3",
-        Set.of(new Author("1L", "author1"), new Author("3L", "author3")),
-        Set.of(new Genre("genre1"), new Genre("genre3")));
+    var book3 = new Work("3L", "book3", "descr",
+        Set.of(new Author("1L", "author1", null, null, null, null),
+            new Author("3L", "author3", null, null, null, null)),
+        Set.of(new Genre("genre1"), new Genre("genre3")),
+        null,
+        null,
+        null,
+        null);
 
     return List.of(
         book1,

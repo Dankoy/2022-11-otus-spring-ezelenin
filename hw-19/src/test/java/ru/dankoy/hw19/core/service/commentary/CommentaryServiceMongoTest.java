@@ -20,26 +20,26 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dankoy.hw19.core.domain.Book;
 import ru.dankoy.hw19.core.domain.Commentary;
+import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw19.core.repository.commentary.CommentaryRepository;
 import ru.dankoy.hw19.core.service.author.AuthorServiceMongo;
-import ru.dankoy.hw19.core.service.book.BookService;
-import ru.dankoy.hw19.core.service.book.BookServiceMongo;
 import ru.dankoy.hw19.core.service.genre.GenreServiceMongo;
+import ru.dankoy.hw19.core.service.work.WorkService;
+import ru.dankoy.hw19.core.service.work.WorkServiceMongo;
 
 
 @Transactional(propagation = Propagation.NEVER)
 @DisplayName("Tests for CommentaryServiceMongo ")
 @DataMongoTest
-@Import({CommentaryServiceMongo.class, BookServiceMongo.class, GenreServiceMongo.class,
+@Import({CommentaryServiceMongo.class, WorkServiceMongo.class, GenreServiceMongo.class,
     AuthorServiceMongo.class})
 class CommentaryServiceMongoTest {
 
 
   @MockBean
-  private BookService bookService;
+  private WorkService workService;
 
   @MockBean
   private CommentaryRepository commentaryRepository;
@@ -54,8 +54,9 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>());
-    var found = new Commentary(id, "com", book);
+    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+        null);
+    var found = new Commentary(id, "com", null, book, null, null);
     given(commentaryRepository.findById(id)).willReturn(Optional.of(found));
 
     var actual = commentaryService.getById(id);
@@ -88,13 +89,13 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    given(commentaryRepository.findAllByBookId(id)).willReturn(
+    given(commentaryRepository.findAllByWorkId(id)).willReturn(
         new ArrayList<>(makeCorrectCommentaryList()));
 
     var actual = commentaryService.getAllByBookId(id);
 
     assertThat(actual).isEqualTo(new ArrayList<>(makeCorrectCommentaryList()));
-    Mockito.verify(commentaryRepository, times(1)).findAllByBookId(id);
+    Mockito.verify(commentaryRepository, times(1)).findAllByWorkId(id);
 
   }
 
@@ -105,9 +106,10 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>());
-    var commentary = new Commentary(id, "com", book);
-    given(bookService.getById(id)).willReturn(Optional.of(book));
+    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+        null);
+    var commentary = new Commentary(id, "com", null, book, null, null);
+    given(workService.getById(id)).willReturn(Optional.of(book));
     given(commentaryRepository.findById(id)).willReturn(Optional.of(commentary));
 
     commentaryService.deleteById(id);
@@ -124,8 +126,9 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>());
-    given(bookService.getById(id)).willReturn(Optional.of(book));
+    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+        null);
+    given(workService.getById(id)).willReturn(Optional.of(book));
     given(commentaryRepository.findById(id)).willReturn(Optional.empty());
 
     assertThatThrownBy(() -> commentaryService.deleteById(id))
@@ -143,8 +146,9 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Book(id, "name", new HashSet<>(), new HashSet<>());
-    var commentary = new Commentary(id, "com", book);
+    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+        null);
+    var commentary = new Commentary(id, "com", null, book, null, null);
 
     commentaryService.insertOrUpdate(commentary);
 
@@ -156,10 +160,11 @@ class CommentaryServiceMongoTest {
 
   private Set<Commentary> makeCorrectCommentaryList() {
 
-    var book = new Book("1L", "name", new HashSet<>(), new HashSet<>());
-    return Set.of(new Commentary("1L", "com1", book),
-        new Commentary("2L", "com2", book),
-        new Commentary("3L", "com3", book));
+    var book = new Work("1L", "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+        null);
+    return Set.of(new Commentary("1L", "com1", null, book, null, null),
+        new Commentary("2L", "com2", null, book, null, null),
+        new Commentary("3L", "com3", null, book, null, null));
 
   }
 

@@ -19,14 +19,14 @@ public class CommentaryServiceMongo implements CommentaryService {
 
   @Override
   public List<Commentary> getAllByBookId(String id) {
-    return commentaryRepository.findAllByBookId(id);
+    return commentaryRepository.findAllByWorkId(id);
   }
 
 
   @Override
   public void deleteAllByBookId(String bookId) {
 
-    commentaryRepository.deleteCommentariesByBookId(bookId);
+    commentaryRepository.deleteCommentariesByWorkId(bookId);
 
   }
 

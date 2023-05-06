@@ -1,4 +1,4 @@
-package ru.dankoy.hw19.core.repository.book;
+package ru.dankoy.hw19.core.repository.work;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import ru.dankoy.hw19.core.domain.Author;
-import ru.dankoy.hw19.core.domain.Book;
+import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.domain.Genre;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
@@ -35,13 +35,13 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
             .and("genres.name").as("name")
     );
 
-    return mongoTemplate.aggregate(aggregation, Book.class, Genre.class).getMappedResults();
+    return mongoTemplate.aggregate(aggregation, Work.class, Genre.class).getMappedResults();
   }
 
   @Override
-  public Book saveAndCheckAuthors(Book book) {
+  public Work saveAndCheckAuthors(Work work) {
 
-    Set<Author> authors = book.getAuthors();
+    Set<Author> authors = work.getAuthors();
 
     // проверяем, что авторы присутствуют в коллекции авторов
     authors.forEach(author -> {
@@ -55,7 +55,7 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
       }
     });
 
-    return mongoTemplate.save(book, "books");
+    return mongoTemplate.save(work, "books");
   }
 
 
@@ -63,8 +63,8 @@ public class BookRepositoryCustomImpl implements BookRepositoryCustom {
   public void deleteByBookId(String bookId) {
 
     var query = Query.query(Criteria.where("_id").is(bookId));
-    commentaryRepository.deleteCommentariesByBookId(bookId);
-    mongoTemplate.remove(query, Book.class);
+    commentaryRepository.deleteCommentariesByWorkId(bookId);
+    mongoTemplate.remove(query, Work.class);
 
   }
 

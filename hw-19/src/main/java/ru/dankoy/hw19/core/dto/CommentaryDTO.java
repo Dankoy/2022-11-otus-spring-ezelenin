@@ -1,12 +1,14 @@
 package ru.dankoy.hw19.core.dto;
 
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import ru.dankoy.hw19.core.domain.Book;
+import ru.dankoy.hw19.core.domain.User;
+import ru.dankoy.hw19.core.domain.Work;
 
 
 @ToString
@@ -20,6 +22,12 @@ public class CommentaryDTO {
 
   private String text;
 
-  private Book book;
+  private Work work;
+
+  private User user;
+
+  private LocalDateTime dateCreated;
+
+  private LocalDateTime dateModified;
 
 }

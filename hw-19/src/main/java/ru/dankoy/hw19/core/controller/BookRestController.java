@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dankoy.hw19.core.dto.BookDTO;
+import ru.dankoy.hw19.core.dto.WorkDTO;
 import ru.dankoy.hw19.core.dto.mapper.BookMapper;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
-import ru.dankoy.hw19.core.service.book.BookService;
+import ru.dankoy.hw19.core.service.work.WorkService;
 
 
 @RequiredArgsConstructor
 @RestController
 public class BookRestController {
 
-  private final BookService bookService;
+  private final WorkService workService;
   private final BookMapper bookMapper;
 
   @GetMapping(value = "/api/v1/book",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public List<BookDTO> getAll() {
+  public List<WorkDTO> getAll() {
 
-    var books = bookService.findAll();
+    var books = workService.findAll();
 
     return books.stream()
         .map(bookMapper::toDTOWithoutCommentaries)
@@ -47,16 +47,16 @@ public class BookRestController {
   @ResponseStatus(value = HttpStatus.ACCEPTED)
   public void delete(@PathVariable String id) {
 
-    bookService.deleteById(id);
+    workService.deleteById(id);
 
   }
 
   @GetMapping(value = "/api/v1/book/{id}",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public BookDTO getById(@PathVariable String id) {
+  public WorkDTO getById(@PathVariable String id) {
 
-    var book = bookService.getById(id)
+    var book = workService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
     return bookMapper.toDTOWithoutCommentaries(book);
@@ -67,14 +67,14 @@ public class BookRestController {
   @PutMapping(value = "/api/v1/book/{id}",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public BookDTO update(@PathVariable String id, @RequestBody BookDTO bookDTO) {
+  public WorkDTO update(@PathVariable String id, @RequestBody WorkDTO workDTO) {
 
-    var book = bookMapper.toBook(bookDTO);
+    var book = bookMapper.toBook(workDTO);
 
-    bookService.getById(id)
+    workService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
-    var updated = bookService.insertOrUpdate(book);
+    var updated = workService.insertOrUpdate(book);
 
     return bookMapper.toDTOWithoutCommentaries(updated);
 
@@ -83,11 +83,11 @@ public class BookRestController {
   @PostMapping(value = "/api/v1/book",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public BookDTO create(@RequestBody BookDTO bookDTO) {
+  public WorkDTO create(@RequestBody WorkDTO workDTO) {
 
-    var book = bookMapper.toBook(bookDTO);
+    var book = bookMapper.toBook(workDTO);
 
-    var created = bookService.insertOrUpdate(book);
+    var created = workService.insertOrUpdate(book);
 
     return bookMapper.toDTOWithoutCommentaries(created);
 

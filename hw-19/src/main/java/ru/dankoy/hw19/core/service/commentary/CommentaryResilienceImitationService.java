@@ -43,13 +43,13 @@ public class CommentaryResilienceImitationService implements ResilienceCommentar
     } else {
       sleep();
     }
-    return CompletableFuture.completedFuture(commentaryRepository.findAllByBookId(id));
+    return CompletableFuture.completedFuture(commentaryRepository.findAllByWorkId(id));
   }
 
   @Override
   public void deleteAllByBookId(String bookId) {
 
-    commentaryRepository.deleteCommentariesByBookId(bookId);
+    commentaryRepository.deleteCommentariesByWorkId(bookId);
 
   }
 

@@ -2,32 +2,40 @@ package ru.dankoy.hw19.core.dto.mapper;
 
 import java.util.HashSet;
 import org.springframework.stereotype.Component;
-import ru.dankoy.hw19.core.domain.Book;
-import ru.dankoy.hw19.core.dto.BookDTO;
+import ru.dankoy.hw19.core.domain.Work;
+import ru.dankoy.hw19.core.dto.WorkDTO;
 
 
 @Component
 public class BookMapperImpl implements BookMapper {
 
   @Override
-  public BookDTO toDTOWithoutCommentaries(Book book) {
+  public WorkDTO toDTOWithoutCommentaries(Work work) {
 
-    return BookDTO.builder()
-        .id(book.getId())
-        .name(book.getName())
-        .genres(book.getGenres())
-        .authors(book.getAuthors())
+    return WorkDTO.builder()
+        .id(work.getId())
+        .name(work.getName())
+        .description(work.getDescription())
+        .dateWritten(work.getDateWritten())
+        .dateCreated(work.getDateCreated())
+        .dateModified(work.getDateModified())
+        .genres(work.getGenres())
+        .authors(work.getAuthors())
         .commentaries(new HashSet<>())
         .build();
 
   }
 
   @Override
-  public BookDTO toSimpleDTO(Book book) {
+  public WorkDTO toSimpleDTO(Work work) {
 
-    return BookDTO.builder()
-        .id(book.getId())
-        .name(book.getName())
+    return WorkDTO.builder()
+        .id(work.getId())
+        .name(work.getName())
+        .description(work.getDescription())
+        .dateWritten(work.getDateWritten())
+        .dateCreated(work.getDateCreated())
+        .dateModified(work.getDateModified())
         .genres(new HashSet<>())
         .authors(new HashSet<>())
         .commentaries(new HashSet<>())
@@ -36,26 +44,36 @@ public class BookMapperImpl implements BookMapper {
   }
 
   @Override
-  public BookDTO toDTOWithCommentaries(Book book) {
+  public WorkDTO toDTOWithCommentaries(Work work) {
 
-    return BookDTO.builder()
-        .id(book.getId())
-        .name(book.getName())
-        .genres(book.getGenres())
-        .authors(book.getAuthors())
+    return WorkDTO.builder()
+        .id(work.getId())
+        .name(work.getName())
+        .description(work.getDescription())
+        .genres(work.getGenres())
+        .authors(work.getAuthors())
+        .editions(work.getEditions())
+        .dateWritten(work.getDateWritten())
+        .dateCreated(work.getDateCreated())
+        .dateModified(work.getDateModified())
         .build();
 
   }
 
 
   @Override
-  public Book toBook(BookDTO dto) {
+  public Work toBook(WorkDTO dto) {
 
-    return new Book(
+    return new Work(
         dto.getId(),
         dto.getName(),
+        dto.getDescription(),
         dto.getAuthors(),
-        dto.getGenres()
+        dto.getGenres(),
+        dto.getEditions(),
+        dto.getDateWritten(),
+        dto.getDateCreated(),
+        dto.getDateModified()
     );
 
   }

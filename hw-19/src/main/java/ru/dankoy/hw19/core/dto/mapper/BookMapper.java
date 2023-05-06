@@ -1,15 +1,15 @@
 package ru.dankoy.hw19.core.dto.mapper;
 
-import ru.dankoy.hw19.core.domain.Book;
-import ru.dankoy.hw19.core.dto.BookDTO;
+import ru.dankoy.hw19.core.domain.Work;
+import ru.dankoy.hw19.core.dto.WorkDTO;
 
 public interface BookMapper {
 
-  BookDTO toDTOWithoutCommentaries(Book book);
+  WorkDTO toDTOWithoutCommentaries(Work work);
 
-  BookDTO toSimpleDTO(Book book);
+  WorkDTO toSimpleDTO(Work work);
 
-  BookDTO toDTOWithCommentaries(Book book);
+  WorkDTO toDTOWithCommentaries(Work work);
 
-  Book toBook(BookDTO dto);
+  Work toBook(WorkDTO dto);
 }

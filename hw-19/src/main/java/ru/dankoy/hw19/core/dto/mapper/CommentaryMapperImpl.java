@@ -10,7 +10,12 @@ public class CommentaryMapperImpl implements CommentaryMapper {
 
   @Override
   public Commentary toCommentary(CommentaryDTO dto) {
-    return new Commentary(dto.getId(), dto.getText(), dto.getBook());
+    return new Commentary(dto.getId(),
+        dto.getText(),
+        dto.getUser(),
+        dto.getWork(),
+        dto.getDateCreated(),
+        dto.getDateModified());
   }
 
   @Override
@@ -18,7 +23,10 @@ public class CommentaryMapperImpl implements CommentaryMapper {
     return CommentaryDTO.builder()
         .id(commentary.getId())
         .text(commentary.getText())
-        .book(commentary.getBook())
+        .work(commentary.getWork())
+        .dateCreated(commentary.getDateCreated())
+        .dateModified(commentary.getDateModified())
+        .user(commentary.getUser())
         .build();
   }
 }

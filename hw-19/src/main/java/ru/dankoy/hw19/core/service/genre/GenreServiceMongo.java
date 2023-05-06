@@ -5,45 +5,45 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.dankoy.hw19.core.domain.Book;
+import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.domain.Genre;
-import ru.dankoy.hw19.core.service.book.BookService;
+import ru.dankoy.hw19.core.service.work.WorkService;
 
 @Service
 @RequiredArgsConstructor
 public class GenreServiceMongo implements GenreService {
 
-  private final BookService bookService;
+  private final WorkService workService;
 
   @Override
   public void update(Genre oldGenre, Genre newGenre) {
 
-    List<Book> books = bookService.findAllByGenreName(oldGenre);
+    List<Work> works = workService.findAllByGenreName(oldGenre);
 
-    books.forEach(b -> {
+    works.forEach(b -> {
       b.getGenres().remove(oldGenre);
       b.getGenres().add(newGenre);
     });
 
-    bookService.updateMultiple(books);
+    workService.updateMultiple(works);
 
   }
 
   @Override
   public void delete(Genre genre) {
 
-    List<Book> books = bookService.findAllByGenreName(genre);
+    List<Work> works = workService.findAllByGenreName(genre);
 
-    books.forEach(b -> b.getGenres().remove(genre));
+    works.forEach(b -> b.getGenres().remove(genre));
 
-    bookService.updateMultiple(books);
+    workService.updateMultiple(works);
 
   }
 
 
   @Override
   public Set<Genre> getAllGenres() {
-    var books = bookService.findAll();
+    var books = workService.findAll();
 
     return books.stream().flatMap(b -> b.getGenres().stream())
         .collect(Collectors.toSet());

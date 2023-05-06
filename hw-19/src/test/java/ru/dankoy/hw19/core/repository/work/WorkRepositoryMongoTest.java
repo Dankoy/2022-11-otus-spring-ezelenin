@@ -1,4 +1,4 @@
-package ru.dankoy.hw19.core.repository.book;
+package ru.dankoy.hw19.core.repository.work;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,13 +14,13 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import ru.dankoy.hw19.core.domain.Author;
-import ru.dankoy.hw19.core.domain.Book;
+import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
 
 
 @DisplayName("Test BookRepositoryMongo ")
 @DataMongoTest
-class BookRepositoryMongoTest {
+class WorkRepositoryMongoTest {
 
   @Autowired
   private BookRepository bookRepository;
@@ -37,7 +37,7 @@ class BookRepositoryMongoTest {
     Query query = new Query();
     query.addCriteria(Criteria.where("genres.name").is("genre1"));
 
-    var booksExpected = mongoTemplate.find(query, Book.class);
+    var booksExpected = mongoTemplate.find(query, Work.class);
 
     assertThat(books).isEqualTo(booksExpected);
   }
@@ -50,7 +50,7 @@ class BookRepositoryMongoTest {
     Query query = new Query();
     query.addCriteria(Criteria.where("genres.name").is("none-existing"));
 
-    var booksExpected = mongoTemplate.find(query, Book.class);
+    var booksExpected = mongoTemplate.find(query, Work.class);
 
     assertThat(books).isEqualTo(booksExpected);
   }
@@ -62,7 +62,7 @@ class BookRepositoryMongoTest {
 
     var book1 = mongoTemplate.find(
             new Query().addCriteria(Criteria.where("name").is("book1")),
-            Book.class)
+            Work.class)
         .get(0);
 
     var genres = bookRepository.getAllGenresByBookId(book1.getId());
@@ -80,13 +80,14 @@ class BookRepositoryMongoTest {
             Author.class
         )
         .get(0);
-    var book = new Book(null, "mybookname", Set.of(author), new HashSet<>());
+    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(), null, null,
+        null, null);
 
     var inserted = bookRepository.saveAndCheckAuthors(book);
 
     var expected = mongoTemplate.find(
         new Query().addCriteria(Criteria.where("name").is("mybookname")),
-        Book.class
+        Work.class
     ).get(0);
 
     assertThat(inserted).isEqualTo(expected);
@@ -98,8 +99,9 @@ class BookRepositoryMongoTest {
   @Test
   void shouldThrowExceptionWhenSaveBookWithNonExistingAuthor() {
 
-    var author = new Author("blah", "blah");
-    var book = new Book(null, "mybookname", Set.of(author), new HashSet<>());
+    var author = new Author("blah", "blah", null, null, null, null);
+    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(), null, null,
+        null, null);
 
     assertThatThrownBy(() -> bookRepository.saveAndCheckAuthors(book))
         .isInstanceOf(EntityNotFoundException.class);

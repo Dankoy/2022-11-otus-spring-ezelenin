@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import ru.dankoy.hw19.core.domain.Book;
+import ru.dankoy.hw19.core.domain.Work;
 
 @DisplayName("Test CommentaryRepository ")
 @DataMongoTest
@@ -30,15 +30,15 @@ class CommentaryRepositoryTest {
 
     var book1 = mongoTemplate.find(
             new Query().addCriteria(Criteria.where("name").is("book1")),
-            Book.class)
+            Work.class)
         .get(0);
 
-    var commentariesBeforeDelete = commentaryRepository.findAllByBookId(book1.getId());
+    var commentariesBeforeDelete = commentaryRepository.findAllByWorkId(book1.getId());
     assertThat(commentariesBeforeDelete).hasSize(3);
 
-    commentaryRepository.deleteCommentariesByBookId(book1.getId());
+    commentaryRepository.deleteCommentariesByWorkId(book1.getId());
 
-    var commentariesAfterDelete = commentaryRepository.findAllByBookId(book1.getId());
+    var commentariesAfterDelete = commentaryRepository.findAllByWorkId(book1.getId());
     assertThat(commentariesAfterDelete).isEmpty();
 
 

@@ -1,8 +1,8 @@
-package ru.dankoy.hw19.core.repository.book;
+package ru.dankoy.hw19.core.repository.work;
 
 import java.util.List;
 import org.springframework.data.rest.core.annotation.RestResource;
-import ru.dankoy.hw19.core.domain.Book;
+import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.domain.Genre;
 
 public interface BookRepositoryCustom {
@@ -12,7 +12,7 @@ public interface BookRepositoryCustom {
   List<Genre> getAllGenresByBookId(String bookId);
 
   @RestResource(path = "save-book", rel = "save-book")
-  Book saveAndCheckAuthors(Book book);
+  Work saveAndCheckAuthors(Work work);
 
   @RestResource(path = "delete-book", rel = "delete-book")
   void deleteByBookId(String bookId);

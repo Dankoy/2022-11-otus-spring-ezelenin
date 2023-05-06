@@ -18,9 +18,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw19.core.domain.Author;
-import ru.dankoy.hw19.core.domain.Book;
+import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.domain.Genre;
-import ru.dankoy.hw19.core.service.book.BookService;
+import ru.dankoy.hw19.core.service.work.WorkService;
 
 
 @Transactional(propagation = Propagation.NEVER)
@@ -30,7 +30,7 @@ import ru.dankoy.hw19.core.service.book.BookService;
 class GenreServiceMongoTest {
 
   @MockBean
-  private BookService bookService;
+  private WorkService workService;
 
   @Autowired
   private GenreServiceMongo genreServiceMongo;
@@ -40,12 +40,12 @@ class GenreServiceMongoTest {
   @Test
   void shouldGetAllGenresTest() {
 
-    given(bookService.findAll()).willReturn(makeCorrectAllBooksList());
+    given(workService.findAll()).willReturn(makeCorrectAllBooksList());
 
     var genres = genreServiceMongo.getAllGenres();
 
     assertThat(genres).isEqualTo(makeCorrectAllGenresList());
-    Mockito.verify(bookService, times(1)).findAll();
+    Mockito.verify(workService, times(1)).findAll();
   }
 
 
@@ -58,15 +58,15 @@ class GenreServiceMongoTest {
     var booksReturnFromService = makeCorrectAllBooksList();
     var expectedBooks = makeCorrectAllBooksList();
 
-    given(bookService.findAllByGenreName(oldGenre)).willReturn(booksReturnFromService);
+    given(workService.findAllByGenreName(oldGenre)).willReturn(booksReturnFromService);
 
     booksAfterUpdateGenres(expectedBooks, oldGenre, newGenre);
 
     genreServiceMongo.update(oldGenre, newGenre);
 
-    Mockito.verify(bookService, times(1))
+    Mockito.verify(workService, times(1))
         .updateMultiple(expectedBooks);
-    Mockito.verify(bookService, times(1))
+    Mockito.verify(workService, times(1))
         .findAllByGenreName(oldGenre);
     assertThat(expectedBooks).containsExactlyInAnyOrderElementsOf(booksReturnFromService);
 
@@ -80,30 +80,30 @@ class GenreServiceMongoTest {
     var booksReturnFromService = makeCorrectAllBooksList();
     var expectedBooks = makeCorrectAllBooksList();
 
-    given(bookService.findAllByGenreName(toDelete)).willReturn(booksReturnFromService);
+    given(workService.findAllByGenreName(toDelete)).willReturn(booksReturnFromService);
 
     booksAfterDeleteGenres(expectedBooks, toDelete);
 
     genreServiceMongo.delete(toDelete);
 
-    Mockito.verify(bookService, times(1)).updateMultiple(expectedBooks);
-    Mockito.verify(bookService, times(1)).findAllByGenreName(toDelete);
+    Mockito.verify(workService, times(1)).updateMultiple(expectedBooks);
+    Mockito.verify(workService, times(1)).findAllByGenreName(toDelete);
     assertThat(expectedBooks).containsExactlyInAnyOrderElementsOf(booksReturnFromService);
 
   }
 
-  private void booksAfterUpdateGenres(List<Book> books, Genre oldGenre, Genre newGenre) {
+  private void booksAfterUpdateGenres(List<Work> works, Genre oldGenre, Genre newGenre) {
 
-    books.forEach(b -> {
+    works.forEach(b -> {
       b.getGenres().remove(oldGenre);
       b.getGenres().add(newGenre);
     });
 
   }
 
-  private void booksAfterDeleteGenres(List<Book> books, Genre toDelete) {
+  private void booksAfterDeleteGenres(List<Work> works, Genre toDelete) {
 
-    books.forEach(b -> b.getGenres().remove(toDelete));
+    works.forEach(b -> b.getGenres().remove(toDelete));
 
   }
 
@@ -117,7 +117,7 @@ class GenreServiceMongoTest {
   }
 
 
-  private List<Book> makeCorrectAllBooksList() {
+  private List<Work> makeCorrectAllBooksList() {
 
     Set<Genre> genreBook1 = new HashSet<>();
     genreBook1.add(new Genre("genre1"));
@@ -131,17 +131,17 @@ class GenreServiceMongoTest {
     genreBook3.add(new Genre("genre1"));
     genreBook3.add(new Genre("genre3"));
 
-    var book1 = new Book("1L", "book1",
-        Set.of(new Author("1L", "author1"), new Author("2L", "author2")),
-        genreBook1);
+    var book1 = new Work("1L", "book1", "descr",
+        Set.of(new Author("1L", "author1",null, null, null, null), new Author("2L", "author2",null, null, null, null)),
+        genreBook1,null, null, null, null);
 
-    var book2 = new Book("2L", "book2",
-        Set.of(new Author("2L", "author2"), new Author("3L", "author3")),
-        genreBook2);
+    var book2 = new Work("2L", "book2", "descr",
+        Set.of(new Author("2L", "author2",null, null, null, null), new Author("3L", "author3",null, null, null, null)),
+        genreBook2,null, null, null, null);
 
-    var book3 = new Book("3L", "book3",
-        Set.of(new Author("1L", "author1"), new Author("3L", "author3")),
-        genreBook3);
+    var book3 = new Work("3L", "book3", "descr",
+        Set.of(new Author("1L", "author1",null, null, null, null), new Author("3L", "author3",null, null, null, null)),
+        genreBook3,null, null, null, null);
 
     return List.of(
         book1,

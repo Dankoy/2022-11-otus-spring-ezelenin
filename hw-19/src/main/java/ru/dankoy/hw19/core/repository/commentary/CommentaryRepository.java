@@ -11,9 +11,9 @@ import ru.dankoy.hw19.core.domain.Commentary;
 public interface CommentaryRepository extends MongoRepository<Commentary, String> {
 
   @RestResource(path = "delete-by-book-id", rel = "delete-by-book-id")
-  void deleteCommentariesByBookId(String bookId);
+  void deleteCommentariesByWorkId(String workId);
 
   @RestResource(path = "all-by-book-id", rel = "all-by-book-id")
-  List<Commentary> findAllByBookId(String bookId);
+  List<Commentary> findAllByWorkId(String workId);
 
 }
