@@ -79,7 +79,7 @@ public class InitBooksChangeLog {
             .append("pages", 416)
             .append("isbn13", "9781844162949")
             .append("isbn10", "184416294X")
-            .append("publisher", new Document().append("_id", publisher1.get("_id")))
+            .append("publisher", publisher1.get("_id"))
             .append("dt_created", LocalDateTime.now())
             .append("dt_modified", null)
     );
@@ -95,7 +95,7 @@ public class InitBooksChangeLog {
             .append("pages", 416)
             .append("isbn13", "9781844163700")
             .append("isbn10", "1844163709")
-            .append("publisher", new Document().append("_id", publisher1.get("_id")))
+            .append("publisher", publisher1.get("_id"))
             .append("dt_created", LocalDateTime.now())
             .append("dt_modified", null)
     );
