@@ -1,7 +1,5 @@
 package ru.dankoy.hw19.core.mongock.changelogs;
 
-import static com.mongodb.client.model.Filters.eq;
-
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.mongodb.client.MongoCollection;
@@ -10,10 +8,15 @@ import java.util.List;
 import java.util.Set;
 import org.bson.Document;
 
-@ChangeLog(order = "004")
+@ChangeLog(order = "001")
 public class InitAuthorizationData {
 
-  @ChangeSet(order = "001", id = "insertRoles", author = "dankoy")
+  @ChangeSet(order = "001", id = "dropDb", author = "dankoy", runAlways = true)
+  public void dropDb(MongoDatabase db) {
+    db.drop();
+  }
+
+  @ChangeSet(order = "002", id = "insertRoles", author = "dankoy")
   public void insertRoles(MongoDatabase db) {
 
     MongoCollection<Document> roles = db.getCollection("roles");
@@ -27,16 +30,16 @@ public class InitAuthorizationData {
   }
 
 
-  @ChangeSet(order = "002", id = "insertUsers", author = "dankoy")
+  @ChangeSet(order = "003", id = "insertUsers", author = "dankoy")
   public void insertUsers(MongoDatabase db) {
 
     var passwordHash = "$2a$10$TWU4IJ6sZhHeKKNtznMqe.7AqaCRESc68LhExRCs.frwpv.i8uvsW";
 
     MongoCollection<Document> users = db.getCollection("users");
 
-    var roleAdmin = getDocumentByName(db, "ROLE_ADMIN", "roles");
-    var roleOperator = getDocumentByName(db, "ROLE_OPERATOR", "roles");
-    var roleReader = getDocumentByName(db, "ROLE_READER", "roles");
+    var roleAdmin = MongockHelper.getDocumentByName(db, "role", "ROLE_ADMIN", "roles");
+    var roleOperator = MongockHelper.getDocumentByName(db, "role", "ROLE_OPERATOR", "roles");
+    var roleReader = MongockHelper.getDocumentByName(db, "role", "ROLE_READER", "roles");
 
     var userAdmin = new Document()
         .append("username", "admin")
@@ -65,17 +68,16 @@ public class InitAuthorizationData {
         .append("credentials_non_expired", true)
         .append("roles", Set.of(roleReader.get("_id")));
 
-    users.insertMany(List.of(userAdmin, userOperator, userReader));
+    var userTurtle = new Document()
+        .append("username", "turtle")
+        .append("password", passwordHash)
+        .append("enabled", true)
+        .append("account_non_locked", true)
+        .append("account_non_expired", true)
+        .append("credentials_non_expired", true)
+        .append("roles", Set.of(roleOperator.get("_id")));
 
-  }
-
-
-  private Document getDocumentByName(MongoDatabase db, String nameValue, String collectionName) {
-
-    MongoCollection<Document> collection = db.getCollection(collectionName);
-
-    return collection.find(eq("role", nameValue))
-        .first();
+    users.insertMany(List.of(userAdmin, userOperator, userReader, userTurtle));
 
   }
 
