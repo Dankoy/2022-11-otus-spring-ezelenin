@@ -7,7 +7,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -15,7 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"work"})
 @Getter
 @Document("editions")
 public class Edition {
@@ -41,8 +45,8 @@ public class Edition {
 
   @Field("pages")
   private long pages; // should be wrapper?
-
-  @DocumentReference(lookup = "{ '_id' : ?#{#target} }")
+  
+  @DocumentReference(collection = "publishers", lookup = "{ '_id' : ?#{#target} }")
   @Field("publisher")
   private Publisher publisher;
 
@@ -56,10 +60,20 @@ public class Edition {
   private String isbn13;
 
   @Field("dt_created")
+  @CreatedDate
   private LocalDateTime dateCreated;
 
   @Field("dt_modified")
+  @LastModifiedDate
   private LocalDateTime dateModified;
+
+  @Field("created_by")
+  @CreatedBy
+  private String createdByUser;
+
+  @Field("modified_by")
+  @LastModifiedBy
+  private String modifiedByUser;
 
 
 }
