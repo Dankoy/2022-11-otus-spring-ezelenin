@@ -45,7 +45,7 @@ public class Edition {
 
   @Field("pages")
   private long pages; // should be wrapper?
-  
+
   @DocumentReference(collection = "publishers", lookup = "{ '_id' : ?#{#target} }")
   @Field("publisher")
   private Publisher publisher;
