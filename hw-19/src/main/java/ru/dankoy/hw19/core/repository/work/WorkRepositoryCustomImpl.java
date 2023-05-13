@@ -20,7 +20,7 @@ import ru.dankoy.hw19.core.repository.commentary.CommentaryRepository;
 
 
 @RequiredArgsConstructor
-public class BookRepositoryCustomImpl implements BookRepositoryCustom {
+public class WorkRepositoryCustomImpl implements WorkRepositoryCustom {
 
   private final MongoTemplate mongoTemplate;
 

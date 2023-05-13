@@ -5,7 +5,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.domain.Genre;
 
-public interface BookRepositoryCustom {
+public interface WorkRepositoryCustom {
 
 
   @RestResource(path = "genres-by-book", rel = "genres-by-book")

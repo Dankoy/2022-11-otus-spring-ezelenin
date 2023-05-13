@@ -10,7 +10,7 @@ import ru.dankoy.hw19.core.domain.Work;
 
 
 @RepositoryRestResource(path = "work")
-public interface WorkRepository extends MongoRepository<Work, String>, BookRepositoryCustom {
+public interface WorkRepository extends MongoRepository<Work, String>, WorkRepositoryCustom {
 
 
   @RestResource(path = "works-by-genres", rel = "works-by-genres")
