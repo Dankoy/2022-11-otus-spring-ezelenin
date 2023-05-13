@@ -22,12 +22,12 @@ import ru.dankoy.hw19.core.service.work.WorkService;
 
 @RequiredArgsConstructor
 @RestController
-public class BookRestController {
+public class WorkRestController {
 
   private final WorkService workService;
   private final BookMapper bookMapper;
 
-  @GetMapping(value = "/api/v1/book",
+  @GetMapping(value = "/api/v1/work",
       consumes = {"application/json"},
       produces = {"application/json"})
   public List<WorkDTO> getAll() {
@@ -41,7 +41,7 @@ public class BookRestController {
   }
 
 
-  @DeleteMapping(value = "/api/v1/book/{id}",
+  @DeleteMapping(value = "/api/v1/work/{id}",
       consumes = {"application/json"},
       produces = {"application/json"})
   @ResponseStatus(value = HttpStatus.ACCEPTED)
@@ -51,7 +51,7 @@ public class BookRestController {
 
   }
 
-  @GetMapping(value = "/api/v1/book/{id}",
+  @GetMapping(value = "/api/v1/work/{id}",
       consumes = {"application/json"},
       produces = {"application/json"})
   public WorkDTO getById(@PathVariable String id) {
@@ -64,7 +64,7 @@ public class BookRestController {
   }
 
 
-  @PutMapping(value = "/api/v1/book/{id}",
+  @PutMapping(value = "/api/v1/work/{id}",
       consumes = {"application/json"},
       produces = {"application/json"})
   public WorkDTO update(@PathVariable String id, @RequestBody WorkDTO workDTO) {
@@ -80,7 +80,7 @@ public class BookRestController {
 
   }
 
-  @PostMapping(value = "/api/v1/book",
+  @PostMapping(value = "/api/v1/work",
       consumes = {"application/json"},
       produces = {"application/json"})
   public WorkDTO create(@RequestBody WorkDTO workDTO) {
