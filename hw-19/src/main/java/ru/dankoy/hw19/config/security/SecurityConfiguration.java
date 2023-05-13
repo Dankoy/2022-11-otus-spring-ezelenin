@@ -22,22 +22,22 @@ public class SecurityConfiguration {
         .csrf().disable()
         .authorizeHttpRequests(authorize ->
                 authorize
-                    .antMatchers("/books")
+                    .antMatchers("/works")
                     .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name(),
                         Authority.READER.name()) // для любой роли доступен.
 
-                    .antMatchers("/book/create")
+                    .antMatchers("/work/create")
                     .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name())
 
                     .antMatchers(HttpMethod.GET,
-                        "/book/edit") // для примера, что есть возможность управлять методами
+                        "/work/edit") // для примера, что есть возможность управлять методами
                     .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name(),
                         Authority.READER.name())
 
-                    .antMatchers(HttpMethod.POST, "/book/edit")
+                    .antMatchers(HttpMethod.POST, "/work/edit")
                     .hasAnyRole(Authority.ADMIN.name(), Authority.OPERATOR.name())
 
-                    .antMatchers("/book/delete")
+                    .antMatchers("/work/delete")
                     .hasAnyRole(Authority.ADMIN.name())
 
                     .anyRequest().authenticated()
