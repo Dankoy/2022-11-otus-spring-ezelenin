@@ -1,13 +1,18 @@
 package ru.dankoy.hw19.core.dto.mapper;
 
 import java.util.HashSet;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.dto.WorkDTO;
 
 
 @Component
+@RequiredArgsConstructor
 public class BookMapperImpl implements BookMapper {
+
+  private final EditionMapper editionMapper;
+  private final CommentaryMapper commentaryMapper;
 
   @Override
   public WorkDTO toDTOWithoutCommentaries(Work work) {
@@ -18,6 +23,7 @@ public class BookMapperImpl implements BookMapper {
         .description(work.getDescription())
         .dateCreated(work.getDateCreated())
         .dateModified(work.getDateModified())
+        .editions(editionMapper.toSetDTO(work.getEditions()))
         .genres(work.getGenres())
         .authors(work.getAuthors())
         .commentaries(new HashSet<>())
@@ -50,7 +56,7 @@ public class BookMapperImpl implements BookMapper {
         .description(work.getDescription())
         .genres(work.getGenres())
         .authors(work.getAuthors())
-        .editions(work.getEditions())
+        .editions(editionMapper.toSetDTO(work.getEditions()))
         .dateCreated(work.getDateCreated())
         .dateModified(work.getDateModified())
         .build();
@@ -61,15 +67,27 @@ public class BookMapperImpl implements BookMapper {
   @Override
   public Work toBook(WorkDTO dto) {
 
+//    Work.builder()
+//        .id(dto.getId())
+//        .name(dto.getName())
+//        .description(dto.getDescription())
+//        .genres(dto.getGenres())
+//        .authors(dto.getAuthors())
+//        .editions(editionMapper.fromSetDto(dto.getEditions()))
+//        .
+//        .build();
+
     return new Work(
         dto.getId(),
         dto.getName(),
         dto.getDescription(),
         dto.getAuthors(),
         dto.getGenres(),
-        dto.getEditions(),
+        editionMapper.fromSetDto(dto.getEditions()),
         dto.getDateCreated(),
-        dto.getDateModified()
+        dto.getDateModified(),
+        dto.getCreateBy(),
+        dto.getModifiedBy()
     );
 
   }

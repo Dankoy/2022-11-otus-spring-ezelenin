@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ru.dankoy.hw19.core.domain.Author;
-import ru.dankoy.hw19.core.domain.Commentary;
-import ru.dankoy.hw19.core.domain.Edition;
 import ru.dankoy.hw19.core.domain.Genre;
 
 @ToString
@@ -35,15 +33,19 @@ public class WorkDTO {
   private Set<Genre> genres;
 
   @Setter
-  private Set<Commentary> commentaries;
+  private Set<CommentaryDTO> commentaries;
 
-  private Set<Edition> editions = new HashSet<>();
+  private Set<EditionDTO> editions = new HashSet<>();
 
   private LocalDateTime dateWritten;
 
   private LocalDateTime dateCreated;
 
   private LocalDateTime dateModified;
+
+  private String createBy;
+
+  private String modifiedBy;
 
 
 }
