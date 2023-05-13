@@ -16,7 +16,6 @@ public class BookMapperImpl implements BookMapper {
         .id(work.getId())
         .name(work.getName())
         .description(work.getDescription())
-        .dateWritten(work.getDateWritten())
         .dateCreated(work.getDateCreated())
         .dateModified(work.getDateModified())
         .genres(work.getGenres())
@@ -33,7 +32,6 @@ public class BookMapperImpl implements BookMapper {
         .id(work.getId())
         .name(work.getName())
         .description(work.getDescription())
-        .dateWritten(work.getDateWritten())
         .dateCreated(work.getDateCreated())
         .dateModified(work.getDateModified())
         .genres(new HashSet<>())
@@ -53,7 +51,6 @@ public class BookMapperImpl implements BookMapper {
         .genres(work.getGenres())
         .authors(work.getAuthors())
         .editions(work.getEditions())
-        .dateWritten(work.getDateWritten())
         .dateCreated(work.getDateCreated())
         .dateModified(work.getDateModified())
         .build();
@@ -71,7 +68,6 @@ public class BookMapperImpl implements BookMapper {
         dto.getAuthors(),
         dto.getGenres(),
         dto.getEditions(),
-        dto.getDateWritten(),
         dto.getDateCreated(),
         dto.getDateModified()
     );
