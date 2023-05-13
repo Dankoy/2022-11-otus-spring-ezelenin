@@ -19,7 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
-@Document("books")
+@Document("works")
 public class Work {
 
   @Id
@@ -38,12 +38,9 @@ public class Work {
   @Field("genres")
   private Set<Genre> genres = new HashSet<>();
 
-  @DocumentReference(lookup = "{ '_id' : ?#{#target} }")
+  @DocumentReference(collection = "editions", lookup = "{ '_id' : ?#{#target} }")
   @Field("editions")
   private Set<Edition> editions = new HashSet<>();
-
-  @Field("date_written")
-  private LocalDateTime dateWritten;
 
   @Field("dt_created")
   private LocalDateTime dateCreated;
