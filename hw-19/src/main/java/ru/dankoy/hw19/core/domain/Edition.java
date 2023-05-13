@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @ToString
@@ -22,6 +23,7 @@ public class Edition {
   @Id
   private String id;
 
+  @DocumentReference(collection = "works", lookup = "{ '_id' : ?#{#target} }")
   @Field("work")
   private Work work;
 
@@ -40,6 +42,7 @@ public class Edition {
   @Field("pages")
   private long pages; // should be wrapper?
 
+  @DocumentReference(lookup = "{ '_id' : ?#{#target} }")
   @Field("publisher")
   private Publisher publisher;
 
