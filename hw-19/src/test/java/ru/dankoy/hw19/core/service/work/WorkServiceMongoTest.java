@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.dankoy.hw19.core.domain.Author;
 import ru.dankoy.hw19.core.domain.Genre;
 import ru.dankoy.hw19.core.domain.Work;
-import ru.dankoy.hw19.core.repository.work.BookRepository;
+import ru.dankoy.hw19.core.repository.work.WorkRepository;
 import ru.dankoy.hw19.core.service.author.AuthorService;
 import ru.dankoy.hw19.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw19.core.service.commentary.CommentaryServiceMongo;
@@ -35,7 +35,7 @@ import ru.dankoy.hw19.core.service.commentary.CommentaryServiceMongo;
 class WorkServiceMongoTest {
 
   @MockBean
-  private BookRepository bookRepository;
+  private WorkRepository workRepository;
 
   @MockBean
   private AuthorService authorService;
@@ -51,13 +51,13 @@ class WorkServiceMongoTest {
     String genreName = "genre1";
     var genre = new Genre(genreName);
 
-    given(bookRepository.findBookByGenres(genreName))
+    given(workRepository.findBookByGenres(genreName))
         .willReturn(makeCorrectAllBooksList());
 
     var books = bookServiceMongo.findAllByGenreName(genre);
 
     assertThat(books).isEqualTo(makeCorrectAllBooksList());
-    Mockito.verify(bookRepository, times(1)).findBookByGenres(genreName);
+    Mockito.verify(workRepository, times(1)).findBookByGenres(genreName);
   }
 
 
@@ -65,12 +65,12 @@ class WorkServiceMongoTest {
   @Test
   void shouldGetAllBooksTest() {
 
-    given(bookRepository.findAll()).willReturn(makeCorrectAllBooksList());
+    given(workRepository.findAll()).willReturn(makeCorrectAllBooksList());
 
     var books = bookServiceMongo.findAll();
 
     assertThat(books).isEqualTo(makeCorrectAllBooksList());
-    Mockito.verify(bookRepository, times(1)).findAll();
+    Mockito.verify(workRepository, times(1)).findAll();
   }
 
 
@@ -78,12 +78,12 @@ class WorkServiceMongoTest {
   @Test
   void shouldReturnCorrectCountTest() {
 
-    given(bookRepository.count()).willReturn(3L);
+    given(workRepository.count()).willReturn(3L);
 
     var count = bookServiceMongo.count();
 
     assertThat(count).isEqualTo(makeCorrectAllBooksList().size());
-    Mockito.verify(bookRepository, times(1)).count();
+    Mockito.verify(workRepository, times(1)).count();
 
   }
 
@@ -96,12 +96,12 @@ class WorkServiceMongoTest {
     var books = makeCorrectAllBooksList();
     var correctbook = getBookByIdFromList(books, id);
 
-    given(bookRepository.findById(id)).willReturn(Optional.ofNullable(correctbook));
+    given(workRepository.findById(id)).willReturn(Optional.ofNullable(correctbook));
 
     var book = bookServiceMongo.getById(id);
 
     assertThat(book).isPresent().get().isEqualTo(correctbook);
-    Mockito.verify(bookRepository, times(1)).findById(id);
+    Mockito.verify(workRepository, times(1)).findById(id);
 
   }
 
@@ -122,17 +122,17 @@ class WorkServiceMongoTest {
     authors.add(author);
     genres.add(genre);
 
-    var bookToInsert = new Work(null, bookName, descr, authors, genres, null, null, null, null);
+    var bookToInsert = new Work(null, bookName, descr, authors, genres, null, null, null);
     var insertedBook = new Work(correctInsertedId, bookName, descr, authors, genres, null, null,
-        null, null);
+        null);
 
-    given(bookRepository.saveAndCheckAuthors(bookToInsert)).willReturn(insertedBook);
+    given(workRepository.saveAndCheckAuthors(bookToInsert)).willReturn(insertedBook);
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
     var actual = bookServiceMongo.insertOrUpdate(bookToInsert);
 
     assertThat(actual).isEqualTo(insertedBook);
-    Mockito.verify(bookRepository, times(1)).saveAndCheckAuthors(bookToInsert);
+    Mockito.verify(workRepository, times(1)).saveAndCheckAuthors(bookToInsert);
 
   }
 
@@ -141,14 +141,14 @@ class WorkServiceMongoTest {
   void shouldCorrectlyDeleteBookById() {
 
     var id = "1L";
-    var toDelete = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+    var toDelete = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null,
         null);
 
-    given(bookRepository.findById(id)).willReturn(Optional.of(toDelete));
+    given(workRepository.findById(id)).willReturn(Optional.of(toDelete));
 
     bookServiceMongo.deleteById(id);
 
-    Mockito.verify(bookRepository, times(1)).deleteByBookId(id);
+    Mockito.verify(workRepository, times(1)).deleteByBookId(id);
 
   }
 
@@ -165,14 +165,14 @@ class WorkServiceMongoTest {
     authors.add(author);
     genres.add(genre);
 
-    var bookToUpdate = new Work(id, "newName", "descr", authors, genres, null, null, null, null);
+    var bookToUpdate = new Work(id, "newName", "descr", authors, genres, null, null, null);
 
-    given(bookRepository.findById(id)).willReturn(Optional.of(bookToUpdate));
+    given(workRepository.findById(id)).willReturn(Optional.of(bookToUpdate));
     given(authorService.getById(id)).willReturn(Optional.of(author));
 
     bookServiceMongo.insertOrUpdate(bookToUpdate);
 
-    Mockito.verify(bookRepository, times(1)).saveAndCheckAuthors(bookToUpdate);
+    Mockito.verify(workRepository, times(1)).saveAndCheckAuthors(bookToUpdate);
 
   }
 
@@ -186,7 +186,7 @@ class WorkServiceMongoTest {
         new Work(nonExistingId, "nonexisting", "descr",
             new HashSet<>(),
             new HashSet<>()
-            , null, null, null, null));
+            , null, null, null));
 
   }
 
@@ -196,19 +196,19 @@ class WorkServiceMongoTest {
         Set.of(new Author("1L", "author1", null, null, null, null),
             new Author("2L", "author2", null, null, null, null)),
         Set.of(new Genre("genre1"), new Genre("genre2"))
-        , null, null, null, null);
+        , null, null, null);
 
     var book2 = new Work("2L", "book2", "descr",
         Set.of(new Author("2L", "author2", null, null, null, null),
             new Author("3L", "author3", null, null, null, null)),
         Set.of(new Genre("genre2"), new Genre("genre3"))
-        , null, null, null, null);
+        , null, null, null);
 
     var book3 = new Work("3L", "book3", "descr",
         Set.of(new Author("1L", "author1", null, null, null, null),
             new Author("3L", "author3", null, null, null, null)),
         Set.of(new Genre("genre1"), new Genre("genre3"))
-        , null, null, null, null);
+        , null, null, null);
 
     return List.of(
         book1,

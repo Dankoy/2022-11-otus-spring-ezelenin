@@ -23,7 +23,7 @@ import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
 class WorkRepositoryMongoTest {
 
   @Autowired
-  private BookRepository bookRepository;
+  private WorkRepository workRepository;
 
   @Autowired
   private MongoTemplate mongoTemplate;
@@ -32,7 +32,7 @@ class WorkRepositoryMongoTest {
   @DisplayName("should return all books by genre name")
   @Test
   void shouldGetAllBooksByGenreNameTest() {
-    var books = bookRepository.findBookByGenres("genre1");
+    var books = workRepository.findBookByGenres("genre1");
 
     Query query = new Query();
     query.addCriteria(Criteria.where("genres.name").is("genre1"));
@@ -45,7 +45,7 @@ class WorkRepositoryMongoTest {
   @DisplayName("should return no books by genre name")
   @Test
   void shouldGetNoBooksByGenreNameTest() {
-    var books = bookRepository.findBookByGenres("none-existing");
+    var books = workRepository.findBookByGenres("none-existing");
 
     Query query = new Query();
     query.addCriteria(Criteria.where("genres.name").is("none-existing"));
@@ -65,7 +65,7 @@ class WorkRepositoryMongoTest {
             Work.class)
         .get(0);
 
-    var genres = bookRepository.getAllGenresByBookId(book1.getId());
+    var genres = workRepository.getAllGenresByBookId(book1.getId());
 
     assertThat(genres).containsExactlyInAnyOrderElementsOf(book1.getGenres());
   }
@@ -80,10 +80,10 @@ class WorkRepositoryMongoTest {
             Author.class
         )
         .get(0);
-    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(), null, null,
+    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(),  null,
         null, null);
 
-    var inserted = bookRepository.saveAndCheckAuthors(book);
+    var inserted = workRepository.saveAndCheckAuthors(book);
 
     var expected = mongoTemplate.find(
         new Query().addCriteria(Criteria.where("name").is("mybookname")),
@@ -100,10 +100,10 @@ class WorkRepositoryMongoTest {
   void shouldThrowExceptionWhenSaveBookWithNonExistingAuthor() {
 
     var author = new Author("blah", "blah", null, null, null, null);
-    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(), null, null,
+    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(),  null,
         null, null);
 
-    assertThatThrownBy(() -> bookRepository.saveAndCheckAuthors(book))
+    assertThatThrownBy(() -> workRepository.saveAndCheckAuthors(book))
         .isInstanceOf(EntityNotFoundException.class);
 
   }

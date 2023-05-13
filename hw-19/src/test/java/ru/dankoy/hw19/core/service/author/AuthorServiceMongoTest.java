@@ -175,7 +175,6 @@ class AuthorServiceMongoTest {
         Set.of(new Genre("genre1"), new Genre("genre2")),
         null,
         null,
-        null,
         null);
 
     var book2 = new Work("2L", "book2", "descr",
@@ -183,13 +182,11 @@ class AuthorServiceMongoTest {
         Set.of(new Genre("genre2"), new Genre("genre3")),
         null,
         null,
-        null,
         null);
 
     var book3 = new Work("3L", "book3", "descr",
         authorBook3,
         Set.of(new Genre("genre1"), new Genre("genre3")),
-        null,
         null,
         null,
         null);

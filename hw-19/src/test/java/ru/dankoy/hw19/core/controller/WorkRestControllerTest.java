@@ -241,7 +241,6 @@ class WorkRestControllerTest {
         Set.of(new Genre("genre1"), new Genre("genre2")),
         null,
         null,
-        null,
         null);
 
     var book2 = new Work("2L", "book2", "descr",
@@ -250,14 +249,12 @@ class WorkRestControllerTest {
         Set.of(new Genre("genre2"), new Genre("genre3")),
         null,
         null,
-        null,
         null);
 
     var book3 = new Work("3L", "book3", "descr",
         Set.of(new Author("1L", "author1", null, null, null, null),
             new Author("3L", "author3", null, null, null, null)),
         Set.of(new Genre("genre1"), new Genre("genre3")),
-        null,
         null,
         null,
         null);

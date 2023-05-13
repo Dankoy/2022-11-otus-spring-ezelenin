@@ -54,7 +54,7 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null,
         null);
     var found = new Commentary(id, "com", null, book, null, null);
     given(commentaryRepository.findById(id)).willReturn(Optional.of(found));
@@ -106,7 +106,7 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null,
         null);
     var commentary = new Commentary(id, "com", null, book, null, null);
     given(workService.getById(id)).willReturn(Optional.of(book));
@@ -126,7 +126,7 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null,
         null);
     given(workService.getById(id)).willReturn(Optional.of(book));
     given(commentaryRepository.findById(id)).willReturn(Optional.empty());
@@ -146,7 +146,7 @@ class CommentaryServiceMongoTest {
 
     var id = "1L";
 
-    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+    var book = new Work(id, "name", "descr", new HashSet<>(), new HashSet<>(), null, null,
         null);
     var commentary = new Commentary(id, "com", null, book, null, null);
 
@@ -160,7 +160,7 @@ class CommentaryServiceMongoTest {
 
   private Set<Commentary> makeCorrectCommentaryList() {
 
-    var book = new Work("1L", "name", "descr", new HashSet<>(), new HashSet<>(), null, null, null,
+    var book = new Work("1L", "name", "descr", new HashSet<>(), new HashSet<>(), null, null,
         null);
     return Set.of(new Commentary("1L", "com1", null, book, null, null),
         new Commentary("2L", "com2", null, book, null, null),

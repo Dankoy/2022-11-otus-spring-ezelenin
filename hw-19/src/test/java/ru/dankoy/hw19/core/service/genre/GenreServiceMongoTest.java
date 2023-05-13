@@ -133,15 +133,15 @@ class GenreServiceMongoTest {
 
     var book1 = new Work("1L", "book1", "descr",
         Set.of(new Author("1L", "author1",null, null, null, null), new Author("2L", "author2",null, null, null, null)),
-        genreBook1,null, null, null, null);
+        genreBook1,null, null, null);
 
     var book2 = new Work("2L", "book2", "descr",
         Set.of(new Author("2L", "author2",null, null, null, null), new Author("3L", "author3",null, null, null, null)),
-        genreBook2,null, null, null, null);
+        genreBook2,null, null, null);
 
     var book3 = new Work("3L", "book3", "descr",
         Set.of(new Author("1L", "author1",null, null, null, null), new Author("3L", "author3",null, null, null, null)),
-        genreBook3,null, null, null, null);
+        genreBook3,null, null, null);
 
     return List.of(
         book1,

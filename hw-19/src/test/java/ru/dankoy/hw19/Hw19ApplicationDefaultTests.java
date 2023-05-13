@@ -14,7 +14,7 @@ import ru.dankoy.hw19.core.controller.CommentaryRestController;
 import ru.dankoy.hw19.core.dto.mapper.BookMapper;
 import ru.dankoy.hw19.core.dto.mapper.CommentaryMapper;
 import ru.dankoy.hw19.core.repository.author.AuthorRepository;
-import ru.dankoy.hw19.core.repository.work.BookRepository;
+import ru.dankoy.hw19.core.repository.work.WorkRepository;
 import ru.dankoy.hw19.core.service.author.AuthorServiceMongo;
 import ru.dankoy.hw19.core.service.work.WorkServiceMongo;
 import ru.dankoy.hw19.core.service.genre.GenreServiceMongo;
@@ -32,7 +32,7 @@ class Hw19ApplicationDefaultTests {
   @Test
   void contextLoads() {
 
-    var bookRepository = context.getBean(BookRepository.class);
+    var bookRepository = context.getBean(WorkRepository.class);
     var authorRepository = context.getBean(AuthorRepository.class);
     var bookServiceJpa = context.getBean(WorkServiceMongo.class);
     var authorServiceJpa = context.getBean(AuthorServiceMongo.class);
