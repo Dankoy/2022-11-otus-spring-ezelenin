@@ -55,7 +55,7 @@ public class WorkRepositoryCustomImpl implements WorkRepositoryCustom {
       }
     });
 
-    return mongoTemplate.save(work, "books");
+    return mongoTemplate.save(work, "works");
   }
 
 
