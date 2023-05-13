@@ -9,15 +9,16 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import ru.dankoy.hw19.core.domain.Work;
 
 
-@RepositoryRestResource(path = "book")
-public interface BookRepository extends MongoRepository<Work, String>, BookRepositoryCustom {
+@RepositoryRestResource(path = "work")
+public interface WorkRepository extends MongoRepository<Work, String>, BookRepositoryCustom {
 
-  @RestResource(path = "books-by-genres", rel = "books-by-genres")
+
+  @RestResource(path = "works-by-genres", rel = "works-by-genres")
   @Query("{'genres.name' : :#{#genreName}}")
   List<Work> findBookByGenres(@Param("genreName") String genreName);
 
 
-  @RestResource(path = "books-by-author", rel = "books-by-author")
+  @RestResource(path = "works-by-author", rel = "works-by-author")
   List<Work> findBookByAuthorsId(String authorId);
 
 }
