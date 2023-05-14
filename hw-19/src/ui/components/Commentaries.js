@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {apiPath, bookPath, commentaryPath} from "../context";
+import {apiPath, workPath, commentaryPath} from "../context";
 import {styles} from "../styles/styles";
 
 const Header = (props) => (
@@ -16,7 +16,7 @@ export const Commentaries = (props) => {
   }, [])
 
   function fetchCommentaries() {
-    fetch(`${apiPath}/${bookPath}/${bookId}/${commentaryPath}`, {
+    fetch(`${apiPath}/${workPath}/${bookId}/${commentaryPath}`, {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {apiPath, bookPath} from "../context";
+import {apiPath, workPath} from "../context";
 import {styles} from "../styles/styles";
 import {Book} from "./Book";
 
@@ -19,7 +19,7 @@ export const Books = (props) => {
   }, [])
 
   function fetchBooks() {
-    fetch(`${apiPath}/${bookPath}`, {
+    fetch(`${apiPath}/${workPath}`, {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
@@ -42,7 +42,7 @@ export const Books = (props) => {
   }
 
   const deleteBookById = (bookId) => {
-    fetch(`${apiPath}/${bookPath}/${bookId}`, {
+    fetch(`${apiPath}/${workPath}/${bookId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

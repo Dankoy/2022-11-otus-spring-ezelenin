@@ -1,5 +1,5 @@
 import React, {Suspense, useEffect, useState} from 'react'
-import {apiPath, bookPath} from "../context";
+import {apiPath, workPath} from "../context";
 import {styles} from "../styles/styles";
 import {LoadingSpinner} from "./LoadingSpinner";
 import {Commentaries} from "./Commentaries";
@@ -15,7 +15,7 @@ export const Book = (props) => {
   const [book, setBook] = useState({});
 
   useEffect(() => {
-    fetch(`${apiPath}/${bookPath}/${bookId}`,{
+    fetch(`${apiPath}/${workPath}/${bookId}`,{
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
