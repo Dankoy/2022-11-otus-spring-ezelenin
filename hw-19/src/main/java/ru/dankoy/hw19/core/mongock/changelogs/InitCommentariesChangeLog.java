@@ -22,15 +22,15 @@ public class InitCommentariesChangeLog {
     var com1 = new Document()
         .append("text", "com1")
         .append("work", new DBRef("works", book1.get("_id")))
-        .append("user", new Document().append("_id", user.get("_id")));
+        .append("user", user.get("_id"));
     var com2 = new Document()
         .append("text", "com2")
         .append("work", new DBRef("works", book1.get("_id")))
-        .append("user", new Document().append("_id", user.get("_id")));
+        .append("user", user.get("_id"));
     var com3 = new Document()
         .append("text", "com3")
         .append("work", new DBRef("works", book1.get("_id")))
-        .append("user", new Document().append("_id", user.get("_id")));
+        .append("user", user.get("_id"));
 
     commentaries.insertMany(List.of(com1, com2, com3));
 
