@@ -37,8 +37,6 @@ public class WorkDTO {
 
   private Set<EditionDTO> editions = new HashSet<>();
 
-  private LocalDateTime dateWritten;
-
   private LocalDateTime dateCreated;
 
   private LocalDateTime dateModified;
@@ -46,6 +44,5 @@ public class WorkDTO {
   private String createBy;
 
   private String modifiedBy;
-
 
 }

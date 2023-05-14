@@ -23,6 +23,8 @@ public class BookMapperImpl implements BookMapper {
         .description(work.getDescription())
         .dateCreated(work.getDateCreated())
         .dateModified(work.getDateModified())
+        .createBy(work.getCreatedByUser())
+        .modifiedBy(work.getModifiedByUser())
         .editions(editionMapper.toSetDTO(work.getEditions()))
         .genres(work.getGenres())
         .authors(work.getAuthors())
@@ -40,6 +42,8 @@ public class BookMapperImpl implements BookMapper {
         .description(work.getDescription())
         .dateCreated(work.getDateCreated())
         .dateModified(work.getDateModified())
+        .createBy(work.getCreatedByUser())
+        .modifiedBy(work.getModifiedByUser())
         .genres(new HashSet<>())
         .authors(new HashSet<>())
         .commentaries(new HashSet<>())
@@ -59,6 +63,8 @@ public class BookMapperImpl implements BookMapper {
         .editions(editionMapper.toSetDTO(work.getEditions()))
         .dateCreated(work.getDateCreated())
         .dateModified(work.getDateModified())
+        .createBy(work.getCreatedByUser())
+        .modifiedBy(work.getModifiedByUser())
         .build();
 
   }
