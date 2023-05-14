@@ -25,7 +25,7 @@ public class CommentaryRestController {
   private final CommentaryMapper commentaryMapper;
 
 
-  @GetMapping("/api/v1/book/{id}/commentary")
+  @GetMapping("/api/v1/work/{id}/commentary")
   public List<CommentaryDTO> getAllByBookId(@PathVariable String id)
       throws ExecutionException, InterruptedException {
     var commentaries = commentaryService.getAllByBookId(id);
