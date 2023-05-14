@@ -1,6 +1,7 @@
 package ru.dankoy.hw19.core.service.commentary;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,12 @@ public class CommentaryServiceMongo implements CommentaryService {
 
   @Override
   public Commentary insertOrUpdate(Commentary commentary) {
+
+    // todo: вынести в отдельный метод сохранения?
+    if (Objects.nonNull(commentary.getId())) {
+      var optionalWork = commentaryRepository.findById(commentary.getId());
+      optionalWork.ifPresent(w -> commentary.setDateCreated(w.getDateCreated()));
+    }
 
     return commentaryRepository.save(commentary);
   }
