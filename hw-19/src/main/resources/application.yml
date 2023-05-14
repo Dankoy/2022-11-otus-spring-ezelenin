@@ -58,6 +58,10 @@ management:
 logging:
   level:
     root: info
+    org:
+      springframework:
+        data:
+          mongodb: DEBUG
 
 resilience4j:
   circuitbreaker:
