@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.dankoy.hw19.core.aspects.CommentaryCurrentUser;
 import ru.dankoy.hw19.core.domain.Commentary;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
@@ -38,6 +39,7 @@ public class CommentaryServiceMongo implements CommentaryService {
 
 
   @Override
+  @CommentaryCurrentUser
   public Commentary insertOrUpdate(Commentary commentary) {
 
     // todo: вынести в отдельный метод сохранения?

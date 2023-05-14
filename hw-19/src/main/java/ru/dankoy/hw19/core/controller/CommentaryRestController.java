@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dankoy.hw19.core.domain.User;
 import ru.dankoy.hw19.core.dto.commentary.CommentaryCreateDTO;
 import ru.dankoy.hw19.core.dto.commentary.CommentaryDTO;
 import ru.dankoy.hw19.core.dto.mappers.CommentaryMapper;
@@ -48,15 +46,6 @@ public class CommentaryRestController {
 
     var fromDto = commentaryMapper.toCommentary(dto);
 
-    // todo: сделать в сервисе через аоп
-    // Получаю объект юзера создавшего комментарий и добавляю его к комментарию
-    var securityContextUser = (User) SecurityContextHolder.getContext()
-        .getAuthentication()
-        .getPrincipal();
-
-//    var user = (User) userService.loadUserByUsername(securityContextUserName);
-    fromDto.setUser(securityContextUser);
-
     var created = commentaryService.insertOrUpdate(fromDto);
 
     return commentaryMapper.toDTO(created);
@@ -82,14 +71,6 @@ public class CommentaryRestController {
 
     commentaryService.getById(toUpdate.getId())
         .orElseThrow(() -> new EntityNotFoundException(toUpdate.getId(), Entity.COMMENTARY));
-
-    // todo: сделать в сервисе через аоп
-    // Получаю объект юзера создавшего комментарий и добавляю его к комментарию
-    var securityContextUser = (User) SecurityContextHolder.getContext()
-        .getAuthentication()
-        .getPrincipal();
-
-    toUpdate.setUser(securityContextUser);
 
     var updated = commentaryService.insertOrUpdate(toUpdate);
 
