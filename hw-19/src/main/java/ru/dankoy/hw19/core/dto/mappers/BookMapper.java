@@ -1,7 +1,7 @@
-package ru.dankoy.hw19.core.dto.mapper;
+package ru.dankoy.hw19.core.dto.mappers;
 
 import ru.dankoy.hw19.core.domain.Work;
-import ru.dankoy.hw19.core.dto.WorkDTO;
+import ru.dankoy.hw19.core.dto.work.WorkDTO;
 
 public interface BookMapper {
 

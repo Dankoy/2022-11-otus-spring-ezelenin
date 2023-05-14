@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dankoy.hw19.core.dto.CommentaryDTO;
-import ru.dankoy.hw19.core.dto.mapper.CommentaryMapper;
+import ru.dankoy.hw19.core.dto.commentary.CommentaryDTO;
+import ru.dankoy.hw19.core.dto.mappers.CommentaryMapper;
 import ru.dankoy.hw19.core.service.commentary.ResilienceCommentaryService;
 
 

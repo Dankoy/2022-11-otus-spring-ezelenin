@@ -1,4 +1,4 @@
-package ru.dankoy.hw19.core.dto;
+package ru.dankoy.hw19.core.dto.work;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -13,6 +13,8 @@ import lombok.Setter;
 import lombok.ToString;
 import ru.dankoy.hw19.core.domain.Author;
 import ru.dankoy.hw19.core.domain.Genre;
+import ru.dankoy.hw19.core.dto.commentary.CommentaryDTO;
+import ru.dankoy.hw19.core.dto.edition.EditionDTO;
 
 @ToString
 @Getter

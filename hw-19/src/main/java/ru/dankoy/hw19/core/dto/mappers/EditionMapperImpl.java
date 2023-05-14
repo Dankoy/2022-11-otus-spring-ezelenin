@@ -1,11 +1,11 @@
-package ru.dankoy.hw19.core.dto.mapper;
+package ru.dankoy.hw19.core.dto.mappers;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import ru.dankoy.hw19.core.domain.Edition;
 import ru.dankoy.hw19.core.domain.Work;
-import ru.dankoy.hw19.core.dto.EditionDTO;
+import ru.dankoy.hw19.core.dto.edition.EditionDTO;
 
 @Component
 public class EditionMapperImpl implements EditionMapper {

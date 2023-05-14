@@ -1,4 +1,4 @@
-package ru.dankoy.hw19.core.dto;
+package ru.dankoy.hw19.core.dto.edition;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

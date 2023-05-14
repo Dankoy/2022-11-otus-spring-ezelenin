@@ -1,8 +1,8 @@
-package ru.dankoy.hw19.core.dto.mapper;
+package ru.dankoy.hw19.core.dto.mappers;
 
 import java.util.Set;
 import ru.dankoy.hw19.core.domain.Edition;
-import ru.dankoy.hw19.core.dto.EditionDTO;
+import ru.dankoy.hw19.core.dto.edition.EditionDTO;
 
 public interface EditionMapper {
 

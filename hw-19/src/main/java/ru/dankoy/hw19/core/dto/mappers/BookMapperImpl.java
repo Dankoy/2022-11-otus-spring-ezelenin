@@ -1,10 +1,10 @@
-package ru.dankoy.hw19.core.dto.mapper;
+package ru.dankoy.hw19.core.dto.mappers;
 
 import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.dankoy.hw19.core.domain.Work;
-import ru.dankoy.hw19.core.dto.WorkDTO;
+import ru.dankoy.hw19.core.dto.work.WorkDTO;
 
 
 @Component
