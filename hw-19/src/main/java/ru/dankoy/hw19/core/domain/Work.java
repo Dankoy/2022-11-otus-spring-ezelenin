@@ -1,5 +1,6 @@
 package ru.dankoy.hw19.core.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +45,7 @@ public class Work {
   @Field("genres")
   private Set<Genre> genres = new HashSet<>();
 
+  @JsonManagedReference
   @DocumentReference(collection = "editions", lookup = "{ '_id' : ?#{#target} }")
   @Field("editions")
   private Set<Edition> editions = new HashSet<>();
