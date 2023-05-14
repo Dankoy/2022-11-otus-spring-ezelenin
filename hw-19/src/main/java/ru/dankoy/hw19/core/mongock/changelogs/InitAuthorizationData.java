@@ -11,10 +11,10 @@ import org.bson.Document;
 @ChangeLog(order = "001")
 public class InitAuthorizationData {
 
-  @ChangeSet(order = "001", id = "dropDb", author = "dankoy", runAlways = true)
-  public void dropDb(MongoDatabase db) {
-    db.drop();
-  }
+//  @ChangeSet(order = "001", id = "dropDb", author = "dankoy", runAlways = true)
+//  public void dropDb(MongoDatabase db) {
+//    db.drop();
+//  }
 
   @ChangeSet(order = "002", id = "insertRoles", author = "dankoy")
   public void insertRoles(MongoDatabase db) {
