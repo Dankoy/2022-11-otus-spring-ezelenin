@@ -10,7 +10,8 @@ public enum Entity {
   BOOK("Book"),
   AUTHOR("Author"),
   GENRE("Genre"),
-  COMMENTARY("Commentary");
+  COMMENTARY("Commentary"),
+  PUBLISHER("Publisher");
 
   private final String name;
 
