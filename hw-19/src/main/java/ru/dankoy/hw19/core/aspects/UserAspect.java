@@ -17,9 +17,11 @@ import ru.dankoy.hw19.core.domain.User;
  */
 @Aspect
 @Component
-public class CommentaryUserAspect {
+public class UserAspect {
 
-  @Around("@annotation(ru.dankoy.hw19.core.aspects.CommentaryCurrentUser) && args(commentary)")
+  // Для того что бы использовать с сервисами других классов отличных от комментариев, надо
+  // добавить новый поинткат и указать другой тип аргумента
+  @Around("@annotation(ru.dankoy.hw19.core.aspects.AddCurrentUser) && args(commentary)")
   public Object addCurrentUserToCommentary(ProceedingJoinPoint joinPoint, Commentary commentary)
       throws Throwable {
 
