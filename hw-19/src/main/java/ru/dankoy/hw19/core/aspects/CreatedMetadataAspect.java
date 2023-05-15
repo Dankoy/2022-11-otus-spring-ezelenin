@@ -8,9 +8,11 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import ru.dankoy.hw19.core.domain.Commentary;
 import ru.dankoy.hw19.core.domain.Publisher;
+import ru.dankoy.hw19.core.domain.Shelf;
 import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.service.commentary.CommentaryService;
 import ru.dankoy.hw19.core.service.publisher.PublisherService;
+import ru.dankoy.hw19.core.service.shelf.ShelfService;
 import ru.dankoy.hw19.core.service.work.WorkService;
 
 @Slf4j
@@ -22,6 +24,7 @@ public class CreatedMetadataAspect {
   private final WorkService workService;
   private final CommentaryService commentaryService;
   private final PublisherService publisherService;
+  private final ShelfService shelfService;
 
   @Before("@annotation(ru.dankoy.hw19.core.aspects.AddCreatedMetadata) && args(work)")
   public void addCreatedMetadata(Work work) {
@@ -48,6 +51,17 @@ public class CreatedMetadataAspect {
       publisher.setCreatedByUser(w.getCreatedByUser());
       publisher.setDateCreated(w.getDateCreated());
     });
+
+  }
+
+  @Before("@annotation(ru.dankoy.hw19.core.aspects.AddCreatedMetadata) && args(shelf)")
+  public void addCreatedMetadata(Shelf shelf) {
+
+    log.info("Aspect add meta to publisher");
+
+    var found = shelfService.getShelfById(shelf.getId());
+
+    found.ifPresent(w -> shelf.setDateCreated(w.getDateCreated()));
 
   }
 
