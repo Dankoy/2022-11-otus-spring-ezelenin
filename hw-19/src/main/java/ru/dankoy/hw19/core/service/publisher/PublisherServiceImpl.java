@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.dankoy.hw19.core.aspects.AddCreatedMetadata;
 import ru.dankoy.hw19.core.domain.Publisher;
 import ru.dankoy.hw19.core.repository.publisher.PublisherRepository;
 
@@ -36,6 +37,7 @@ public class PublisherServiceImpl implements PublisherService {
   }
 
   @Override
+  @AddCreatedMetadata
   public Publisher update(Publisher publisher) {
     return publisherRepository.save(publisher);
   }
