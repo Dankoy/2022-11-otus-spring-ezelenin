@@ -15,7 +15,6 @@ public class WorkCommentaryDTO {
 
   private String id;
 
-
   public static Work fromDTO(WorkCommentaryDTO dto) {
     return new Work(dto.id);
   }

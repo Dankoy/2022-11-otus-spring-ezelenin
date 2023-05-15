@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dankoy.hw19.core.dto.work.WorkDTO;
-import ru.dankoy.hw19.core.dto.mappers.BookMapper;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw19.core.service.work.WorkService;
@@ -25,7 +24,6 @@ import ru.dankoy.hw19.core.service.work.WorkService;
 public class WorkRestController {
 
   private final WorkService workService;
-  private final BookMapper bookMapper;
 
   @GetMapping(value = "/api/v1/work",
       consumes = {"application/json"},
@@ -35,7 +33,7 @@ public class WorkRestController {
     var books = workService.findAll();
 
     return books.stream()
-        .map(bookMapper::toDTOWithoutCommentaries)
+        .map(WorkDTO::toDTOWithoutCommentaries)
         .collect(Collectors.toList());
 
   }
@@ -59,7 +57,7 @@ public class WorkRestController {
     var book = workService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
-    return bookMapper.toDTOWithoutCommentaries(book);
+    return WorkDTO.toDTOWithoutCommentaries(book);
 
   }
 
@@ -69,14 +67,14 @@ public class WorkRestController {
       produces = {"application/json"})
   public WorkDTO update(@PathVariable String id, @RequestBody WorkDTO workDTO) {
 
-    var book = bookMapper.toBook(workDTO);
+    var book = WorkDTO.toWork(workDTO);
 
     workService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
     var updated = workService.update(book);
 
-    return bookMapper.toDTOWithoutCommentaries(updated);
+    return WorkDTO.toDTOWithoutCommentaries(updated);
 
   }
 
@@ -85,11 +83,11 @@ public class WorkRestController {
       produces = {"application/json"})
   public WorkDTO create(@RequestBody WorkDTO workDTO) {
 
-    var book = bookMapper.toBook(workDTO);
+    var book = WorkDTO.toWork(workDTO);
 
     var created = workService.insert(book);
 
-    return bookMapper.toDTOWithoutCommentaries(created);
+    return WorkDTO.toDTOWithoutCommentaries(created);
 
   }
 

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.dankoy.hw19.core.dto.commentary.CommentaryCreateDTO;
 import ru.dankoy.hw19.core.dto.commentary.CommentaryDTO;
-import ru.dankoy.hw19.core.dto.mappers.CommentaryMapper;
 import ru.dankoy.hw19.core.dto.work.WorkCommentaryDTO;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
@@ -28,13 +27,11 @@ public class CommentaryRestController {
 
   private final CommentaryService commentaryService;
 
-  private final CommentaryMapper commentaryMapper;
-
 
   @GetMapping("/api/v1/work/{id}/commentary")
   public List<CommentaryDTO> getAllByBookId(@PathVariable String id) {
     var commentaries = commentaryService.getAllByBookId(id);
-    return commentaries.stream().map(commentaryMapper::toDTO).collect(Collectors.toList());
+    return commentaries.stream().map(CommentaryDTO::toDTO).collect(Collectors.toList());
   }
 
 
@@ -44,11 +41,11 @@ public class CommentaryRestController {
 
     var work = new WorkCommentaryDTO(workId);
     dto.setWork(work);
-    var fromDto = commentaryMapper.toCommentary(dto);
+    var fromDto = CommentaryCreateDTO.toCommentary(dto);
 
     var created = commentaryService.insert(fromDto);
 
-    return commentaryMapper.toDTO(created);
+    return CommentaryDTO.toDTO(created);
 
   }
 
@@ -59,7 +56,7 @@ public class CommentaryRestController {
     var commentary = commentaryService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.COMMENTARY));
 
-    return commentaryMapper.toDTO(commentary);
+    return CommentaryDTO.toDTO(commentary);
 
   }
 
@@ -74,11 +71,11 @@ public class CommentaryRestController {
 
     dto.setWork(new WorkCommentaryDTO(found.getWork().getId()));
 
-    var toUpdate = commentaryMapper.toCommentary(dto);
+    var toUpdate = CommentaryCreateDTO.toCommentary(dto);
 
     var updated = commentaryService.update(toUpdate);
 
-    return commentaryMapper.toDTO(updated);
+    return CommentaryDTO.toDTO(updated);
 
   }
 
