@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -29,6 +30,7 @@ public class Publisher {
   @Field("name")
   private String name;
 
+  @Setter
   @Field("dt_created")
   @CreatedDate
   private LocalDateTime dateCreated;
@@ -37,6 +39,7 @@ public class Publisher {
   @LastModifiedDate
   private LocalDateTime dateModified;
 
+  @Setter
   @Field("created_by")
   @CreatedBy
   private String createdByUser;
