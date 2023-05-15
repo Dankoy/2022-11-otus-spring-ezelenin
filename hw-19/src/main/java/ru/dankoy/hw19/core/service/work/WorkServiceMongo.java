@@ -2,11 +2,11 @@ package ru.dankoy.hw19.core.service.work;
 
 import io.github.resilience4j.retry.annotation.Retry;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.dankoy.hw19.core.aspects.AddCreatedMetadata;
 import ru.dankoy.hw19.core.domain.Author;
 import ru.dankoy.hw19.core.domain.Genre;
 import ru.dankoy.hw19.core.domain.Work;
@@ -51,29 +51,13 @@ public class WorkServiceMongo implements WorkService {
   @Retry(name = "bookService")
   @Override
   public Work insert(Work work) {
-
-    // todo: вынести в отдельный метод сохранения?
-    if (Objects.nonNull(work.getId())) {
-      var optionalWork = workRepository.findById(work.getId());
-      optionalWork.ifPresent(w -> {
-        work.setDateCreated(w.getDateCreated());
-        work.setCreatedByUser(w.getCreatedByUser());
-      });
-    }
-
     return workRepository.saveAndCheckAuthors(work);
   }
 
   @Retry(name = "bookService")
   @Override
+  @AddCreatedMetadata
   public Work update(Work work) {
-
-    var optionalWork = workRepository.findById(work.getId());
-    optionalWork.ifPresent(w -> {
-      work.setDateCreated(w.getDateCreated());
-      work.setCreatedByUser(w.getCreatedByUser());
-    });
-
     return workRepository.saveAndCheckAuthors(work);
   }
 

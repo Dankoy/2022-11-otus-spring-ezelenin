@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.dankoy.hw19.core.aspects.AddCreatedMetadata;
 import ru.dankoy.hw19.core.aspects.AddCurrentUser;
 import ru.dankoy.hw19.core.domain.Commentary;
 import ru.dankoy.hw19.core.exceptions.Entity;
@@ -39,11 +40,8 @@ public class CommentaryServiceMongo implements CommentaryService {
 
   @Override
   @AddCurrentUser
+  @AddCreatedMetadata
   public Commentary update(Commentary commentary) {
-
-    var optionalWork = commentaryRepository.findById(commentary.getId());
-    optionalWork.ifPresent(w -> commentary.setDateCreated(w.getDateCreated()));
-
     return commentaryRepository.save(commentary);
   }
 
