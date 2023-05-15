@@ -1,5 +1,6 @@
 package ru.dankoy.hw19.core.service.work;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import java.util.List;
 import java.util.Optional;
 import ru.dankoy.hw19.core.domain.Author;
@@ -16,7 +17,10 @@ public interface WorkService {
 
   Optional<Work> getById(String id);
 
-  Work insertOrUpdate(Work work);
+  Work insert(Work work);
+
+  @Retry(name = "bookService")
+  Work update(Work work);
 
   void deleteById(String id);
 

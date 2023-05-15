@@ -74,7 +74,7 @@ public class WorkRestController {
     workService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
-    var updated = workService.insertOrUpdate(book);
+    var updated = workService.update(book);
 
     return bookMapper.toDTOWithoutCommentaries(updated);
 
@@ -87,7 +87,7 @@ public class WorkRestController {
 
     var book = bookMapper.toBook(workDTO);
 
-    var created = workService.insertOrUpdate(book);
+    var created = workService.insert(book);
 
     return bookMapper.toDTOWithoutCommentaries(created);
 
