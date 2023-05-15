@@ -1,11 +1,10 @@
 package ru.dankoy.hw19.core.service.commentary;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.dankoy.hw19.core.aspects.CommentaryCurrentUser;
+import ru.dankoy.hw19.core.aspects.AddCurrentUser;
 import ru.dankoy.hw19.core.domain.Commentary;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
@@ -39,16 +38,21 @@ public class CommentaryServiceMongo implements CommentaryService {
 
 
   @Override
-  @CommentaryCurrentUser
-  public Commentary insertOrUpdate(Commentary commentary) {
+  @AddCurrentUser
+  public Commentary update(Commentary commentary) {
 
-    // todo: вынести в отдельный метод сохранения?
-    if (Objects.nonNull(commentary.getId())) {
-      var optionalWork = commentaryRepository.findById(commentary.getId());
-      optionalWork.ifPresent(w -> commentary.setDateCreated(w.getDateCreated()));
-    }
+    var optionalWork = commentaryRepository.findById(commentary.getId());
+    optionalWork.ifPresent(w -> commentary.setDateCreated(w.getDateCreated()));
 
     return commentaryRepository.save(commentary);
+  }
+
+  @Override
+  @AddCurrentUser
+  public Commentary insert(Commentary commentary) {
+
+    return commentaryRepository.save(commentary);
+
   }
 
   @Override

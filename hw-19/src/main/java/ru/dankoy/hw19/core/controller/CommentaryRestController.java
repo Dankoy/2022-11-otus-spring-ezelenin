@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.dankoy.hw19.core.dto.commentary.CommentaryCreateDTO;
 import ru.dankoy.hw19.core.dto.commentary.CommentaryDTO;
 import ru.dankoy.hw19.core.dto.mappers.CommentaryMapper;
+import ru.dankoy.hw19.core.dto.work.WorkCommentaryDTO;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw19.core.service.commentary.CommentaryService;
-import ru.dankoy.hw19.core.service.user.UserService;
 
 
 @RequiredArgsConstructor
@@ -27,8 +27,6 @@ import ru.dankoy.hw19.core.service.user.UserService;
 public class CommentaryRestController {
 
   private final CommentaryService commentaryService;
-
-  private final UserService userService;
 
   private final CommentaryMapper commentaryMapper;
 
@@ -44,9 +42,11 @@ public class CommentaryRestController {
   public CommentaryDTO createCommentaryToWork(@PathVariable String workId,
       @RequestBody CommentaryCreateDTO dto) {
 
+    var work = new WorkCommentaryDTO(workId);
+    dto.setWork(work);
     var fromDto = commentaryMapper.toCommentary(dto);
 
-    var created = commentaryService.insertOrUpdate(fromDto);
+    var created = commentaryService.insert(fromDto);
 
     return commentaryMapper.toDTO(created);
 
@@ -65,14 +65,18 @@ public class CommentaryRestController {
 
 
   @PutMapping("/api/v1/commentary/{id}")
-  public CommentaryDTO update(@RequestBody CommentaryCreateDTO dto) {
+  public CommentaryDTO update(@PathVariable String id,
+      @RequestBody CommentaryCreateDTO dto) {
+
+    // Не позволяем менять работу комментария.
+    var found = commentaryService.getById(id)
+        .orElseThrow(() -> new EntityNotFoundException(id, Entity.COMMENTARY));
+
+    dto.setWork(new WorkCommentaryDTO(found.getWork().getId()));
 
     var toUpdate = commentaryMapper.toCommentary(dto);
 
-    commentaryService.getById(toUpdate.getId())
-        .orElseThrow(() -> new EntityNotFoundException(toUpdate.getId(), Entity.COMMENTARY));
-
-    var updated = commentaryService.insertOrUpdate(toUpdate);
+    var updated = commentaryService.update(toUpdate);
 
     return commentaryMapper.toDTO(updated);
 
