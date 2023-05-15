@@ -7,10 +7,12 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import ru.dankoy.hw19.core.domain.Commentary;
+import ru.dankoy.hw19.core.domain.Note;
 import ru.dankoy.hw19.core.domain.Publisher;
 import ru.dankoy.hw19.core.domain.Shelf;
 import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.service.commentary.CommentaryService;
+import ru.dankoy.hw19.core.service.note.NoteService;
 import ru.dankoy.hw19.core.service.publisher.PublisherService;
 import ru.dankoy.hw19.core.service.shelf.ShelfService;
 import ru.dankoy.hw19.core.service.work.WorkService;
@@ -25,6 +27,7 @@ public class CreatedMetadataAspect {
   private final CommentaryService commentaryService;
   private final PublisherService publisherService;
   private final ShelfService shelfService;
+  private final NoteService noteService;
 
   @Before("@annotation(ru.dankoy.hw19.core.aspects.AddCreatedMetadata) && args(work)")
   public void addCreatedMetadata(Work work) {
@@ -73,6 +76,17 @@ public class CreatedMetadataAspect {
     var found = commentaryService.getById(commentary.getId());
 
     found.ifPresent(w -> commentary.setDateCreated(w.getDateCreated()));
+
+  }
+
+  @Before("@annotation(ru.dankoy.hw19.core.aspects.AddCreatedMetadata) && args(note)")
+  public void addCreatedMetadata(Note note) {
+
+    log.info("Aspect add meta to commentary");
+
+    var found = noteService.findById(note.getId());
+
+    found.ifPresent(w -> note.setDateCreated(w.getDateCreated()));
 
   }
 
