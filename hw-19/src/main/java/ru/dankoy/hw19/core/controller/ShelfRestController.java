@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dankoy.hw19.core.domain.User;
 import ru.dankoy.hw19.core.dto.shelf.ShelfDTO;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
@@ -30,11 +28,7 @@ public class ShelfRestController {
   @GetMapping("/api/v1/shelf")
   public List<ShelfDTO> getAll() {
 
-    var user = (User) SecurityContextHolder.getContext()
-        .getAuthentication()
-        .getPrincipal();
-
-    var found = shelfService.getShelvesByUserId(user.getId());
+    var found = shelfService.findAll();
 
     return found.stream().map(ShelfDTO::toDTO).collect(Collectors.toList());
 
@@ -43,7 +37,7 @@ public class ShelfRestController {
   @GetMapping("/api/v1/shelf/{id}")
   public ShelfDTO getById(@PathVariable String id) {
 
-    var found = shelfService.getShelfById(id)
+    var found = shelfService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.SHELF));
 
     return ShelfDTO.toDTO(found);
@@ -55,7 +49,7 @@ public class ShelfRestController {
   @ResponseStatus(HttpStatus.ACCEPTED)
   public void delete(@PathVariable String id) {
 
-    shelfService.deleteShelf(id);
+    shelfService.deleteById(id);
 
   }
 
@@ -63,7 +57,7 @@ public class ShelfRestController {
   public ShelfDTO create(@RequestBody ShelfDTO dto) {
 
     var toCreate = ShelfDTO.fromDTO(dto);
-    var created = shelfService.createShelf(toCreate);
+    var created = shelfService.create(toCreate);
 
     return ShelfDTO.toDTO(created);
 
@@ -72,11 +66,12 @@ public class ShelfRestController {
   @PutMapping("/api/v1/shelf/{id}")
   public ShelfDTO update(@PathVariable String id, @RequestBody ShelfDTO dto) {
 
-    shelfService.getShelfById(id)
+    // Проверка на существование полки по id и проверка принадлежности юзеру
+    shelfService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.SHELF));
 
     var toUpdate = ShelfDTO.fromDTO(dto);
-    var updated = shelfService.updateShelf(toUpdate);
+    var updated = shelfService.update(toUpdate);
 
     return ShelfDTO.toDTO(updated);
 

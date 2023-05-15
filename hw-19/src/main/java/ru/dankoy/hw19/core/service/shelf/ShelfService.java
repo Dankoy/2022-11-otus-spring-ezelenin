@@ -6,14 +6,14 @@ import ru.dankoy.hw19.core.domain.Shelf;
 
 public interface ShelfService {
 
-  Optional<Shelf> getShelfById(String id);
+  Optional<Shelf> getById(String id);
 
-  void deleteShelf(String id);
+  void deleteById(String id);
 
-  Shelf createShelf(Shelf shelf);
+  Shelf create(Shelf shelf);
 
-  Set<Shelf> getShelvesByUserId(String userId);
+  Set<Shelf> findAll();
 
-  Shelf updateShelf(Shelf shelf);
+  Shelf update(Shelf shelf);
 
 }
