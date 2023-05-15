@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ru.dankoy.hw19.core.domain.Shelf;
 import ru.dankoy.hw19.core.dto.edition.EditionDTO;
@@ -13,6 +14,7 @@ import ru.dankoy.hw19.core.dto.edition.EditionDTO;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class ShelfDTO {
 
   private String id;
