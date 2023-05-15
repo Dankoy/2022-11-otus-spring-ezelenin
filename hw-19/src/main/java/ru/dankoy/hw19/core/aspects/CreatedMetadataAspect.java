@@ -59,7 +59,7 @@ public class CreatedMetadataAspect {
 
     log.info("Aspect add meta to publisher");
 
-    var found = shelfService.getShelfById(shelf.getId());
+    var found = shelfService.getById(shelf.getId());
 
     found.ifPresent(w -> shelf.setDateCreated(w.getDateCreated()));
 
