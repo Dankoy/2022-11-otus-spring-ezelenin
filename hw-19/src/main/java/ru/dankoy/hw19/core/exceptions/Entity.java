@@ -12,7 +12,8 @@ public enum Entity {
   GENRE("Genre"),
   COMMENTARY("Commentary"),
   PUBLISHER("Publisher"),
-  SHELF("Shelf");
+  SHELF("Shelf"),
+  NOTE("Note");
 
   private final String name;
 
