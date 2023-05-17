@@ -5,6 +5,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import ru.dankoy.hw19.core.domain.Publisher;
 
 @RepositoryRestResource(path = "publisher")
-public interface PublisherRepository extends MongoRepository<Publisher, String> {
+public interface PublisherRepository extends MongoRepository<Publisher, String>,
+    PublisherRepositoryCustom {
 
 }

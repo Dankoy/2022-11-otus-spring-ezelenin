@@ -33,7 +33,7 @@ public class PublisherServiceImpl implements PublisherService {
   @Override
   public void deleteById(String id) {
     var optionalPublisher = publisherRepository.findById(id);
-    optionalPublisher.ifPresent(publisherRepository::delete);
+    optionalPublisher.ifPresent(publisherRepository::deleteAndCheckEditions);
   }
 
   @Override
