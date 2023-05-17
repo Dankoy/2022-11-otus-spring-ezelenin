@@ -15,5 +15,5 @@ public interface WorkRepositoryCustom {
   Work saveAndCheckAuthors(Work work);
 
   @RestResource(path = "delete-book", rel = "delete-book")
-  void deleteByBookId(String bookId);
+  void deleteByWorkId(String bookId);
 }

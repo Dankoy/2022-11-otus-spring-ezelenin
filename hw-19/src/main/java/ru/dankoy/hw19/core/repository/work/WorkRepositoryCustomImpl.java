@@ -6,16 +6,20 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import ru.dankoy.hw19.core.domain.Author;
-import ru.dankoy.hw19.core.domain.Work;
+import ru.dankoy.hw19.core.domain.Edition;
 import ru.dankoy.hw19.core.domain.Genre;
+import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
+import ru.dankoy.hw19.core.exceptions.Hw5RootException;
 import ru.dankoy.hw19.core.repository.commentary.CommentaryRepository;
 
 
@@ -60,11 +64,31 @@ public class WorkRepositoryCustomImpl implements WorkRepositoryCustom {
 
 
   @Override
-  public void deleteByBookId(String bookId) {
+  public void deleteByWorkId(String workId) {
 
-    var query = Query.query(Criteria.where("_id").is(bookId));
-    commentaryRepository.deleteCommentariesByWorkId(bookId);
-    mongoTemplate.remove(query, Work.class);
+    var query = Query.query(Criteria.where("_id").is(workId));
+
+    var foundWork = Optional.ofNullable(mongoTemplate.findOne(query, Work.class));
+
+    foundWork.ifPresent(w -> {
+
+      // Если есть издания, то удалять запрещено
+      if (!w.getEditions().isEmpty()) {
+
+        var editionsIds = w.getEditions().stream()
+            .map(Edition::getId)
+            .collect(Collectors.toSet());
+
+        throw new Hw5RootException(
+            String.format("Can't delete work, because editions require it. '%s'", editionsIds)
+        );
+      }
+
+      // todo: сделать через mongoTemplate. избавиться от зависимости репы комментариев
+      commentaryRepository.deleteCommentariesByWorkId(workId);
+      mongoTemplate.remove(query, Work.class);
+
+    });
 
   }
 

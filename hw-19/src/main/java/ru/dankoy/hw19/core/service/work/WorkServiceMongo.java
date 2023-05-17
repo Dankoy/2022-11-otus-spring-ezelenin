@@ -64,7 +64,7 @@ public class WorkServiceMongo implements WorkService {
   @Retry(name = "bookService")
   @Override
   public void deleteById(String id) {
-    workRepository.deleteByBookId(id);
+    workRepository.deleteByWorkId(id);
   }
 
   //  @CircuitBreaker(name = "bookService", fallbackMethod = "fallbackCount")
