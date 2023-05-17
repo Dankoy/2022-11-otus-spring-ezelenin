@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import ru.dankoy.hw19.core.domain.Edition;
 import ru.dankoy.hw19.core.domain.Publisher;
@@ -19,6 +20,7 @@ public class EditionDTO {
   @Id
   private String id;
 
+  @Setter
   private String workId;
 
   private String name;
@@ -50,7 +52,7 @@ public class EditionDTO {
   public static Edition fromDTO(EditionDTO dto) {
     return new Edition(
         dto.getId(),
-        new Work(dto.getId()),
+        new Work(dto.getWorkId()),
         dto.getName(),
         dto.getDescription(),
         dto.getDatePublished(),
