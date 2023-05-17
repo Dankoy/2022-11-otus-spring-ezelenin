@@ -47,18 +47,8 @@ public class EditionServiceImpl implements EditionService {
   @Override
   public void deleteById(String id) {
 
-    // Заодно и удаляется id из списка в работе.
-    // todo: перенести в репозиторий
     var optionalEdition = editionRepository.findById(id);
-    optionalEdition.ifPresent(ed -> {
-
-      var optionalWork = workService.getById(ed.getWork().getId());
-      optionalWork.ifPresent(w -> w.getEditions().remove(ed));
-
-      editionRepository.delete(ed);
-
-    });
-
+    optionalEdition.ifPresent(editionRepository::deleteAndCheckNotesShelvesWorks);
 
   }
 
