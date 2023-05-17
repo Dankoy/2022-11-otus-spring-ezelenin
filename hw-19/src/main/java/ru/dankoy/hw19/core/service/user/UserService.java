@@ -1,22 +1,14 @@
 package ru.dankoy.hw19.core.service.user;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import ru.dankoy.hw19.core.repository.user.UserRepository;
+import ru.dankoy.hw19.core.domain.User;
 
-
-@Service
-@RequiredArgsConstructor
-public class UserService implements UserDetailsService {
-
-  private final UserRepository userRepository;
+public interface UserService extends UserDetailsService {
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return userRepository.findByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException(username));
-  }
+  UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+  void create(User user);
 }

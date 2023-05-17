@@ -40,6 +40,8 @@ public class SecurityConfiguration {
                     .antMatchers("/work/delete")
                     .hasAnyRole(Authority.ADMIN.name())
 
+                    .antMatchers("/api/v1/register")
+                    .permitAll()
                     .anyRequest().authenticated()
             // обязательно любой запрос должен быть аутентифицирован
 
