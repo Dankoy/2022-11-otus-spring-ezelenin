@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import ru.dankoy.hw19.core.controller.BookRestController;
+import ru.dankoy.hw19.core.controller.WorkRestController;
 import ru.dankoy.hw19.core.controller.CommentaryRestController;
-import ru.dankoy.hw19.core.dto.mapper.BookMapper;
-import ru.dankoy.hw19.core.dto.mapper.CommentaryMapper;
+import ru.dankoy.hw19.core.dto.mappers.BookMapper;
+import ru.dankoy.hw19.core.dto.mappers.CommentaryMapper;
 import ru.dankoy.hw19.core.repository.author.AuthorRepository;
 import ru.dankoy.hw19.core.repository.work.WorkRepository;
 import ru.dankoy.hw19.core.service.author.AuthorServiceMongo;
@@ -41,7 +41,7 @@ class Hw19ApplicationDefaultTests {
     var objectMapperService = context.getBean(ObjectMapperServiceImpl.class);
     var bookMapper = context.getBean(BookMapper.class);
     var commentaryMapper = context.getBean(CommentaryMapper.class);
-    var bookRestController = context.getBean(BookRestController.class);
+    var bookRestController = context.getBean(WorkRestController.class);
     var commentaryRestController = context.getBean(CommentaryRestController.class);
 
     assertNotNull(bookRepository);

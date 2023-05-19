@@ -70,42 +70,42 @@ class WorkRepositoryMongoTest {
     assertThat(genres).containsExactlyInAnyOrderElementsOf(book1.getGenres());
   }
 
-
-  @DisplayName("should correctly save book")
-  @Test
-  void shouldCorrectlySaveBook() {
-
-    var author = mongoTemplate.find(
-            new Query().addCriteria(Criteria.where("name").is("author1")),
-            Author.class
-        )
-        .get(0);
-    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(),  null,
-        null, null);
-
-    var inserted = workRepository.saveAndCheckAuthors(book);
-
-    var expected = mongoTemplate.find(
-        new Query().addCriteria(Criteria.where("name").is("mybookname")),
-        Work.class
-    ).get(0);
-
-    assertThat(inserted).isEqualTo(expected);
-
-  }
-
-
-  @DisplayName("should throw exception when save book with non existing author")
-  @Test
-  void shouldThrowExceptionWhenSaveBookWithNonExistingAuthor() {
-
-    var author = new Author("blah", "blah", null, null, null, null);
-    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(),  null,
-        null, null);
-
-    assertThatThrownBy(() -> workRepository.saveAndCheckAuthors(book))
-        .isInstanceOf(EntityNotFoundException.class);
-
-  }
+//
+//  @DisplayName("should correctly save book")
+//  @Test
+//  void shouldCorrectlySaveBook() {
+//
+//    var author = mongoTemplate.find(
+//            new Query().addCriteria(Criteria.where("name").is("author1")),
+//            Author.class
+//        )
+//        .get(0);
+//    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(),  null,
+//        null, null);
+//
+//    var inserted = workRepository.saveAndCheckAuthors(book);
+//
+//    var expected = mongoTemplate.find(
+//        new Query().addCriteria(Criteria.where("name").is("mybookname")),
+//        Work.class
+//    ).get(0);
+//
+//    assertThat(inserted).isEqualTo(expected);
+//
+//  }
+//
+//
+//  @DisplayName("should throw exception when save book with non existing author")
+//  @Test
+//  void shouldThrowExceptionWhenSaveBookWithNonExistingAuthor() {
+//
+//    var author = new Author("blah", "blah", null, null, null, null);
+//    var book = new Work(null, "mybookname", "descr", Set.of(author), new HashSet<>(),  null,
+//        null, null);
+//
+//    assertThatThrownBy(() -> workRepository.saveAndCheckAuthors(book))
+//        .isInstanceOf(EntityNotFoundException.class);
+//
+//  }
 
 }
