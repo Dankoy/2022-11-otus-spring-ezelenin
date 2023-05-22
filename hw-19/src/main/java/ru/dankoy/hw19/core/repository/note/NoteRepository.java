@@ -10,9 +10,9 @@ import ru.dankoy.hw19.core.domain.Note;
 public interface NoteRepository extends MongoRepository<Note, String> {
 
   @RestResource(path = "find-by-id", rel = "find-by-id")
-  Optional<Note> findByIdAndUserId(String id, String userId);
+  Optional<Note> findByCreatedByUserIdAndId(String createdByUserId, String id);
 
   @RestResource(path = "find-by-edition-id", rel = "find-by-edition-id")
-  Optional<Note> findAllByUserIdAndEditionId(String userId, String editionId);
+  Optional<Note> findAllByCreatedByUserIdAndEditionId(String createdByUserId, String editionId);
 
 }

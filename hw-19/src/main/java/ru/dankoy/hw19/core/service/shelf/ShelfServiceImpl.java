@@ -8,7 +8,6 @@ import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw19.core.aspects.AddCreatedMetadata;
-import ru.dankoy.hw19.core.aspects.AddCurrentUser;
 import ru.dankoy.hw19.core.domain.Shelf;
 import ru.dankoy.hw19.core.domain.User;
 import ru.dankoy.hw19.core.repository.shelf.ShelfRepository;
@@ -27,7 +26,7 @@ public class ShelfServiceImpl implements ShelfService {
         .getPrincipal();
 
     // костыльная секурность
-    return shelfRepository.findByIdAndUserId(id, user.getId());
+    return shelfRepository.findByIdAndCreatedByUserId(id, user.getId());
   }
 
   @Override
@@ -39,20 +38,18 @@ public class ShelfServiceImpl implements ShelfService {
         .getAuthentication()
         .getPrincipal();
 
-    var optionalShelf = shelfRepository.findByIdAndUserId(id, user.getId());
+    var optionalShelf = shelfRepository.findByIdAndCreatedByUserId(id, user.getId());
     optionalShelf.ifPresent(shelfRepository::delete);
 
   }
 
   @Override
-  @AddCurrentUser
-  @AddCreatedMetadata
   public Shelf create(Shelf shelf) {
     return shelfRepository.save(shelf);
 
   }
 
-  @PostFilter(value = "filterObject.user.getId() == authentication.principal.id")
+  @PostFilter(value = "filterObject.createdByUser.getId() == authentication.principal.id")
   @Override
   public Set<Shelf> findAll() {
     // Фильтруются полки по id юзера с помощью пост фильтра
@@ -61,7 +58,6 @@ public class ShelfServiceImpl implements ShelfService {
   }
 
   @Override
-  @AddCurrentUser
   @AddCreatedMetadata
   public Shelf update(Shelf shelf) {
     return shelfRepository.save(shelf);

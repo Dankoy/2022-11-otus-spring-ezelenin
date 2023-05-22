@@ -10,10 +10,10 @@ import ru.dankoy.hw19.core.domain.Shelf;
 public interface ShelfRepository extends MongoRepository<Shelf, String> {
 
   @RestResource(path = "find-by-id", rel = "find-by-id")
-  Optional<Shelf> findByIdAndUserId(String id, String userId);
+  Optional<Shelf> findByIdAndCreatedByUserId(String id, String userId);
 
   @RestResource(path = "find-by-name", rel = "find-by-name")
-  Shelf findByNameAndUserId(String name, String userId);
+  Shelf findByNameAndCreatedByUserId(String name, String userId);
 
 
 }

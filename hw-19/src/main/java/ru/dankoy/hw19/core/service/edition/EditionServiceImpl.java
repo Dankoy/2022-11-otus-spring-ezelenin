@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.dankoy.hw19.core.aspects.AddCreatedMetadata;
 import ru.dankoy.hw19.core.domain.Edition;
 import ru.dankoy.hw19.core.repository.edition.EditionRepository;
 import ru.dankoy.hw19.core.service.work.WorkService;
@@ -53,6 +54,7 @@ public class EditionServiceImpl implements EditionService {
   }
 
   @Override
+  @AddCreatedMetadata
   public Edition update(Edition edition) {
     return editionRepository.save(edition);
   }

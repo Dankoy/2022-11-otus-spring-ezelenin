@@ -5,7 +5,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw19.core.aspects.AddCreatedMetadata;
-import ru.dankoy.hw19.core.aspects.AddCurrentUser;
 import ru.dankoy.hw19.core.domain.Commentary;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
@@ -39,14 +38,13 @@ public class CommentaryServiceMongo implements CommentaryService {
 
 
   @Override
-  @AddCurrentUser
   @AddCreatedMetadata
   public Commentary update(Commentary commentary) {
+    //todo: запретить менять не свои комментарии для юзеров
     return commentaryRepository.save(commentary);
   }
 
   @Override
-  @AddCurrentUser
   public Commentary insert(Commentary commentary) {
 
     return commentaryRepository.save(commentary);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.dankoy.hw19.core.aspects.AddCreatedMetadata;
 import ru.dankoy.hw19.core.domain.Author;
 import ru.dankoy.hw19.core.domain.Work;
 import ru.dankoy.hw19.core.exceptions.Entity;
@@ -30,7 +31,13 @@ public class AuthorServiceMongo implements AuthorService {
   }
 
   @Override
-  public Author insertOrUpdate(Author author) {
+  public Author insert(Author author) {
+    return authorRepository.save(author);
+  }
+
+  @Override
+  @AddCreatedMetadata
+  public Author update(Author author) {
     return authorRepository.save(author);
   }
 

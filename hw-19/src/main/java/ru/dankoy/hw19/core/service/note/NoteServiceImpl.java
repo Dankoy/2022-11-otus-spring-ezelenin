@@ -8,7 +8,6 @@ import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.dankoy.hw19.core.aspects.AddCreatedMetadata;
-import ru.dankoy.hw19.core.aspects.AddCurrentUser;
 import ru.dankoy.hw19.core.domain.Note;
 import ru.dankoy.hw19.core.domain.User;
 import ru.dankoy.hw19.core.repository.note.NoteRepository;
@@ -21,7 +20,6 @@ public class NoteServiceImpl implements NoteService {
   private final NoteRepository noteRepository;
 
   @Override
-  @AddCurrentUser
   public Note create(Note note) {
     return noteRepository.save(note);
   }
@@ -33,7 +31,7 @@ public class NoteServiceImpl implements NoteService {
         .getAuthentication()
         .getPrincipal();
 
-    return noteRepository.findByIdAndUserId(noteId, user.getId());
+    return noteRepository.findByCreatedByUserIdAndId(user.getId(), noteId);
 
   }
 
@@ -44,20 +42,19 @@ public class NoteServiceImpl implements NoteService {
         .getAuthentication()
         .getPrincipal();
 
-    var optionalNote = noteRepository.findByIdAndUserId(noteId, user.getId());
+    var optionalNote = noteRepository.findByCreatedByUserIdAndId(user.getId(), noteId);
     optionalNote.ifPresent(noteRepository::delete);
 
   }
 
 
   @Override
-  @AddCurrentUser
   @AddCreatedMetadata
   public Note update(Note note) {
     return noteRepository.save(note);
   }
 
-  @PostFilter(value = "filterObject.user.getId() == authentication.principal.id")
+  @PostFilter(value = "filterObject.createdByUser.getId() == authentication.principal.id")
   @Override
   public Set<Note> findAll() {
     return new HashSet<>(noteRepository.findAll());
@@ -70,6 +67,6 @@ public class NoteServiceImpl implements NoteService {
         .getAuthentication()
         .getPrincipal();
 
-    return noteRepository.findAllByUserIdAndEditionId(user.getId(), editionId);
+    return noteRepository.findAllByCreatedByUserIdAndEditionId(user.getId(), editionId);
   }
 }

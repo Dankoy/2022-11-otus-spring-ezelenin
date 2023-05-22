@@ -10,7 +10,9 @@ public interface AuthorService {
 
   Optional<Author> getById(String id);
 
-  Author insertOrUpdate(Author author);
+  Author insert(Author author);
+
+  Author update(Author author);
 
   void deleteById(String id);
 
