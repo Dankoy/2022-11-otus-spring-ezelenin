@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ru.dankoy.hw19.core.domain.Commentary;
-import ru.dankoy.hw19.core.dto.user.UserDTO;
 import ru.dankoy.hw19.core.dto.work.WorkCommentaryDTO;
 
 
@@ -16,7 +15,7 @@ import ru.dankoy.hw19.core.dto.work.WorkCommentaryDTO;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentaryCreateDTO {
+public class CommentaryCreateUpdateDTO {
 
   private String id;
 
@@ -25,18 +24,24 @@ public class CommentaryCreateDTO {
   @Setter
   private WorkCommentaryDTO work;
 
-  public static Commentary toCommentary(CommentaryCreateDTO dto) {
-    return new Commentary(dto.getId(),
+  public static Commentary fromUpdateDTO(CommentaryCreateUpdateDTO dto) {
+    return new Commentary(
+        dto.getId(),
         dto.getText(),
-        null,
-        WorkCommentaryDTO.fromDTO(dto.getWork()),
-        null,
-        null
+        WorkCommentaryDTO.fromDTO(dto.getWork())
     );
   }
 
-  public static CommentaryCreateDTO toDTO(Commentary commentary) {
-    return CommentaryCreateDTO.builder()
+  public static Commentary fromCreateDTO(CommentaryCreateUpdateDTO dto) {
+    return new Commentary(
+        null,
+        dto.getText(),
+        WorkCommentaryDTO.fromDTO(dto.getWork())
+    );
+  }
+
+  public static CommentaryCreateUpdateDTO toDTO(Commentary commentary) {
+    return CommentaryCreateUpdateDTO.builder()
         .id(commentary.getId())
         .text(commentary.getText())
         .work(new WorkCommentaryDTO(commentary.getWork().getId()))

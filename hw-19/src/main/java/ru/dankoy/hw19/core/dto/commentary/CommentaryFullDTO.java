@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ru.dankoy.hw19.core.domain.Commentary;
-import ru.dankoy.hw19.core.dto.user.UserDTO;
+import ru.dankoy.hw19.core.dto.user.UserMetaDTO;
 import ru.dankoy.hw19.core.dto.work.WorkCommentaryDTO;
 
 
@@ -17,7 +17,7 @@ import ru.dankoy.hw19.core.dto.work.WorkCommentaryDTO;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommentaryDTO {
+public class CommentaryFullDTO {
 
   private String id;
 
@@ -25,26 +25,26 @@ public class CommentaryDTO {
 
   private WorkCommentaryDTO work;
 
-  private UserDTO user;
+  private UserMetaDTO createdByUser;
+
+  private UserMetaDTO modifiedByUser;
 
   private LocalDateTime dateCreated;
 
   private LocalDateTime dateModified;
 
-  public static Commentary toCommentary(CommentaryDTO dto) {
+  public static Commentary toCommentary(CommentaryFullDTO dto) {
     return new Commentary(dto.getId(),
         dto.getText(),
-        UserDTO.fromDTO(dto.getUser()),
-        WorkCommentaryDTO.fromDTO(dto.getWork()),
-        dto.getDateCreated(),
-        dto.getDateModified());
+        WorkCommentaryDTO.fromDTO(dto.getWork()));
   }
 
-  public static CommentaryDTO toDTO(Commentary commentary) {
-    return CommentaryDTO.builder()
+  public static CommentaryFullDTO toDTO(Commentary commentary) {
+    return CommentaryFullDTO.builder()
         .id(commentary.getId())
         .text(commentary.getText())
-        .user(new UserDTO(commentary.getUser().getId()))
+        .createdByUser(UserMetaDTO.toDTO(commentary.getCreatedByUser()))
+        .modifiedByUser(UserMetaDTO.toDTO(commentary.getModifiedByUser()))
         .work(new WorkCommentaryDTO(commentary.getWork().getId()))
         .dateCreated(commentary.getDateCreated())
         .dateModified(commentary.getDateModified())

@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dankoy.hw19.core.dto.edition.EditionDTO;
+import ru.dankoy.hw19.core.dto.edition.EditionCreateDTO;
+import ru.dankoy.hw19.core.dto.edition.EditionCreatedDTO;
+import ru.dankoy.hw19.core.dto.edition.EditionFullDTO;
+import ru.dankoy.hw19.core.dto.edition.EditionUpdateDTO;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw19.core.service.edition.EditionService;
@@ -25,12 +28,12 @@ public class EditionRestController {
   private final EditionService editionService;
 
   @GetMapping("/api/v1/edition/{id}")
-  public EditionDTO getById(@PathVariable String id) {
+  public EditionFullDTO getById(@PathVariable String id) {
 
     var found = editionService.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.EDITION));
 
-    return EditionDTO.toDTO(found);
+    return EditionFullDTO.toDTO(found);
 
   }
 
@@ -44,36 +47,36 @@ public class EditionRestController {
   }
 
   @PostMapping("/api/v1/work/{workId}/edition")
-  public EditionDTO create(@PathVariable String workId, @RequestBody EditionDTO dto) {
+  public EditionCreatedDTO create(@PathVariable String workId, @RequestBody EditionCreateDTO dto) {
 
     dto.setWorkId(workId);
 
-    var toCreate = EditionDTO.fromDTO(dto);
+    var toCreate = EditionCreateDTO.fromDTO(dto);
     var created = editionService.create(toCreate);
 
-    return EditionDTO.toDTO(created);
+    return EditionCreatedDTO.toDTO(created);
 
   }
 
   @GetMapping("/api/v1/work/{workId}/edition")
-  public Set<EditionDTO> getAllByWork(@PathVariable String workId) {
+  public Set<EditionFullDTO> getAllByWork(@PathVariable String workId) {
 
     var found = editionService.findAllByWorkId(workId);
 
-    return found.stream().map(EditionDTO::toDTO).collect(Collectors.toSet());
+    return found.stream().map(EditionFullDTO::toDTO).collect(Collectors.toSet());
 
   }
 
   @PutMapping("/api/v1/edition/{id}")
-  public EditionDTO update(@PathVariable String id, @RequestBody EditionDTO dto) {
+  public EditionCreatedDTO update(@PathVariable String id, @RequestBody EditionUpdateDTO dto) {
 
     editionService.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.EDITION));
 
-    var toUpdate = EditionDTO.fromDTO(dto);
+    var toUpdate = EditionUpdateDTO.fromDTO(dto);
     var updated = editionService.update(toUpdate);
 
-    return EditionDTO.toDTO(updated);
+    return EditionCreatedDTO.toDTO(updated);
 
   }
 

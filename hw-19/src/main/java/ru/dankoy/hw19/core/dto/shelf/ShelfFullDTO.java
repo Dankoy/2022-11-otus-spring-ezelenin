@@ -9,46 +9,50 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ru.dankoy.hw19.core.domain.Shelf;
-import ru.dankoy.hw19.core.dto.edition.EditionDTO;
+import ru.dankoy.hw19.core.dto.edition.EditionFullDTO;
+import ru.dankoy.hw19.core.dto.user.UserMetaDTO;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class ShelfDTO {
+public class ShelfFullDTO {
 
   private String id;
 
   private String name;
 
-  private Set<EditionDTO> editions;
+  private Set<EditionFullDTO> editions;
 
   private LocalDateTime dateCreated;
 
   private LocalDateTime dateModified;
 
+  private UserMetaDTO createdByUser;
 
-  public static Shelf fromDTO(ShelfDTO dto) {
+  private UserMetaDTO modifiedByUser;
+
+
+  public static Shelf fromDTO(ShelfFullDTO dto) {
 
     return new Shelf(
         dto.id,
         dto.name,
-        null,
-        dto.editions.stream().map(EditionDTO::fromDTO).collect(Collectors.toSet()),
-        null,
-        null
+        dto.editions.stream().map(EditionFullDTO::fromDTO).collect(Collectors.toSet())
     );
 
   }
 
-  public static ShelfDTO toDTO(Shelf shelf) {
+  public static ShelfFullDTO toDTO(Shelf shelf) {
 
-    return ShelfDTO.builder()
+    return ShelfFullDTO.builder()
         .id(shelf.getId())
         .name(shelf.getName())
-        .editions(shelf.getEditions().stream().map(EditionDTO::toDTO).collect(Collectors.toSet()))
+        .editions(shelf.getEditions().stream().map(EditionFullDTO::toDTO).collect(Collectors.toSet()))
         .dateCreated(shelf.getDateCreated())
         .dateModified(shelf.getDateModified())
+        .createdByUser(UserMetaDTO.toDTO(shelf.getCreatedByUser()))
+        .modifiedByUser(UserMetaDTO.toDTO(shelf.getModifiedByUser()))
         .build();
 
   }

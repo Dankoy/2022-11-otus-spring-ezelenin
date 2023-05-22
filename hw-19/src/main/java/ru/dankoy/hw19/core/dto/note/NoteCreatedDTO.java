@@ -9,18 +9,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ru.dankoy.hw19.core.domain.Note;
-import ru.dankoy.hw19.core.dto.edition.EditionDTO;
+import ru.dankoy.hw19.core.dto.user.UserMetaDTO;
 
 @JsonInclude(Include.NON_EMPTY)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class NoteDTO {
+public class NoteCreatedDTO {
 
   private String id;
 
-  private EditionDTO edition;
+  private NoteCreateEditionDTO edition;
 
   private String text;
 
@@ -28,28 +28,31 @@ public class NoteDTO {
 
   private LocalDateTime dateModified;
 
+  private UserMetaDTO createdByUser;
 
-  public static Note fromDTO(NoteDTO dto) {
+  private UserMetaDTO modifiedByUser;
+
+
+  public static Note fromDTO(NoteCreatedDTO dto) {
 
     return new Note(
-        dto.id,
         null,
-        EditionDTO.fromDTO(dto.getEdition()),
-        dto.getText(),
-        null,
-        null
+        NoteCreateEditionDTO.fromDTO(dto.getEdition()),
+        dto.getText()
     );
 
   }
 
-  public static NoteDTO toDTO(Note note) {
+  public static NoteCreatedDTO toDTO(Note note) {
 
-    return NoteDTO.builder()
+    return NoteCreatedDTO.builder()
         .id(note.getId())
-        .edition(EditionDTO.toDTO(note.getEdition()))
+        .edition(NoteCreateEditionDTO.toDTO(note.getEdition()))
         .text(note.getText())
         .dateCreated(note.getDateCreated())
         .dateModified(note.getDateModified())
+        .createdByUser(UserMetaDTO.toDTO(note.getCreatedByUser()))
+        .modifiedByUser(UserMetaDTO.toDTO(note.getModifiedByUser()))
         .build();
 
   }

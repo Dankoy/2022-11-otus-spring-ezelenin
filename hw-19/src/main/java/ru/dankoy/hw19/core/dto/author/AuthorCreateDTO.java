@@ -14,7 +14,7 @@ import ru.dankoy.hw19.core.domain.Author;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthorDTO {
+public class AuthorCreateDTO {
 
   private String id;
 
@@ -24,41 +24,25 @@ public class AuthorDTO {
 
   private LocalDateTime deathDate;
 
-  private LocalDateTime dateCreated;
 
-  private LocalDateTime dateModified;
-
-  private String createdByUser;
-
-  private String modifiedByUser;
-
-
-  public static AuthorDTO fromAuthor(Author author) {
+  public static AuthorCreateDTO fromAuthor(Author author) {
 
     return builder()
         .id(author.getId())
         .name(author.getName())
         .birthDate(author.getBirthDate())
         .deathDate(author.getDeathDate())
-        .dateCreated(author.getDateCreated())
-        .dateModified(author.getDateModified())
-        .createdByUser(author.getCreatedByUser())
-        .modifiedByUser(author.getModifiedByUser())
         .build();
 
   }
 
-  public static Author fromDTO(AuthorDTO dto) {
+  public static Author fromDTO(AuthorCreateDTO dto) {
 
     return new Author(
-        dto.id,
+        null,
         dto.name,
         dto.birthDate,
-        dto.deathDate,
-        dto.dateCreated,
-        dto.dateModified,
-        dto.createdByUser,
-        dto.modifiedByUser
+        dto.deathDate
     );
 
   }

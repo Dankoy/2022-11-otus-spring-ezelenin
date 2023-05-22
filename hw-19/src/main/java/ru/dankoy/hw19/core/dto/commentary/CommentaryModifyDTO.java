@@ -20,12 +20,10 @@ public class CommentaryModifyDTO {
   private String text;
 
 
-  public static Commentary toCommentary(CommentaryModifyDTO dto) {
-    return new Commentary(dto.getId(),
+  public static Commentary fromDTO(CommentaryModifyDTO dto) {
+    return new Commentary(
+        dto.getId(),
         dto.getText(),
-        null,
-        null,
-        null,
         null
     );
   }

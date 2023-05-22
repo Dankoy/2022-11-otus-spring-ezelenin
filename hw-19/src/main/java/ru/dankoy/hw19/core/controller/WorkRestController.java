@@ -2,7 +2,6 @@ package ru.dankoy.hw19.core.controller;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +12,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dankoy.hw19.core.dto.work.WorkDTO;
+import ru.dankoy.hw19.core.dto.work.WorkCreateDTO;
+import ru.dankoy.hw19.core.dto.work.WorkCreatedDTO;
+import ru.dankoy.hw19.core.dto.work.WorkFullDTO;
+import ru.dankoy.hw19.core.dto.work.WorkUpdateDTO;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw19.core.service.work.WorkService;
@@ -28,13 +30,13 @@ public class WorkRestController {
   @GetMapping(value = "/api/v1/work",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public List<WorkDTO> getAll() {
+  public List<WorkFullDTO> getAll() {
 
     var books = workService.findAll();
 
     return books.stream()
-        .map(WorkDTO::toDTOWithoutCommentaries)
-        .collect(Collectors.toList());
+        .map(WorkFullDTO::toDTOWithoutCommentaries)
+        .toList();
 
   }
 
@@ -52,12 +54,12 @@ public class WorkRestController {
   @GetMapping(value = "/api/v1/work/{id}",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public WorkDTO getById(@PathVariable String id) {
+  public WorkFullDTO getById(@PathVariable String id) {
 
     var book = workService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
-    return WorkDTO.toDTOWithoutCommentaries(book);
+    return WorkFullDTO.toDTOWithoutCommentaries(book);
 
   }
 
@@ -65,29 +67,29 @@ public class WorkRestController {
   @PutMapping(value = "/api/v1/work/{id}",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public WorkDTO update(@PathVariable String id, @RequestBody WorkDTO workDTO) {
+  public WorkCreatedDTO update(@PathVariable String id, @RequestBody WorkUpdateDTO dto) {
 
-    var book = WorkDTO.toWork(workDTO);
+    var book = WorkUpdateDTO.toWork(dto);
 
     workService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.BOOK));
 
     var updated = workService.update(book);
 
-    return WorkDTO.toDTOWithoutCommentaries(updated);
+    return WorkCreatedDTO.toDTOWithoutCommentaries(updated);
 
   }
 
   @PostMapping(value = "/api/v1/work",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public WorkDTO create(@RequestBody WorkDTO workDTO) {
+  public WorkCreatedDTO create(@RequestBody WorkCreateDTO dto) {
 
-    var book = WorkDTO.toWork(workDTO);
+    var book = WorkCreateDTO.toWork(dto);
 
     var created = workService.insert(book);
 
-    return WorkDTO.toDTOWithoutCommentaries(created);
+    return WorkCreatedDTO.toDTOWithoutCommentaries(created);
 
   }
 

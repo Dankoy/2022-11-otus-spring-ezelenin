@@ -2,7 +2,6 @@ package ru.dankoy.hw19.core.controller;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dankoy.hw19.core.dto.author.AuthorDTO;
+import ru.dankoy.hw19.core.dto.author.AuthorCreateDTO;
+import ru.dankoy.hw19.core.dto.author.AuthorFullDTO;
+import ru.dankoy.hw19.core.dto.author.AuthorUpdateDTO;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw19.core.service.author.AuthorService;
@@ -24,46 +25,46 @@ public class AuthorRestController {
 
 
   @GetMapping("/api/v1/author")
-  public List<AuthorDTO> getAuthorList() {
+  public List<AuthorFullDTO> getAuthorList() {
 
     var authors = authorService.getAll();
 
     return authors.stream()
-        .map(AuthorDTO::fromAuthor)
-        .collect(Collectors.toList());
+        .map(AuthorFullDTO::fromAuthor)
+        .toList();
 
   }
 
   @GetMapping("/api/v1/author/{id}")
-  public AuthorDTO getAuthorById(@PathVariable String id) {
+  public AuthorFullDTO getAuthorById(@PathVariable String id) {
 
     var author = authorService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.AUTHOR));
 
-    return AuthorDTO.fromAuthor(author);
+    return AuthorFullDTO.fromAuthor(author);
 
   }
 
   @PutMapping("/api/v1/author/{id}")
-  public AuthorDTO updateAuthor(@PathVariable String id, @RequestBody AuthorDTO dto) {
+  public AuthorFullDTO updateAuthor(@PathVariable String id, @RequestBody AuthorUpdateDTO dto) {
 
     authorService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.AUTHOR));
 
-    var fromDto = AuthorDTO.fromDTO(dto);
-    var updated = authorService.insertOrUpdate(fromDto);
+    var fromDto = AuthorUpdateDTO.fromDTO(dto);
+    var updated = authorService.update(fromDto);
 
-    return AuthorDTO.fromAuthor(updated);
+    return AuthorFullDTO.fromAuthor(updated);
 
   }
 
   @PostMapping("/api/v1/author")
-  public AuthorDTO createAuthor(@RequestBody AuthorDTO dto) {
+  public AuthorFullDTO createAuthor(@RequestBody AuthorCreateDTO dto) {
 
-    var fromDto = AuthorDTO.fromDTO(dto);
-    var created = authorService.insertOrUpdate(fromDto);
+    var fromDto = AuthorCreateDTO.fromDTO(dto);
+    var created = authorService.insert(fromDto);
 
-    return AuthorDTO.fromAuthor(created);
+    return AuthorFullDTO.fromAuthor(created);
 
   }
 

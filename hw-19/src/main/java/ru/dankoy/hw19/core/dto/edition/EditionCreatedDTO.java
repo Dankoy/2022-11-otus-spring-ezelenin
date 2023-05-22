@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import ru.dankoy.hw19.core.domain.Edition;
-import ru.dankoy.hw19.core.domain.Publisher;
 import ru.dankoy.hw19.core.domain.Work;
+import ru.dankoy.hw19.core.dto.user.UserMetaDTO;
 
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditionDTO {
+public class EditionCreatedDTO {
 
   @Id
   private String id;
@@ -33,7 +33,7 @@ public class EditionDTO {
 
   private long pages; // should be wrapper?
 
-  private Publisher publisher;
+  private EditionCreatePublisherDTO publisher;
 
   private byte cover;
 
@@ -45,32 +45,29 @@ public class EditionDTO {
 
   private LocalDateTime dateModified;
 
-  private String createdByUser;
+  private UserMetaDTO createdByUser;
 
-  private String modifiedByUser;
+  private UserMetaDTO modifiedByUser;
 
-  public static Edition fromDTO(EditionDTO dto) {
+
+  public static Edition fromDTO(EditionCreatedDTO dto) {
     return new Edition(
-        dto.getId(),
+        null,
         new Work(dto.getWorkId()),
         dto.getName(),
         dto.getDescription(),
         dto.getDatePublished(),
         dto.getLanguage(),
         dto.getPages(),
-        dto.getPublisher(),
+        EditionCreatePublisherDTO.fromDTO(dto.getPublisher()),
         dto.getCover(),
         dto.getIsbn10(),
-        dto.getIsbn13(),
-        dto.getDateCreated(),
-        dto.getDateModified(),
-        dto.getCreatedByUser(),
-        dto.getModifiedByUser()
+        dto.getIsbn13()
     );
   }
 
-  public static EditionDTO toDTO(Edition edition) {
-    return EditionDTO.builder()
+  public static EditionCreatedDTO toDTO(Edition edition) {
+    return EditionCreatedDTO.builder()
         .id(edition.getId())
         .name(edition.getName())
         .description(edition.getDescription())
@@ -79,10 +76,10 @@ public class EditionDTO {
         .isbn13(edition.getIsbn13())
         .pages(edition.getPages())
         .language(edition.getLanguage())
-        .publisher(edition.getPublisher())
+        .publisher(EditionCreatePublisherDTO.toDTO(edition.getPublisher()))
         .datePublished(edition.getDatePublished())
-        .createdByUser(edition.getCreatedByUser())
-        .modifiedByUser(edition.getModifiedByUser())
+        .createdByUser(UserMetaDTO.toDTO(edition.getCreatedByUser()))
+        .modifiedByUser(UserMetaDTO.toDTO(edition.getModifiedByUser()))
         .dateCreated(edition.getDateCreated())
         .dateModified(edition.getDateModified())
         .workId(edition.getWork().getId())

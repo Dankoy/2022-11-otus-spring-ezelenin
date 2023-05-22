@@ -2,7 +2,6 @@ package ru.dankoy.hw19.core.controller;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.dankoy.hw19.core.dto.publisher.PublisherDTO;
+import ru.dankoy.hw19.core.dto.publisher.PublisherCreateDTO;
+import ru.dankoy.hw19.core.dto.publisher.PublisherFullDTO;
+import ru.dankoy.hw19.core.dto.publisher.PublisherUpdateDTO;
 import ru.dankoy.hw19.core.exceptions.Entity;
 import ru.dankoy.hw19.core.exceptions.EntityNotFoundException;
 import ru.dankoy.hw19.core.service.publisher.PublisherService;
@@ -26,21 +27,21 @@ public class PublisherRestController {
 
 
   @GetMapping("/api/v1/publisher")
-  public List<PublisherDTO> getAll() {
+  public List<PublisherFullDTO> getAll() {
 
     var found = publisherService.findAll();
 
-    return found.stream().map(PublisherDTO::toDTO).collect(Collectors.toList());
+    return found.stream().map(PublisherFullDTO::toDTO).toList();
 
   }
 
   @GetMapping("/api/v1/publisher/{id}")
-  public PublisherDTO getById(@PathVariable String id) {
+  public PublisherFullDTO getById(@PathVariable String id) {
 
     var found = publisherService.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.PUBLISHER));
 
-    return PublisherDTO.toDTO(found);
+    return PublisherFullDTO.toDTO(found);
 
   }
 
@@ -54,25 +55,25 @@ public class PublisherRestController {
   }
 
   @PostMapping("/api/v1/publisher")
-  public PublisherDTO create(@RequestBody PublisherDTO dto) {
+  public PublisherFullDTO create(@RequestBody PublisherCreateDTO dto) {
 
-    var toCreate = PublisherDTO.fromDTO(dto);
+    var toCreate = PublisherCreateDTO.fromDTO(dto);
     var created = publisherService.create(toCreate);
 
-    return PublisherDTO.toDTO(created);
+    return PublisherFullDTO.toDTO(created);
 
   }
 
   @PutMapping("/api/v1/publisher/{id}")
-  public PublisherDTO update(@PathVariable String id, @RequestBody PublisherDTO dto) {
+  public PublisherFullDTO update(@PathVariable String id, @RequestBody PublisherUpdateDTO dto) {
 
     publisherService.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.PUBLISHER));
 
-    var toUpdate = PublisherDTO.fromDTO(dto);
+    var toUpdate = PublisherUpdateDTO.fromDTO(dto);
     var updated = publisherService.update(toUpdate);
 
-    return PublisherDTO.toDTO(updated);
+    return PublisherFullDTO.toDTO(updated);
 
   }
 
