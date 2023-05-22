@@ -14,12 +14,18 @@ public class InitPublishersChangeLog {
 
   @ChangeSet(order = "001", id = "insertPublishers", author = "dankoy")
   public void insertPublishers(MongoDatabase db) {
+
+    var user = MongockHelper.getDocumentByName(db, "username", "turtle", "users");
+
     MongoCollection<Document> myCollection = db.getCollection("publishers");
     List<Document> docs = List.of(
         new Document()
             .append("name", "Black Library")
             .append("dt_created", LocalDateTime.now())
+            .append("dt_created", LocalDateTime.now())
             .append("dt_modified", null)
+            .append("created_by", user.get("_id"))
+            .append("modified_by", null)
     );
 
     myCollection.insertMany(docs);

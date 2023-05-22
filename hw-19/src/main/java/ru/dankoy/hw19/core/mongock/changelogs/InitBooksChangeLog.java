@@ -28,6 +28,8 @@ public class InitBooksChangeLog {
   @ChangeSet(order = "001", id = "insertBooks", author = "dankoy")
   public void insertWorks(MongoDatabase db) {
 
+    var user = MongockHelper.getDocumentByName(db, "username", "turtle", "users");
+
     var author1 = MongockHelper.getDocumentByName(db, "name", "Graham McNeill", "authors");
     var author2 = MongockHelper.getDocumentByName(db, "name", "Dan Abnett", "authors");
 
@@ -41,7 +43,9 @@ public class InitBooksChangeLog {
         .append("authors", List.of(author2.get("_id")))
         .append("editions", new ArrayList<>())
         .append("dt_created", LocalDateTime.now())
-        .append("dt_modified", null);
+        .append("dt_modified", null)
+        .append("created_by", user.get("_id"))
+        .append("modified_by", null);
 
     var doc2 = new Document()
         .append("name", "False Gods")
@@ -51,7 +55,9 @@ public class InitBooksChangeLog {
         .append("authors", List.of(author1.get("_id")))
         .append("editions", new ArrayList<>())
         .append("dt_created", LocalDateTime.now())
-        .append("dt_modified", null);
+        .append("dt_modified", null)
+        .append("created_by", user.get("_id"))
+        .append("modified_by", null);
 
     var res1 = books.insertOne(doc1);
     var res2 = books.insertOne(doc2);
@@ -62,6 +68,8 @@ public class InitBooksChangeLog {
 
   @ChangeSet(order = "002", id = "insertEditions", author = "dankoy")
   public void insertEditions(MongoDatabase db) {
+
+    var user = MongockHelper.getDocumentByName(db, "username", "turtle", "users");
 
     var work1 = MongockHelper.getDocumentByName(db, "name", "Horus Rising", "works");
     var work2 = MongockHelper.getDocumentByName(db, "name", "False Gods", "works");
@@ -82,6 +90,8 @@ public class InitBooksChangeLog {
             .append("publisher", publisher1.get("_id"))
             .append("dt_created", LocalDateTime.now())
             .append("dt_modified", null)
+            .append("created_by", user.get("_id"))
+            .append("modified_by", null)
     );
 
     List<Document> docs2 = List.of(
@@ -98,6 +108,8 @@ public class InitBooksChangeLog {
             .append("publisher", publisher1.get("_id"))
             .append("dt_created", LocalDateTime.now())
             .append("dt_modified", null)
+            .append("created_by", user.get("_id"))
+            .append("modified_by", null)
     );
 
     InsertManyResult res1 = editions.insertMany(docs);
