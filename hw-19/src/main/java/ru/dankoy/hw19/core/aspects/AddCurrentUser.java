@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
  * <p>
  * Добавляет текущего юзера к объекту комментария
  */
+@Deprecated(since = "2023-05-22", forRemoval = true)
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AddCurrentUser {
