@@ -28,9 +28,9 @@ public class GenreRestController {
   }
 
   @DeleteMapping("/api/v1/genre")
-  public void delete(@RequestBody GenreDTO dto) {
+  public void delete(@RequestParam String name) {
 
-    var genre = GenreDTO.fromDTO(dto);
+    var genre = new Genre(name);
     genreService.delete(genre);
 
   }
