@@ -1,6 +1,7 @@
 package ru.dankoy.hw19.core.dto.publisher;
 
 
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +15,7 @@ import ru.dankoy.hw19.core.domain.Publisher;
 @Getter
 public class PublisherCreateDTO {
 
-  private String id;
-
+  @NotEmpty
   private String name;
 
   public static Publisher fromDTO(PublisherCreateDTO dto) {

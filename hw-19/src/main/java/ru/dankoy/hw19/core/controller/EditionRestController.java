@@ -3,6 +3,7 @@ package ru.dankoy.hw19.core.controller;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,7 +48,7 @@ public class EditionRestController {
   }
 
   @PostMapping("/api/v1/work/{workId}/edition")
-  public EditionCreatedDTO create(@PathVariable String workId, @RequestBody EditionCreateDTO dto) {
+  public EditionCreatedDTO create(@PathVariable String workId, @Valid @RequestBody EditionCreateDTO dto) {
 
     dto.setWorkId(workId);
 
@@ -68,7 +69,9 @@ public class EditionRestController {
   }
 
   @PutMapping("/api/v1/edition/{id}")
-  public EditionCreatedDTO update(@PathVariable String id, @RequestBody EditionUpdateDTO dto) {
+  public EditionCreatedDTO update(@PathVariable String id, @Valid @RequestBody EditionUpdateDTO dto) {
+
+    //todo: если издание биндится к другой работе надо обновлять работы и старую и новую
 
     editionService.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.EDITION));

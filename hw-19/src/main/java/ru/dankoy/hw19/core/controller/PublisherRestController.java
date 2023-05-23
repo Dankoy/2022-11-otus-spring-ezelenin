@@ -2,6 +2,7 @@ package ru.dankoy.hw19.core.controller;
 
 
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,7 +56,7 @@ public class PublisherRestController {
   }
 
   @PostMapping("/api/v1/publisher")
-  public PublisherFullDTO create(@RequestBody PublisherCreateDTO dto) {
+  public PublisherFullDTO create(@Valid @RequestBody PublisherCreateDTO dto) {
 
     var toCreate = PublisherCreateDTO.fromDTO(dto);
     var created = publisherService.create(toCreate);
@@ -65,7 +66,7 @@ public class PublisherRestController {
   }
 
   @PutMapping("/api/v1/publisher/{id}")
-  public PublisherFullDTO update(@PathVariable String id, @RequestBody PublisherUpdateDTO dto) {
+  public PublisherFullDTO update(@PathVariable String id, @Valid @RequestBody PublisherUpdateDTO dto) {
 
     publisherService.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.PUBLISHER));

@@ -2,6 +2,7 @@ package ru.dankoy.hw19.core.controller;
 
 
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +47,7 @@ public class AuthorRestController {
   }
 
   @PutMapping("/api/v1/author/{id}")
-  public AuthorFullDTO updateAuthor(@PathVariable String id, @RequestBody AuthorUpdateDTO dto) {
+  public AuthorFullDTO updateAuthor(@PathVariable String id, @Valid @RequestBody AuthorUpdateDTO dto) {
 
     authorService.getById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.AUTHOR));
@@ -59,7 +60,7 @@ public class AuthorRestController {
   }
 
   @PostMapping("/api/v1/author")
-  public AuthorFullDTO createAuthor(@RequestBody AuthorCreateDTO dto) {
+  public AuthorFullDTO createAuthor(@Valid @RequestBody AuthorCreateDTO dto) {
 
     var fromDto = AuthorCreateDTO.fromDTO(dto);
     var created = authorService.insert(fromDto);

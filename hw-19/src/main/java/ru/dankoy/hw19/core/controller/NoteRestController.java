@@ -2,6 +2,7 @@ package ru.dankoy.hw19.core.controller;
 
 
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,7 +57,7 @@ public class NoteRestController {
   }
 
   @PostMapping("/api/v1/edition/{editionId}/note")
-  public NoteCreatedDTO create(@PathVariable String editionId, @RequestBody NoteCreateDTO dto) {
+  public NoteCreatedDTO create(@PathVariable String editionId, @Valid @RequestBody NoteCreateDTO dto) {
 
     var optionalAlreadyCreated = noteService.findByEditionId(editionId);
 
@@ -73,7 +74,7 @@ public class NoteRestController {
   }
 
   @PutMapping("/api/v1/note/{id}")
-  public NoteCreatedDTO update(@PathVariable String id, @RequestBody NoteUpdateDTO dto) {
+  public NoteCreatedDTO update(@PathVariable String id, @Valid @RequestBody NoteUpdateDTO dto) {
 
     // Проверка на существование полки по id и проверка принадлежности юзеру
     // если была попытка обновить заметку не принадлежащую юзеру, то выбрасывается ошибка

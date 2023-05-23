@@ -1,6 +1,7 @@
 package ru.dankoy.hw19.core.dto.work;
 
 
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import ru.dankoy.hw19.core.domain.Work;
 @NoArgsConstructor
 public class WorkCommentaryDTO {
 
+  @NotEmpty
   private String id;
 
   public static Work fromDTO(WorkCommentaryDTO dto) {

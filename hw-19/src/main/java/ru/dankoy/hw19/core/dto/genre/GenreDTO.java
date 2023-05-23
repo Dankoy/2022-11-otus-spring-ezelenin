@@ -1,6 +1,7 @@
 package ru.dankoy.hw19.core.dto.genre;
 
 
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import ru.dankoy.hw19.core.domain.Genre;
 @NoArgsConstructor
 public class GenreDTO {
 
+  @NotEmpty
   private String name;
 
 

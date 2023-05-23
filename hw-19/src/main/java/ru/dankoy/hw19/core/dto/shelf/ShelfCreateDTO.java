@@ -3,6 +3,8 @@ package ru.dankoy.hw19.core.dto.shelf;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,10 +17,11 @@ import ru.dankoy.hw19.core.domain.Shelf;
 @Getter
 public class ShelfCreateDTO {
 
-  private String id;
 
+  @NotEmpty
   private String name;
 
+  @Valid
   private Set<ShelfCreateEditionDTO> editions;
 
 

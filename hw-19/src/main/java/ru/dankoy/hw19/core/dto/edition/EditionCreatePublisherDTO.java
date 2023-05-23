@@ -1,6 +1,7 @@
 package ru.dankoy.hw19.core.dto.edition;
 
 
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import ru.dankoy.hw19.core.domain.Publisher;
 @Getter
 public class EditionCreatePublisherDTO {
 
+  @NotEmpty(message = "id can't be empty or null")
   private String id;
 
   //

@@ -1,6 +1,9 @@
 package ru.dankoy.hw19.core.dto.edition;
 
 import java.time.LocalDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,28 +19,37 @@ import ru.dankoy.hw19.core.domain.Work;
 @AllArgsConstructor
 public class EditionUpdateDTO {
 
-  @Id
+  @NotEmpty(message = "id can't be empty or null")
   private String id;
 
+  @NotEmpty(message = "workId can't be empty or null")
   @Setter
   private String workId;
 
+  @NotEmpty(message = "name can't be empty or null")
   private String name;
 
+  @NotEmpty(message = "description can't be empty or null")
   private String description;
 
+  @NotNull(message = "published date can't be null")
   private LocalDateTime datePublished;
 
+  @NotEmpty(message = "language can't be empty or null")
   private String language;
 
   private long pages; // should be wrapper?
 
+  @Valid
+  @NotNull(message = "publisher can't be null")
   private EditionCreatePublisherDTO publisher;
 
   private byte cover;
 
+  @NotEmpty(message = "isbn10 can't be empty or null")
   private String isbn10;
 
+  @NotEmpty(message = "isbn13 can't be empty or null")
   private String isbn13;
 
 

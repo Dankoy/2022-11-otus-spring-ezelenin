@@ -1,6 +1,7 @@
 package ru.dankoy.hw19.core.dto.work;
 
 
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import ru.dankoy.hw19.core.domain.Author;
 @AllArgsConstructor
 public class WorkCreateAuthorDTO {
 
+  @NotEmpty
   private String id;
 
   public static Author fromDTO(WorkCreateAuthorDTO dto) {

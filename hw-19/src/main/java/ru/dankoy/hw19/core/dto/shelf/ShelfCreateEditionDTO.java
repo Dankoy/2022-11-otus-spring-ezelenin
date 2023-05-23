@@ -1,5 +1,6 @@
 package ru.dankoy.hw19.core.dto.shelf;
 
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import ru.dankoy.hw19.core.domain.Edition;
 @AllArgsConstructor
 class ShelfCreateEditionDTO {
 
-  @Id
+  @NotEmpty
   private String id;
 
   public static Edition fromDTO(ShelfCreateEditionDTO dto) {

@@ -2,6 +2,9 @@ package ru.dankoy.hw19.core.dto.author;
 
 
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,10 +19,10 @@ import ru.dankoy.hw19.core.domain.Author;
 @AllArgsConstructor
 public class AuthorCreateDTO {
 
-  private String id;
-
+  @NotEmpty(message = "name can't be empty or null")
   private String name;
 
+  @NotNull(message = "birth date can't be null")
   private LocalDateTime birthDate;
 
   private LocalDateTime deathDate;
@@ -28,7 +31,6 @@ public class AuthorCreateDTO {
   public static AuthorCreateDTO fromAuthor(Author author) {
 
     return builder()
-        .id(author.getId())
         .name(author.getName())
         .birthDate(author.getBirthDate())
         .deathDate(author.getDeathDate())

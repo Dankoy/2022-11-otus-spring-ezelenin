@@ -18,7 +18,6 @@ import ru.dankoy.hw19.core.dto.user.UserMetaDTO;
 @AllArgsConstructor
 public class EditionFullDTO {
 
-  @Id
   private String id;
 
   @Setter

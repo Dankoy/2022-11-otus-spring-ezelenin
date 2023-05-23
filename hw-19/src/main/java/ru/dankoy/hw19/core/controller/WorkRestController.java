@@ -2,6 +2,7 @@ package ru.dankoy.hw19.core.controller;
 
 
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,7 +68,7 @@ public class WorkRestController {
   @PutMapping(value = "/api/v1/work/{id}",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public WorkCreatedDTO update(@PathVariable String id, @RequestBody WorkUpdateDTO dto) {
+  public WorkCreatedDTO update(@PathVariable String id, @Valid @RequestBody WorkUpdateDTO dto) {
 
     var book = WorkUpdateDTO.toWork(dto);
 
@@ -83,7 +84,7 @@ public class WorkRestController {
   @PostMapping(value = "/api/v1/work",
       consumes = {"application/json"},
       produces = {"application/json"})
-  public WorkCreatedDTO create(@RequestBody WorkCreateDTO dto) {
+  public WorkCreatedDTO create(@Valid @RequestBody WorkCreateDTO dto) {
 
     var book = WorkCreateDTO.toWork(dto);
 

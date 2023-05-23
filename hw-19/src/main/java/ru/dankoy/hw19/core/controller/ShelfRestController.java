@@ -2,6 +2,7 @@ package ru.dankoy.hw19.core.controller;
 
 
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,7 +57,7 @@ public class ShelfRestController {
   }
 
   @PostMapping("/api/v1/shelf")
-  public ShelfCreatedDTO create(@RequestBody ShelfCreateDTO dto) {
+  public ShelfCreatedDTO create(@Valid @RequestBody ShelfCreateDTO dto) {
 
     var toCreate = ShelfCreateDTO.fromDTO(dto);
     var created = shelfService.create(toCreate);
@@ -66,7 +67,7 @@ public class ShelfRestController {
   }
 
   @PutMapping("/api/v1/shelf/{id}")
-  public ShelfCreatedDTO update(@PathVariable String id, @RequestBody ShelfUpdateDTO dto) {
+  public ShelfCreatedDTO update(@PathVariable String id, @Valid @RequestBody ShelfUpdateDTO dto) {
 
     // Проверка на существование полки по id и проверка принадлежности юзеру
     shelfService.getById(id)

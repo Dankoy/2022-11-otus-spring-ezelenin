@@ -2,6 +2,7 @@ package ru.dankoy.hw19.core.controller;
 
 
 import java.util.Set;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ public class GenreRestController {
   }
 
   @PutMapping("/api/v1/genre")
-  public void update(@RequestBody GenreDTO newGenreDto, @RequestParam String oldGenre) {
+  public void update(@Valid @RequestBody GenreDTO newGenreDto, @RequestParam String oldGenre) {
 
     var old = new Genre(oldGenre);
     var newGenre = GenreDTO.fromDTO(newGenreDto);

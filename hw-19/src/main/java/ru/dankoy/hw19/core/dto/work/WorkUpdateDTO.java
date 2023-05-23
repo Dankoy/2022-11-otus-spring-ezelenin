@@ -5,16 +5,16 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import ru.dankoy.hw19.core.domain.Genre;
 import ru.dankoy.hw19.core.domain.Work;
-import ru.dankoy.hw19.core.dto.commentary.CommentaryFullDTO;
-import ru.dankoy.hw19.core.dto.edition.EditionFullDTO;
 import ru.dankoy.hw19.core.dto.genre.GenreDTO;
 
 @ToString
@@ -25,20 +25,26 @@ import ru.dankoy.hw19.core.dto.genre.GenreDTO;
 @JsonInclude(Include.NON_EMPTY)
 public class WorkUpdateDTO {
 
+  @NotEmpty
   private String id;
 
+  @NotEmpty
   private String name;
 
+  @NotEmpty
   private String description;
 
+  @Valid
+  @NotEmpty
   private Set<WorkCreateAuthorDTO> authors;
 
+  @Valid
+  @NotEmpty
   private Set<GenreDTO> genres;
 
-  @Setter
-  private Set<CommentaryFullDTO> commentaries;
-
-  private Set<EditionFullDTO> editions = new HashSet<>();
+  @Valid
+  @NotNull
+  private Set<WorkCreateEditionDTO> editions = new HashSet<>();
 
   public static Work toWork(WorkUpdateDTO dto) {
 
@@ -52,7 +58,7 @@ public class WorkUpdateDTO {
         dto.getGenres().stream()
             .map(g -> new Genre(g.getName()))
             .collect(Collectors.toSet()),
-        dto.getEditions().stream().map(EditionFullDTO::fromDTO).collect(Collectors.toSet())
+        dto.getEditions().stream().map(WorkCreateEditionDTO::fromDTO).collect(Collectors.toSet())
     );
 
   }
