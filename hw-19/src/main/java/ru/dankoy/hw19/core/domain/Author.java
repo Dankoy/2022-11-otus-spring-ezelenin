@@ -16,12 +16,13 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Getter
 @Document("authors")
 @JsonInclude(Include.NON_EMPTY)
 public class Author extends AuditMetadata {
 
+  @EqualsAndHashCode.Include
   @Id
   private String id;
 
