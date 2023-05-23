@@ -57,5 +57,9 @@ public class Edition extends AuditMetadata {
   @Field("isbn13")
   private String isbn13;
 
+  public Edition(String id) {
+    this.id = id;
+  }
+
 
 }
