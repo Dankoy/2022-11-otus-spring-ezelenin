@@ -13,6 +13,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+  // не работает с авторизацией по кукам, так как swagger-ui не умеет устанавливать куки в запросы
+  private final String[] SWAGGER_URLS = {
+      "/swagger-ui/**",
+      "/v3/api-docs**",
+      "/v3/api-docs/**",
+      "/api-docs**",
+      "/api-docs/**",
+      "/swagger-ui.html"
+  };
+
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     // hasAnyAuthority - позволяет работать с ролями без префикса ROLE_
