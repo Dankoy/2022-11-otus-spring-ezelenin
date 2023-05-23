@@ -55,8 +55,15 @@ public class NoteRestController {
 
   }
 
-  @PostMapping("/api/v1/note")
-  public NoteCreatedDTO create(@RequestBody NoteCreateDTO dto) {
+  @PostMapping("/api/v1/edition/{editionId}/note")
+  public NoteCreatedDTO create(@PathVariable String editionId, @RequestBody NoteCreateDTO dto) {
+
+    var optionalAlreadyCreated = noteService.findByEditionId(editionId);
+
+    if (optionalAlreadyCreated.isPresent()) {
+      throw new IllegalStateException(
+          String.format("Note for edition '%s' already exists", editionId));
+    }
 
     var toCreate = NoteCreateDTO.fromDTO(dto);
     var created = noteService.create(toCreate);
@@ -69,6 +76,8 @@ public class NoteRestController {
   public NoteCreatedDTO update(@PathVariable String id, @RequestBody NoteUpdateDTO dto) {
 
     // Проверка на существование полки по id и проверка принадлежности юзеру
+    // если была попытка обновить заметку не принадлежащую юзеру, то выбрасывается ошибка
+    // иначе обновляем
     noteService.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(id, Entity.NOTE));
 
