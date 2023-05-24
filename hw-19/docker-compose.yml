@@ -1,0 +1,59 @@
+version: '3.7'
+
+services:
+  library-backend:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+      args:
+        MAVEN_PROFILE: backend
+    image: 'evawe/library-backend:1'
+    container_name: library-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - library-network
+    depends_on:
+      - db
+    environment:
+      - MONGODB_DATABASE=library
+      - MONGODB_PORT=27017
+      - MONGODB_HOST=db
+      - JASYPT_PASSWORD=${JASYPT_MASTER_PASSWORD}
+    restart: always
+
+  library-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        - BACKEND_HOST=library-backend
+        - BACKEND_PORT=8080
+    image: 'evawe/library-frontend:1'
+    container_name: library-frontend
+    ports:
+      - "9000:9000"
+    networks:
+      - library-network
+    depends_on:
+      - library-backend
+    restart: always
+
+
+  db:
+    env_file: .env
+    image: 'mongo:latest'
+    container_name: db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_CONTAINER_PASSWORD}
+    ports:
+      - "27017:27017"
+    networks:
+      - library-network
+
+networks:
+  library-network:
+    name: library-network
